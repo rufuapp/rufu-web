@@ -13,8 +13,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "rufu — AI生成HTMLの共有プラットフォーム",
-  description: "AIが生成したHTMLコンテンツを投稿・発見・共有するコミュニティプラットフォーム",
+  title: {
+    default: 'rufu — AI生成HTMLの共有プラットフォーム',
+    template: '%s | rufu',
+  },
+  description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。スライド、ダッシュボード、ビジュアライゼーションをワンクリックで公開。',
+  openGraph: {
+    type: 'website',
+    siteName: 'rufu',
+    title: 'rufu — AI生成HTMLの共有プラットフォーム',
+    description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。',
+    locale: 'ja_JP',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'rufu — AI生成HTMLの共有プラットフォーム',
+    description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。',
+  },
 };
 
 export default function RootLayout({
