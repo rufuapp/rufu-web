@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Rufu (流布) ─ AI生成HTMLコンテンツ共有プラットフォーム 構想</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    font-family: "Helvetica Neue", "Arial", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background: #2a2a2a;
+    color: #1a1a1a;
+    overflow: hidden;
+  }
+  .deck { width: 100vw; height: 100vh; position: relative; }
+  .slide {
+    width: 100vw; height: 100vh;
+    background: #ffffff;
+    display: none;
+    flex-direction: column;
+    padding: 32px 50px 56px 50px;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .slide.active { display: flex; }
+
+  /* Header */
+  .slide-header {
+    border-bottom: 2px solid #00782F;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+    max-width: 1400px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .slide-kicker {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: #00782F;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .slide-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+  .slide-title em {
+    color: #00782F;
+    font-style: normal;
+  }
+
+  /* Body layout helpers */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .row { display: flex; gap: 14px; align-items: stretch; justify-content: center; }
+  .col { flex: 1; display: flex; flex-direction: column; }
+
+  /* Box (BCG-style framed content) */
+  .box {
+    background: #f7f7f5;
+    border-left: 5px solid #00782F;
+    padding: 14px 18px;
+    border-radius: 0 2px 2px 0;
+  }
+  .box-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #00782F;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .box-body { font-size: 17px; line-height: 1.65; color: #333; }
+
+  /* Bullet list */
+  ul.bullets { list-style: none; padding: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: #2a2a2a;
+  }
+  ul.bullets li::before { font-size: 17px; }
+  ul.bullets li::before {
+    content: "▪";
+    color: #00782F;
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+  ul.bullets li strong { color: #1a1a1a; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  th {
+    background: #00782F;
+    color: white;
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  tr:nth-child(even) td { background: #fafaf8; }
+  td.highlight { background: #e8f3ec !important; font-weight: 600; color: #00782F; }
+
+  /* 2x2 Matrix */
+  .matrix {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr;
+    grid-template-rows: auto auto 38px;
+    gap: 0;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .matrix .quadrant { min-height: 120px; }
+  .matrix .y-label {
+    grid-row: 1 / 3;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #00782F;
+    text-transform: uppercase;
+  }
+  .matrix .quadrant {
+    border: 1px solid #d0d0d0;
+    padding: 16px 18px;
+    background: #fafaf8;
+    position: relative;
+  }
+  .matrix .quadrant.highlight {
+    background: #e8f3ec;
+    border: 2px solid #00782F;
+  }
+  .quad-label {
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .quad-content {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+  }
+  .matrix .x-axis {
+    grid-column: 2 / 4;
+    text-align: center;
+    padding-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #00782F;
+    text-transform: uppercase;
+  }
+  .matrix .empty { background: transparent; }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    gap: 8px;
+  }
+  .phase {
+    flex: 1;
+    padding: 14px 16px;
+    background: #fafaf8;
+    border-top: 5px solid #00782F;
+    position: relative;
+  }
+  .phase-label {
+    font-size: 12px;
+    color: #00782F;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .phase-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+  }
+  .phase-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #444;
+  }
+
+  /* Big metrics */
+  .metrics-row { display: flex; gap: 10px; }
+  .metric-card {
+    flex: 1;
+    background: #fafaf8;
+    border-top: 4px solid #00782F;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: #00782F;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+  .metric-label {
+    font-size: 14px;
+    color: #666;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+
+  /* Cover slide */
+  .cover {
+    background: linear-gradient(135deg, #003d18 0%, #00782F 100%);
+    color: white;
+  }
+  .cover .slide-header { border-bottom: none; }
+  .cover-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+  }
+  .cover-content > * { max-width: 900px; }
+  .cover-kicker {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    margin-bottom: 14px;
+    opacity: 0.85;
+  }
+  .cover-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+  .cover-subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    opacity: 0.9;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .cover-meta {
+    font-size: 13px;
+    opacity: 0.7;
+    letter-spacing: 0.15em;
+  }
+
+  /* Footer */
+  .slide-footer {
+    position: absolute;
+    bottom: 18px;
+    left: 50px;
+    right: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: 0.05em;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 8px;
+  }
+  .cover .slide-footer { color: rgba(255,255,255,0.6); border-top-color: rgba(255,255,255,0.2); }
+  .source { font-style: italic; }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(0,0,0,0.7);
+    padding: 8px 14px;
+    border-radius: 30px;
+    color: white;
+    font-size: 12px;
+  }
+  .nav button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.15); }
+  .nav .counter { min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
+
+  /* Pyramid / triangle for prioritization */
+  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .pyramid-level {
+    padding: 12px 22px;
+    background: #00782F;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 2px;
+  }
+  .pyramid-level.tier1 { width: 40%; }
+  .pyramid-level.tier2 { width: 65%; background: #5a9d6e; }
+  .pyramid-level.tier3 { width: 90%; background: #a8c8b1; color: #1a1a1a; }
+
+  /* Risk cards */
+  .risk-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-top: 4px solid #c0392b;
+    padding: 14px 16px;
+    flex: 1;
+  }
+  .risk-label {
+    font-size: 12px;
+    color: #c0392b;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .risk-title { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+  .risk-body { font-size: 15px; line-height: 1.65; color: #444; }
+  .risk-mitigation {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e0e0e0;
+    font-size: 15px;
+    color: #00782F;
+    line-height: 1.6;
+  }
+
+  /* Action items */
+  .action-list {
+    list-style: none;
+    counter-reset: action;
+    padding: 0;
+  }
+  .action-list li {
+    counter-increment: action;
+    position: relative;
+    padding: 14px 18px 14px 66px;
+    background: #fafaf8;
+    border-left: 4px solid #00782F;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .action-list li::before {
+    content: counter(action);
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px; height: 36px;
+    background: #00782F;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .action-list li strong { color: #00782F; }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- Slide 1: Cover -->
+<section class="slide cover active">
+  <div class="cover-content">
+    <div class="cover-kicker">RUFU — STRATEGY PROPOSAL — STRICTLY CONFIDENTIAL</div>
+    <div class="cover-title">Rufu <span style="font-size: 28px; opacity: 0.75; font-weight: 400;">(流布)</span><br>AI生成HTMLコンテンツ共有プラットフォーム</div>
+    <div class="cover-subtitle">個人開発によるacqui-hire戦略 / 12〜18ヶ月で発見されるための設計<br><span style="font-size: 15px; opacity: 0.75;">rufu.app  ·  @rufuapp  ·  github.com/rufuapp</span></div>
+    <div class="cover-meta">PREPARED: 2026年5月  ·  UPDATED: 2026年5月24日  ·  CLASSIFICATION: INTERNAL</div>
+  </div>
+  <div class="slide-footer">
+    <div>Rufu (流布) ─ AI生成HTMLコンテンツ共有プラットフォーム</div>
+    <div>1 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 2: Executive Summary -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">EXECUTIVE SUMMARY</div>
+    <div class="slide-title">AI生成HTMLの共有市場は<em>明確に空白</em>であり、個人開発で先行ポジションを取り、<em>12〜18ヶ月以内のメガ企業からの発見</em>を狙う</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="box col">
+        <div class="box-title">01 市場機会</div>
+        <div class="box-body">Claude等で作るHTMLコンテンツが急増中。一方、共有プラットフォームはPDFベース(Docswell/Speaker Deck)に限定。HTMLネイティブ×コミュニティ性の象限は<strong>未開拓</strong>。</div>
+      </div>
+      <div class="box col">
+        <div class="box-title">02 戦略アプローチ</div>
+        <div class="box-body">事業化はせず、本業継続前提の<strong>個人開発</strong>で運営。acqui-hire / 採用オファー / 戦略提携の3パターンEXITを並列で狙う。</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="box col">
+        <div class="box-title">03 投資規模</div>
+        <div class="box-body">年間<strong>100〜200万円</strong>の自己資金。週20〜26時間のコミット。致命的な金銭リスクなし。</div>
+      </div>
+      <div class="box col">
+        <div class="box-title">04 想定アウトカム</div>
+        <div class="box-body">MAU 500〜1,000、X フォロワー 3,000〜5,000、企業からの定期的アプローチ獲得。<strong>note株式会社・はてな・Anthropicが本命買い手</strong>。</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: Claude調査ベース(2026年5月)</div>
+    <div>2 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 3: Market Opportunity -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">MARKET OPPORTUNITY</div>
+    <div class="slide-title">既存サービスの<em>3つの構造的限界</em>が、HTMLネイティブ共有市場の空白地帯を生んでいる</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="box col">
+        <div class="box-title">既存スライド共有<br>(Docswell / Speaker Deck)</div>
+        <div class="box-body">
+          ▸ <strong>PDFベース</strong>でHTMLネイティブ非対応<br>
+          ▸ AI生成コンテンツとの相性が悪い<br>
+          ▸ インタラクティブ要素が失われる<br>
+          ▸ 動的データ・アニメーション不可
+        </div>
+      </div>
+      <div class="box col">
+        <div class="box-title">分散したホスティング<br>(GitHub Pages / Netlify)</div>
+        <div class="box-body">
+          ▸ 個別ホスティングサービスに分散<br>
+          ▸ <strong>発見性ゼロ</strong>、コミュニティなし<br>
+          ▸ 解説記事が氾濫=標準化不在の証左<br>
+          ▸ いいね・コメント等の反応設計なし
+        </div>
+      </div>
+      <div class="box col">
+        <div class="box-title">Claude公式 Publish<br>(Artifacts共有機能)</div>
+        <div class="box-body">
+          ▸ URL共有は可能だが<strong>発見性なし</strong><br>
+          ▸ 他者の作品を探す動線が存在しない<br>
+          ▸ ギャラリー・タグ・検索なし<br>
+          ▸ コミュニティ要素ゼロ
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: 公式ドキュメント、競合サービス分析(2026年5月)</div>
+    <div>3 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 4: Demand Signals -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">DEMAND VALIDATION</div>
+    <div class="slide-title">インフルエンサー層が<em>自前で解決策を構築</em>するレベルの強い需要シグナル</div>
+  </div>
+  <div class="body">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%">主体</th>
+          <th style="width: 40%">発信内容</th>
+          <th style="width: 35%">シグナルの意味</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>梶谷健人</strong><br>@kajikent</td>
+          <td>NOT A HOTEL社のClaude Code研修で100ページ超のスライドを<strong>自前システムで構築</strong>。「Marp/pptx生成/Claude in PPTはどれもデザイン微妙」</td>
+          <td class="highlight">大企業研修ですら既存ソリューション不在 = 受け皿欠如の決定的証拠</td>
+        </tr>
+        <tr>
+          <td><strong>こばかな</strong><br>@kobaka7</td>
+          <td>「HTML→pptx変換時にデザインが崩れる」「<strong>社内普及のハードルが色々高い</strong>」と発信</td>
+          <td class="highlight">変換ワークフローの摩擦が痛点として言語化されている</td>
+        </tr>
+        <tr>
+          <td><strong>LIFULL</strong><br>Creators Blog</td>
+          <td>「スライドをHTMLで生成するという選択」を企業エンジニアブログで公開、社内で実用化</td>
+          <td class="highlight">企業エンジニア層レベルでも本気の需要が存在</td>
+        </tr>
+        <tr>
+          <td><strong>FUJI</strong><br>@yoshifujidesign</td>
+          <td>プレゼンデザイナーが「<strong>スライドはもうHTMLでいい</strong>」と宣言する記事を発信</td>
+          <td class="highlight">プロのデザイナーがHTML移行を提唱する転換点に到達</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: X(旧Twitter)投稿分析、note記事(2026年4月〜5月)</div>
+    <div>4 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 5: Target Segments -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">TARGET SEGMENTATION</div>
+    <div class="slide-title">3つのセグメントの中で<em>個人クリエイター層</em>と<em>社内ナレッジ層</em>が主戦場</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="col" style="border: 2px solid #00782F; padding: 12px 14px; background: #e8f3ec;">
+        <div style="font-size: 14px; color: #00782F; font-weight: 700; letter-spacing: 0.12em; margin-bottom: 10px;">PRIMARY ① 主戦場</div>
+        <div style="font-size: 22px; font-weight: 700; margin-bottom: 12px;">個人クリエイター層</div>
+        <div style="font-size: 16px; line-height: 1.75; color: #333;">
+          <strong>ペルソナ:</strong> noteで発信するデザイナー・PM・AIユーザー<br>
+          <strong>痛み:</strong> 作ったHTMLを発信したいが受け皿がない<br>
+          <strong>提供価値:</strong> 公開・発見・反応の一気通貫<br>
+          <strong>マネタイズ:</strong> <span style="opacity:0.75;">将来オプション(Phase 3以降検討)</span>
+        </div>
+      </div>
+      <div class="col" style="border: 2px solid #00782F; padding: 12px 14px; background: #e8f3ec;">
+        <div style="font-size: 14px; color: #00782F; font-weight: 700; letter-spacing: 0.12em; margin-bottom: 10px;">PRIMARY ② B2B拡張</div>
+        <div style="font-size: 22px; font-weight: 700; margin-bottom: 12px;">社内ナレッジ層</div>
+        <div style="font-size: 16px; line-height: 1.75; color: #333;">
+          <strong>ペルソナ:</strong> 企業の研修・提案資料担当者<br>
+          <strong>痛み:</strong> 社内普及のハードルが高い(こばかな氏言及)<br>
+          <strong>提供価値:</strong> プライベート空間・SSO・組織管理<br>
+          <strong>マネタイズ:</strong> <span style="opacity:0.75;">将来オプション(Phase 3以降検討)</span>
+        </div>
+      </div>
+      <div class="col" style="border: 1px dashed #999; padding: 12px 14px; background: #f5f5f5; opacity: 0.7;">
+        <div style="font-size: 14px; color: #888; font-weight: 700; letter-spacing: 0.12em; margin-bottom: 10px;">EXCLUDED  対象外</div>
+        <div style="font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #666;">エンジニア・実験層</div>
+        <div style="font-size: 16px; line-height: 1.75; color: #666;">
+          <strong>理由:</strong> GitHub Pages/Netlify等を既に使いこなしている<br>
+          <strong>判断:</strong> 既存ソリューションで満たされており、参入の意義が薄い<br>
+          <strong>例外:</strong> エバンジェリスト的に発信してくれる層は意識的に確保
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: X発信分析、ヒアリング(計画中)</div>
+    <div>5 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 6: Strategy -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">STRATEGIC POSITIONING</div>
+    <div class="slide-title">事業化リスクを避け、個人開発で<em>『発見される』</em>ことに集中する</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="col">
+        <div style="font-size: 18px; font-weight: 700; color: #00782F; margin-bottom: 12px;">なぜ個人開発路線か</div>
+        <ul class="bullets">
+          <li><strong>本業継続が前提</strong>(アクセンチュア Associate Manager / ML需要予測システム保守運用リード・PMO)</li>
+          <li>事業化(2.4億円規模)は人生リスクが大きすぎる</li>
+          <li>個人開発は<strong>失敗時のダメージが軽微</strong>(年間最大200万円)</li>
+          <li>日本に成功事例あり(Docswell久保田氏 → MIXI傘下)</li>
+          <li><strong>当面は無報酬の非営利個人プロジェクト/OSS活動</strong>として運営(副業申請ハードル軽減・Anthropic提携利益相反緩和、マネタイズはPhase 3以降に判断保留)</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div style="font-size: 18px; font-weight: 700; color: #00782F; margin-bottom: 12px;">3つのEXITシナリオ(並列追求)</div>
+        <div class="pyramid">
+          <div class="pyramid-level tier1">① Acqui-hire(数千万〜2億円 + 入社)</div>
+          <div class="pyramid-level tier2">② 転職オファー(Anthropic / note / はてな)</div>
+          <div class="pyramid-level tier3">③ 戦略提携(継続運営、副収入)</div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top: 8px;">
+      <div class="box-title">勝ち筋の核</div>
+      <div class="box-body">
+        「<strong>無視できない存在</strong>」になることが目的。MAU・売上の絶対値ではなく、<strong>戦略的価値</strong>(AI企業からの公式パートナー打診、note CEOからの認知、メディア取材実績)を蓄積する。
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: Docswell事例分析、国内SaaS M&A実績(2020-2025)</div>
+    <div>6 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 7: Product Concept -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">PRODUCT CONCEPT</div>
+    <div class="slide-title">AI生成HTMLの<em>投稿・発見・反応</em>を一気通貫で提供するコミュニティ型プラットフォーム</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="box col">
+        <div class="box-title">▸ 投稿(Post)</div>
+        <div class="box-body">
+          ・HTMLファイル直接アップロード<br>
+          ・<strong>Claude/ChatGPTからワンクリック投稿</strong><br>
+          ・公開/限定/プライベート設定<br>
+          ・iframe sandboxによる安全実行<br>
+          ・OGP自動生成
+        </div>
+      </div>
+      <div class="box col">
+        <div class="box-title">▸ 発見(Discover)</div>
+        <div class="box-body">
+          ・タグ・カテゴリ検索<br>
+          ・トレンド/新着ランキング<br>
+          ・パーソナライズ推薦<br>
+          ・<strong>フィード型タイムライン</strong><br>
+          ・ユーザーフォロー機能
+        </div>
+      </div>
+      <div class="box col">
+        <div class="box-title">▸ 反応(React)</div>
+        <div class="box-body">
+          ・いいね・ブックマーク<br>
+          ・コメント・引用投稿<br>
+          ・<strong>リミックス機能</strong>(フォーク)<br>
+          ・SNSシェア導線<br>
+          ・週次ニュースレター配信
+        </div>
+      </div>
+    </div>
+    <div class="box" style="background: #003d18; color: white; border-left-color: #fff;">
+      <div class="box-title" style="color: #a8e0bc;">▸ 差別化の核 ─ AI連携</div>
+      <div class="box-body" style="color: #f0f0f0;">
+        Anthropic API公式パートナー認定を狙い、<strong>「Claudeの会話画面から直接投稿」</strong>できる機能を最速で実装。これが模倣困難な堀になる。
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: プロダクト企画(構想段階)</div>
+    <div>7 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 8: Competitive Positioning (2x2) -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">COMPETITIVE POSITIONING</div>
+    <div class="slide-title"><em>『HTMLネイティブ × コミュニティ性』</em>の象限は<em>未開拓</em>、本プロジェクトが先行ポジションを獲得可能</div>
+  </div>
+  <div class="body">
+    <div class="matrix">
+      <div class="y-label">コミュニティ性 (高 → 低)</div>
+
+      <div class="quadrant">
+        <div class="quad-label">PDF × 高コミュニティ性</div>
+        <div class="quad-content">
+          <strong>Docswell</strong> / Speaker Deck<br>
+          国内デファクト、ただしPDF前提でAI生成HTMLとの相性悪い。インタラクティブ要素が死ぬ。
+        </div>
+      </div>
+
+      <div class="quadrant highlight">
+        <div class="quad-label" style="color: #00782F;">★ HTML × 高コミュニティ性</div>
+        <div class="quad-content">
+          <strong style="color: #00782F; font-size: 14px;">本プロジェクト</strong><br>
+          <strong>未開拓象限</strong>。HTMLネイティブで投稿・発見・反応を一気通貫提供。AI連携で差別化。
+        </div>
+      </div>
+
+      <div class="quadrant">
+        <div class="quad-label">PDF × 低コミュニティ性</div>
+        <div class="quad-content">
+          <strong>SlideShare</strong>(衰退中)<br>
+          かつての主役だが現在は機能停滞、ユーザー離れが進行。
+        </div>
+      </div>
+
+      <div class="quadrant">
+        <div class="quad-label">HTML × 低コミュニティ性</div>
+        <div class="quad-content">
+          <strong>GitHub Pages</strong> / Netlify / ShareDuo / Display.dev / Claude Publish<br>
+          単純ホスティング機能のみ。発見性・反応設計なし。
+        </div>
+      </div>
+
+      <div class="empty"></div>
+      <div class="x-axis">フォーマット (PDF ← → HTMLネイティブ)</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: 競合分析、各サービス機能比較(2026年5月時点)</div>
+    <div>8 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 9: Roadmap -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">12-18 MONTH ROADMAP</div>
+    <div class="slide-title">4フェーズで段階的に<em>『発見される』</em>状態を構築する</div>
+  </div>
+  <div class="body">
+    <div class="timeline">
+      <div class="phase">
+        <div class="phase-label">PHASE 0 — 〜1ヶ月</div>
+        <div class="phase-title">仕込み</div>
+        <div class="phase-body">
+          ▸ 副業規定確認<br>
+          <span style="color:#00782F;font-weight:700;">✓ プロダクト名 Rufu 確定</span><br>
+          <span style="color:#00782F;font-weight:700;">✓ rufu.app / rufu.dev 取得</span><br>
+          <span style="color:#00782F;font-weight:700;">✓ @rufuapp / github.com/rufuapp</span><br>
+          ▸ X発信開始(週3-5本)<br>
+          ▸ ヒアリング15件<br>
+          ▸ 競合10件触る<br>
+          ▸ 個人事業主登録
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">PHASE 1 — 2〜4ヶ月</div>
+        <div class="phase-title">MVP公開</div>
+        <div class="phase-body">
+          ▸ コア機能のみ実装<br>
+          ▸ 投稿 / iframe / いいね<br>
+          ▸ クローズドβ(30人)<br>
+          ▸ オープンβ公開<br>
+          ▸ ProductHunt JP掲載<br>
+          ▸ ブランド確立
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">PHASE 2 — 5〜8ヶ月</div>
+        <div class="phase-title">バズらせる</div>
+        <div class="phase-body">
+          ▸ 影響力者へDM<br>
+          ▸ 自分の作品を毎週投稿<br>
+          ▸ Anthropic公認狙う<br>
+          ▸ メディア掲載売り込み<br>
+          ▸ 登壇(LT等)<br>
+          ▸ ハッカソン出場
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-label">PHASE 3 — 9〜18ヶ月</div>
+        <div class="phase-title">発見される</div>
+        <div class="phase-body">
+          ▸ MAU 500-1,000達成<br>
+          ▸ Xフォロワー 3,000-5,000<br>
+          ▸ 企業導入1-2社<br>
+          ▸ 採用DM月1回以上<br>
+          ▸ <strong>戦略的提携打診</strong><br>
+          ▸ EXIT判断
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top: 12px;">
+      <div class="box-title">クリティカルパス</div>
+      <div class="box-body">
+        <strong>Phase 2でのAnthropic公式認知</strong>が最大のレバレッジ。これが取れれば、Phase 3での「発見される」確率が劇的に上昇する。
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: プロジェクト計画(2026年5月策定)</div>
+    <div>9 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 10: Budget -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">BUDGET & RESOURCES</div>
+    <div class="slide-title">年間<em>100〜200万円の自己資金</em>で完結、致命的なリスクなし</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="col" style="flex: 1.3;">
+        <table>
+          <thead>
+            <tr>
+              <th>費目</th>
+              <th style="width: 25%">月額/単発</th>
+              <th style="width: 20%">年間</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ホスティング(Vercel/Cloudflare)</td>
+              <td>0〜3,000円</td>
+              <td>0〜3.6万円</td>
+            </tr>
+            <tr>
+              <td>DB / Backend(Supabase)</td>
+              <td>0〜3,000円</td>
+              <td>0〜3.6万円</td>
+            </tr>
+            <tr>
+              <td>Anthropic API</td>
+              <td>5,000〜30,000円</td>
+              <td>6〜36万円</td>
+            </tr>
+            <tr>
+              <td>ドメイン・SaaS小額</td>
+              <td>2,000〜5,000円</td>
+              <td>2.4〜6万円</td>
+            </tr>
+            <tr>
+              <td>会計ソフト(freee)</td>
+              <td>1,000円</td>
+              <td>1.2万円</td>
+            </tr>
+            <tr>
+              <td>初期一時費用(LP・ロゴ・規約)</td>
+              <td>20〜50万円</td>
+              <td>20〜50万円</td>
+            </tr>
+            <tr>
+              <td>スポット業務委託(デザイナー等)</td>
+              <td>必要時のみ</td>
+              <td>0〜50万円</td>
+            </tr>
+            <tr style="background: #e8f3ec;">
+              <td><strong>年間合計</strong></td>
+              <td></td>
+              <td class="highlight"><strong>100〜200万円</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <div class="metrics-row" style="flex-direction: column; gap: 10px;">
+          <div class="metric-card">
+            <div class="metric-value">1名</div>
+            <div class="metric-label">コアメンバー(ソロ運営)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">週26h</div>
+            <div class="metric-label">時間コミット<br>(平日夜2h×5 + 週末8h×2)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">¥0</div>
+            <div class="metric-label">外部資金調達 / 収益化<br>(無報酬OSS運営・全額自己資金)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: 各SaaS公式料金(2026年5月)、個人開発相場ベンチマーク</div>
+    <div>10 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 11: Success Metrics -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">SUCCESS METRICS</div>
+    <div class="slide-title">定量と定性の両面で<em>『発見可能性』</em>を測定する</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="col">
+        <div style="font-size: 18px; font-weight: 700; color: #00782F; margin-bottom: 12px;">定量指標(KPI)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>指標</th>
+              <th>Phase 1終了</th>
+              <th>Phase 3終了</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MAU</td>
+              <td>50〜100</td>
+              <td class="highlight">500〜1,000</td>
+            </tr>
+            <tr>
+              <td>累計投稿数</td>
+              <td>300</td>
+              <td class="highlight">5,000+</td>
+            </tr>
+            <tr>
+              <td>X フォロワー</td>
+              <td>500</td>
+              <td class="highlight">3,000〜5,000</td>
+            </tr>
+            <tr>
+              <td>GitHub Star(OSS化想定)</td>
+              <td>100</td>
+              <td class="highlight">1,000+</td>
+            </tr>
+            <tr>
+              <td>有料企業契約 <span style="font-size:12px;opacity:0.7;">(Phase 3+ オプション)</span></td>
+              <td>0</td>
+              <td class="highlight">1〜2社 <span style="font-weight:400;font-size:12px;opacity:0.7;">(将来検討)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <div style="font-size: 18px; font-weight: 700; color: #00782F; margin-bottom: 12px;">定性指標(発見されたサイン)</div>
+        <ul class="bullets">
+          <li><strong>VPoE/CTOからの採用DM</strong>が月1回以上</li>
+          <li>VC・大手からの<strong>インキュベーション打診</strong></li>
+          <li><strong>Anthropic / note等から公式パートナー打診</strong></li>
+          <li>ITmedia / TechCrunch JP等からの<strong>取材依頼</strong></li>
+          <li>同業の人が「これパクろう」と発言し始める</li>
+          <li>カンファレンス基調講演・パネル登壇依頼</li>
+          <li>note CEO・はてな経営陣との接点獲得</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: 国内インディーハッカー成功事例(Docswell等)からの逆算</div>
+    <div>11 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 12: Risks -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">KEY RISKS & MITIGATION</div>
+    <div class="slide-title">大手の参入とソロ運営の制約が<em>最大のリスク</em>、3つの打ち手で対応</div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="risk-card">
+        <div class="risk-label">RISK 01</div>
+        <div class="risk-title">大手の正面参入</div>
+        <div class="risk-body">
+          Docswellやnoteが「HTML対応します」と発表した瞬間に正面衝突。彼らは既存ユーザー基盤を持つため、機能追加だけで一気に持っていかれる可能性。
+        </div>
+        <div class="risk-mitigation">
+          <strong>▸ 対策:</strong> スピード勝負。Phase 1を最速で公開、Phase 2でブランド確立。先行者利益とコミュニティの粘着性で防衛。
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-label">RISK 02</div>
+        <div class="risk-title">個人時間の限界</div>
+        <div class="risk-body">
+          副業前提のため週26時間が上限。MVPの完成度・機能数で大手フルタイムチームに勝つのは不可能。完璧主義による公開遅延も死活問題。
+        </div>
+        <div class="risk-mitigation">
+          <strong>▸ 対策:</strong> 6割完成度でも公開する原則。AI連携(Claude Code)で開発生産性を3倍化。スポット業務委託の活用。
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-label">RISK 03</div>
+        <div class="risk-title">アクセンチュア副業規定・利益相反</div>
+        <div class="risk-body">
+          アクセンチュアの副業規定は「事前申請+承認」前提。無断は規定違反。特に <strong>アクセンチュア × Anthropic の業務提携</strong>が存在するため、本戦略の核「Anthropic公式パートナー打診」は<strong>利益相反トリガーになる可能性</strong>。クライアント案件で得たML/MLOps知見の流用も禁止。
+        </div>
+        <div class="risk-mitigation">
+          <strong>▸ 対策:</strong> <strong>当面は無報酬の非営利個人OSS活動として運営</strong>し副業申請ハードルを軽減(報酬発生時のみ正式申請に切替)。Anthropic接触は会社経由・公式チャネルの順序整理。プロダクト機能設計・対外発信に本業由来の知見を混入させない。
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top: 4px; background: #fdf4e8; border-left-color: #e6a23c;">
+      <div class="box-title" style="color: #b8801c;">⚠ 追加考慮点</div>
+      <div class="box-body">
+        メンタル消耗のリスク(最初の6ヶ月は反応薄が当たり前)、AI技術の進化速度(Anthropic公式が機能を内製化するリスク)も継続モニタリング対象。
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">Source: 個人開発事例分析、リスク評価フレームワーク</div>
+    <div>12 / 13</div>
+  </div>
+</section>
+
+<!-- Slide 13: Next Steps -->
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">IMMEDIATE NEXT STEPS</div>
+    <div class="slide-title">今週中に<em>4つの初動アクション</em>を実行し、Phase 0を立ち上げる</div>
+  </div>
+  <div class="body">
+    <ol class="action-list">
+      <li>
+        <strong>本業の副業規定確認</strong> ─ Databricks/AWS環境での就業規則、競合避止義務、副業申請プロセスをチェック。必要なら人事へ事前相談。<em>(期限: 今週中)</em>
+      </li>
+      <li style="background: #e8f3ec; border-left-color: #00782F;">
+        <strong style="color:#00782F;">✓ プロダクト名・ドメイン・ハンドル確保(完了)</strong> ─ プロダクト名は <strong>Rufu(流布)</strong> に確定。仏教用語「正法流布」由来で「コンテンツが世に広く伝わる」意。<strong>rufu.app / rufu.dev / github.com/rufuapp / @rufuapp</strong> 一式取得済。命名経緯: misekata → kaigen(同名AI広告SaaS被り回避)→ luhu(米LUHU LLC被り回避)→ rufu。<em>(2026年5月24日完了)</em>
+      </li>
+      <li>
+        <strong>X発信開始(個人ブランド構築)</strong> ─ 「AI生成HTMLスライドの共有先がない」「Claudeで作ったコンテンツの行き場」系の話題で<strong>週3〜5本投稿</strong>を開始。プロフィール整備。<em>(期限: 今週末)</em>
+      </li>
+      <li>
+        <strong>ヒアリング相手5人をX上で特定</strong> ─ 梶谷健人、こばかな、KAWAI、FUJI等のフォロワー層から「HTMLスライドを作っている人」を5名特定し、DM文面ドラフトを準備。<em>(期限: 来週前半)</em>
+      </li>
+    </ol>
+    <div class="box" style="background: #003d18; color: white; border-left-color: #fff;">
+      <div class="box-title" style="color: #a8e0bc;">▸ 90日マイルストーン</div>
+      <div class="box-body" style="color: #f0f0f0;">
+        Phase 0完了 → MVP開発着手 → クローズドβに参加してくれる30名のリスト確保 → ドメイン・LP・X基盤すべて稼働状態。<strong>3ヶ月後にこの状態に到達していれば、Phase 1に確実に移行できる。</strong>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">作成: 2026年5月24日 / Strictly Confidential</div>
+    <div>13 / 14</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="slide-header">
+    <div class="slide-kicker">INTELLECTUAL PROPERTY</div>
+    <div class="slide-title">特許取得は<em>構造的に困難</em>。商標登録と先行者優位が<em>現実的な知財戦略</em></div>
+  </div>
+  <div class="body">
+    <div class="row">
+      <div class="col">
+        <div class="box" style="border-left-color: #e53e3e; margin-bottom: 14px;">
+          <div class="box-title" style="color: #e53e3e;">✗ 特許：取得困難</div>
+          <div class="box-body">
+            コアコンセプトには広範な先行技術が存在する。<br><br>
+            <table>
+              <thead><tr><th>rufuの機能</th><th>先行サービス</th></tr></thead>
+              <tbody>
+                <tr><td>HTMLファイル共有</td><td>GitHub Pages, CodePen, JSFiddle</td></tr>
+                <tr><td>コンテンツ投稿・発見</td><td>Speaker Deck, Docswell</td></tr>
+                <tr><td>iframe sandbox実行</td><td>CodePen, StackBlitz</td></tr>
+                <tr><td>いいね・コメント・フォーク</td><td>GitHub, Qiita</td></tr>
+              </tbody>
+            </table>
+            <br>「AI生成HTMLに特化」はポジショニングであり、特許法上の<strong>技術的発明に該当しない</strong>。
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box" style="margin-bottom: 14px;">
+          <div class="box-title">◯ 特許化の可能性が残る領域</div>
+          <div class="box-body">
+            <ul class="bullets">
+              <li>AI生成HTMLを<strong>検出・分類する独自アルゴリズム</strong>を開発した場合</li>
+              <li>sandbox脱出を防ぐ<strong>新しいセキュリティ手法</strong>を発明した場合</li>
+              <li>HTMLからOGP画像を生成する<strong>特定の新手法</strong>を実装した場合</li>
+            </ul>
+            <br>現時点のrufuにはこれらの<strong>技術的発明は含まれない</strong>。将来の機能開発で生まれた際に検討。
+          </div>
+        </div>
+        <div class="box" style="background: #003d18; color: white; border-left-color: #a8e0bc;">
+          <div class="box-title" style="color: #a8e0bc;">▸ 現実的な知財戦略（推奨）</div>
+          <div class="box-body" style="color: #f0f0f0;">
+            <ul class="bullets" style="color: #f0f0f0;">
+              <li><strong style="color:white;">商標登録（優先）</strong> ─「rufu」「流布」ブランドを保護。数万円〜で実施可能。</li>
+              <li><strong style="color:white;">著作権</strong> ─ コード・デザイン・UIは作成時点で自動的に発生。追加コスト不要。</li>
+              <li><strong style="color:white;">先行者優位</strong> ─ 特許より速度。12〜18ヶ月先行してポジションを確立することが最大の防衛。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="source">知財相談は弁理士に要確認 / 2026年5月25日追記</div>
+    <div>14 / 14</div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav">
+  <button onclick="prev()">‹</button>
+  <span class="counter"><span id="current">1</span> / <span id="total">14</span></span>
+  <button onclick="next()">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let idx = 0;
+  document.getElementById('total').textContent = slides.length;
+
+  function show(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    idx = (n + slides.length) % slides.length;
+    slides[idx].classList.add('active');
+    document.getElementById('current').textContent = idx + 1;
+  }
+  function next() { show(idx + 1); }
+  function prev() { show(idx - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') next();
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+</script>
+</body>
+</html>
