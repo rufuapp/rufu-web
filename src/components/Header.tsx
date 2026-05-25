@@ -56,6 +56,9 @@ export default function Header() {
           </form>
 
           <nav className="flex items-center gap-2 flex-shrink-0 ml-auto">
+            <Link href="/feed" className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors hidden sm:block">
+              フィード
+            </Link>
             <button
               onClick={() => openAuth('login')}
               className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors"
