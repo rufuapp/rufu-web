@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import Header from '@/components/Header';
 import { POSTS, type Post } from '@/lib/posts';
 
@@ -10,15 +10,10 @@ const ALL_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライ�
 
 function SearchResults() {
   const searchParams = useSearchParams();
-  const initialQuery = searchParams.get('q') ?? '';
 
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '');
   const [activeTag, setActiveTag] = useState('');
   const [sort, setSort] = useState<'trend' | 'new'>('trend');
-
-  useEffect(() => {
-    setQuery(searchParams.get('q') ?? '');
-  }, [searchParams]);
 
   const results = POSTS.filter((p) => {
     const q = query.toLowerCase();

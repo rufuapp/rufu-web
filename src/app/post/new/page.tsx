@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import { getPostById } from '@/lib/posts';
 
@@ -40,7 +40,6 @@ const PLACEHOLDER_HTML = `<!DOCTYPE html>
 </html>`;
 
 function NewPostForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const remixId = searchParams.get('remix');
   const remixSource = remixId ? getPostById(remixId) : undefined;
@@ -48,23 +47,14 @@ function NewPostForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [inputMode, setInputMode] = useState<InputMode>('paste');
-  const [title, setTitle] = useState('');
-  const [html, setHtml] = useState('');
-  const [previewHtml, setPreviewHtml] = useState(PLACEHOLDER_HTML);
-  const [tags, setTags] = useState<string[]>([]);
+  const [title, setTitle] = useState(() => remixSource ? `【リミックス】${remixSource.title}` : '');
+  const [html, setHtml] = useState(() => remixSource?.htmlContent ?? '');
+  const [previewHtml, setPreviewHtml] = useState(() => remixSource?.htmlContent ?? PLACEHOLDER_HTML);
+  const [tags, setTags] = useState<string[]>(() => remixSource ? remixSource.tags.slice(0, 5) : []);
   const [tagInput, setTagInput] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [submitted, setSubmitted] = useState(false);
   const [fileName, setFileName] = useState('');
-
-  // リミックス元のデータを初期値としてセット
-  useEffect(() => {
-    if (!remixSource) return;
-    setTitle(`【リミックス】${remixSource.title}`);
-    setHtml(remixSource.htmlContent);
-    setPreviewHtml(remixSource.htmlContent);
-    setTags(remixSource.tags.slice(0, 5));
-  }, [remixSource]);
 
   const updatePreview = useCallback((value: string) => {
     setPreviewHtml(value.trim() ? value : PLACEHOLDER_HTML);
