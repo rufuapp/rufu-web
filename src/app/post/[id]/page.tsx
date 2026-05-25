@@ -119,10 +119,13 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 <ShareIcon size={18} />
                 シェア
               </button>
-              <button className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors ml-auto">
+              <Link
+                href={`/post/new?remix=${post.id}`}
+                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-[#00782F] transition-colors ml-auto"
+              >
                 <ForkIcon size={18} />
                 リミックス
-              </button>
+              </Link>
             </div>
 
             {/* Related posts */}

@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useCallback, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
+import { getPostById } from '@/lib/posts';
 
 const PRESET_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック', 'ツール', 'ポートフォリオ', 'データ', 'AI', 'デザイン'];
 
@@ -38,8 +39,12 @@ const PLACEHOLDER_HTML = `<!DOCTYPE html>
 </body>
 </html>`;
 
-export default function NewPostPage() {
+function NewPostForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const remixId = searchParams.get('remix');
+  const remixSource = remixId ? getPostById(remixId) : undefined;
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [inputMode, setInputMode] = useState<InputMode>('paste');
@@ -51,6 +56,15 @@ export default function NewPostPage() {
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [submitted, setSubmitted] = useState(false);
   const [fileName, setFileName] = useState('');
+
+  // リミックス元のデータを初期値としてセット
+  useEffect(() => {
+    if (!remixSource) return;
+    setTitle(`【リミックス】${remixSource.title}`);
+    setHtml(remixSource.htmlContent);
+    setPreviewHtml(remixSource.htmlContent);
+    setTags(remixSource.tags.slice(0, 5));
+  }, [remixSource]);
 
   const updatePreview = useCallback((value: string) => {
     setPreviewHtml(value.trim() ? value : PLACEHOLDER_HTML);
@@ -157,6 +171,24 @@ export default function NewPostPage() {
         <div className="flex gap-6 items-start">
           {/* Left: Form */}
           <div className="flex-1 min-w-0 space-y-5">
+
+            {/* Remix attribution badge */}
+            {remixSource && (
+              <div className="flex items-center gap-3 bg-[#e8f3ec] border border-[#00782F]/20 rounded-xl px-4 py-3">
+                <div className="flex-shrink-0" style={{ color: '#00782F' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><circle cx="18" cy="6" r="3" />
+                    <path d="M6 9v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9" /><line x1="12" y1="12" x2="12" y2="15" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-[#00782F]">リミックス元</p>
+                  <Link href={`/post/${remixSource.id}`} className="text-xs text-gray-600 hover:underline truncate block">
+                    {remixSource.title} — by {remixSource.author.name}
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Title */}
             <section className="bg-white rounded-xl border border-gray-200 p-5">
@@ -371,5 +403,13 @@ export default function NewPostPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NewPostPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50"><div className="p-8 text-center text-sm text-gray-400">読み込み中...</div></div>}>
+      <NewPostForm />
+    </Suspense>
   );
 }
