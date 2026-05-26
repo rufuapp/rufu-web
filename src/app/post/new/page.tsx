@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import { getPostById } from '@/lib/posts';
+import { createClient } from '@/lib/supabase/client';
 
 const PRESET_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック', 'ツール', 'ポートフォリオ', 'データ', 'AI', 'デザイン'];
 
@@ -54,6 +55,9 @@ function NewPostForm() {
   const [tagInput, setTagInput] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [newPostId, setNewPostId] = useState('');
   const [fileName, setFileName] = useState('');
 
   const updatePreview = useCallback((value: string) => {
@@ -103,8 +107,46 @@ function NewPostForm() {
 
   const canSubmit = title.trim() && html.trim() && tags.length > 0;
 
-  const handleSubmit = () => {
-    if (!canSubmit) return;
+  const handleSubmit = async () => {
+    if (!canSubmit || submitting) return;
+    setSubmitError('');
+    setSubmitting(true);
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      setSubmitError('投稿するにはログインが必要です');
+      setSubmitting(false);
+      return;
+    }
+
+    const { data: post, error } = await supabase
+      .from('posts')
+      .insert({
+        user_id: user.id,
+        title: title.trim(),
+        html_content: html,
+        visibility,
+        remix_source_id: remixSource ? null : null,
+      })
+      .select('id')
+      .single();
+
+    if (error || !post) {
+      setSubmitError('投稿に失敗しました。もう一度お試しください。');
+      setSubmitting(false);
+      return;
+    }
+
+    if (tags.length > 0) {
+      await supabase.from('post_tags').insert(
+        tags.map((tag) => ({ post_id: post.id, tag }))
+      );
+    }
+
+    setNewPostId(post.id);
+    setSubmitting(false);
     setSubmitted(true);
   };
 
@@ -125,13 +167,13 @@ function NewPostForm() {
           <p className="text-gray-500 text-sm mb-8">「{title}」を公開しました。</p>
           <div className="flex gap-3 justify-center">
             <Link
-              href="/"
+              href={newPostId ? `/post/${newPostId}` : '/feed'}
               className="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
             >
-              フィードへ戻る
+              投稿を見る
             </Link>
             <button
-              onClick={() => { setSubmitted(false); setTitle(''); setHtml(''); setPreviewHtml(PLACEHOLDER_HTML); setTags([]); setFileName(''); }}
+              onClick={() => { setSubmitted(false); setTitle(''); setHtml(''); setPreviewHtml(PLACEHOLDER_HTML); setTags([]); setFileName(''); setNewPostId(''); }}
               className="px-5 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: '#00782F' }}
             >
@@ -342,6 +384,9 @@ function NewPostForm() {
             </section>
 
             {/* Submit */}
+            {submitError && (
+              <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{submitError}</p>
+            )}
             <div className="flex gap-3">
               <Link
                 href="/"
@@ -351,11 +396,11 @@ function NewPostForm() {
               </Link>
               <button
                 onClick={handleSubmit}
-                disabled={!canSubmit}
+                disabled={!canSubmit || submitting}
                 className="flex-1 py-2.5 text-sm font-medium text-white rounded-full transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
                 style={{ backgroundColor: '#00782F' }}
               >
-                投稿する
+                {submitting ? '投稿中...' : '投稿する'}
               </button>
             </div>
           </div>
