@@ -134,7 +134,7 @@ function NewPostForm() {
       .single();
 
     if (error || !post) {
-      setSubmitError('投稿に失敗しました。もう一度お試しください。');
+      setSubmitError(`投稿に失敗しました: ${error?.message ?? 'unknown error'}`);
       setSubmitting(false);
       return;
     }
