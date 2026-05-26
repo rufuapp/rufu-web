@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 type AuthTab = 'login' | 'register';
 
@@ -11,6 +13,22 @@ export default function Header() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<AuthTab>('login');
   const [searchQuery, setSearchQuery] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh();
+  };
 
   const openAuth = (tab: AuthTab = 'login') => {
     setAuthTab(tab);
@@ -59,12 +77,30 @@ export default function Header() {
             <Link href="/feed" className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors hidden sm:block">
               フィード
             </Link>
-            <button
-              onClick={() => openAuth('login')}
-              className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors"
-            >
-              ログイン
-            </button>
+            {user ? (
+              <>
+                <Link
+                  href={`/user/${user.user_metadata?.name ?? user.email?.split('@')[0]}`}
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                  style={{ backgroundColor: '#00782F' }}
+                >
+                  {(user.user_metadata?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1.5 transition-colors"
+                >
+                  ログアウト
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => openAuth('login')}
+                className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1.5 transition-colors"
+              >
+                ログイン
+              </button>
+            )}
             <Link
               href="/post/new"
               className="text-sm font-medium text-white px-4 py-1.5 rounded-full transition-opacity hover:opacity-90"
@@ -97,14 +133,38 @@ function AuthModal({
   onTabChange: (t: AuthTab) => void;
   onClose: () => void;
 }) {
+  const supabase = createClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+    if (tab === 'login') {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setError(error.message); setLoading(false); return; }
+    } else {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { name: username, full_name: username } },
+      });
+      if (error) { setError(error.message); setLoading(false); return; }
+    }
+    setLoading(false);
     setDone(true);
+  };
+
+  const handleGoogle = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${location.origin}/auth/callback` },
+    });
   };
 
   return (
@@ -209,12 +269,17 @@ function AuthModal({
                 </div>
               )}
 
+              {error && (
+                <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">{error}</p>
+              )}
+
               <button
                 type="submit"
-                className="w-full py-2.5 text-sm font-medium text-white rounded-full hover:opacity-90 transition-opacity mt-2"
+                disabled={loading}
+                className="w-full py-2.5 text-sm font-medium text-white rounded-full hover:opacity-90 transition-opacity mt-2 disabled:opacity-60"
                 style={{ backgroundColor: '#00782F' }}
               >
-                {tab === 'login' ? 'ログイン' : 'アカウントを作成'}
+                {loading ? '処理中...' : tab === 'login' ? 'ログイン' : 'アカウントを作成'}
               </button>
 
               <div className="relative my-1">
@@ -228,6 +293,7 @@ function AuthModal({
 
               <button
                 type="button"
+                onClick={handleGoogle}
                 className="w-full py-2.5 text-sm font-medium text-gray-700 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24">
