@@ -233,7 +233,7 @@ function AuthModal({
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="例: yamada_dev"
                     required
-                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
+                    className="w-full text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
                   />
                 </div>
               )}
@@ -245,7 +245,7 @@ function AuthModal({
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
+                  className="w-full text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
                 />
               </div>
               <div>
@@ -257,7 +257,7 @@ function AuthModal({
                   placeholder="••••••••"
                   required
                   minLength={8}
-                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
+                  className="w-full text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
                 />
               </div>
 
