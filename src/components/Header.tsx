@@ -78,21 +78,37 @@ export default function Header() {
               フィード
             </Link>
             {user ? (
-              <>
-                <Link
-                  href={`/user/${user.user_metadata?.name ?? user.email?.split('@')[0]}`}
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                  style={{ backgroundColor: '#00782F' }}
-                >
-                  {(user.user_metadata?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1.5 transition-colors"
-                >
-                  ログアウト
-                </button>
-              </>
+              user.is_anonymous ? (
+                <>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center bg-gray-200 flex-shrink-0" title="ゲストユーザー">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                  <button
+                    onClick={() => openAuth('register')}
+                    className="text-sm text-[#00782F] hover:underline px-2 py-1.5 transition-colors font-medium"
+                  >
+                    アカウント登録
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href={`/user/${user.user_metadata?.name ?? user.email?.split('@')[0]}`}
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                    style={{ backgroundColor: '#00782F' }}
+                  >
+                    {(user.user_metadata?.full_name ?? user.email ?? 'U')[0].toUpperCase()}
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1.5 transition-colors"
+                  >
+                    ログアウト
+                  </button>
+                </>
+              )
             ) : (
               <button
                 onClick={() => openAuth('login')}

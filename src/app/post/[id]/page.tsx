@@ -1,36 +1,197 @@
 'use client';
 
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { use, useState } from 'react';
+import { notFound, useRouter } from 'next/navigation';
+import { use, useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import { getPostById, POSTS } from '@/lib/posts';
-import { getCommentsByPostId, type Comment } from '@/lib/comments';
+import { createClient } from '@/lib/supabase/client';
+
+type DbPost = {
+  id: string;
+  user_id: string;
+  title: string;
+  html_content: string;
+  likes_count: number;
+  bookmarks_count: number;
+  views_count: number;
+  created_at: string;
+  profiles: { name: string; display_name: string } | null;
+  post_tags: { tag: string }[];
+};
+
+type DbComment = {
+  id: string;
+  body: string;
+  likes_count: number;
+  created_at: string;
+  profiles: { name: string; display_name: string } | null;
+};
+
+function formatDate(iso: string) {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (diff === 0) return '今日';
+  if (diff === 1) return '昨日';
+  if (diff < 7) return `${diff}日前`;
+  return new Date(iso).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' });
+}
 
 export default function PostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const post = getPostById(id);
-  if (!post) notFound();
-
+  const router = useRouter();
+  const [post, setPost] = useState<DbPost | null | 'loading'>('loading');
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserInitial, setCurrentUserInitial] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [presentationMode, setPresentationMode] = useState(false);
+  const [comments, setComments] = useState<DbComment[]>([]);
+  const [commentBody, setCommentBody] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reported, setReported] = useState(false);
 
-  const related = POSTS.filter(
-    (p) => p.id !== post.id && p.tags.some((t) => post.tags.includes(t))
-  ).slice(0, 3);
+  useEffect(() => {
+    if (!presentationMode) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setPresentationMode(false); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [presentationMode]);
 
-  const initialComments = getCommentsByPostId(id);
-  const [comments, setComments] = useState(initialComments);
-  const [commentInput, setCommentInput] = useState('');
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data }) => {
+      const uid = data.user?.id ?? null;
+      setCurrentUserId(uid);
+      if (uid) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('name, display_name')
+          .eq('id', uid)
+          .single();
+        setCurrentUserInitial((profile?.display_name ?? profile?.name ?? 'U')[0].toUpperCase());
+      }
+    });
+    supabase
+      .from('posts')
+      .select(`
+        id, title, html_content, likes_count, bookmarks_count, views_count, created_at, user_id,
+        profiles!posts_user_id_fkey ( name, display_name ),
+        post_tags ( tag )
+      `)
+      .eq('id', id)
+      .single()
+      .then(({ data }) => {
+        setPost((data as unknown as DbPost) ?? null);
+      });
+
+    supabase
+      .from('comments')
+      .select('id, body, likes_count, created_at, profiles!comments_user_id_fkey(name, display_name)')
+      .eq('post_id', id)
+      .order('created_at', { ascending: true })
+      .then(({ data }) => {
+        setComments((data as unknown as DbComment[]) ?? []);
+      });
+  }, [id]);
+
+  const handleReport = async (reason: string) => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    await supabase.from('reports').insert({
+      post_id: id,
+      reporter_id: user?.id ?? null,
+      reason,
+    });
+    setReported(true);
+    setReportOpen(false);
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('この投稿を削除しますか？この操作は元に戻せません。')) return;
+    setDeleting(true);
+    const supabase = createClient();
+    const { error } = await supabase.from('posts').delete().eq('id', id);
+    if (error) {
+      alert('削除に失敗しました');
+      setDeleting(false);
+      return;
+    }
+    router.push('/feed');
+  };
+
+  const handleComment = async () => {
+    if (!commentBody.trim() || !currentUserId) return;
+    setSubmitting(true);
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('comments')
+      .insert({ post_id: id, user_id: currentUserId, body: commentBody.trim() })
+      .select('id, body, likes_count, created_at, profiles!comments_user_id_fkey(name, display_name)')
+      .single();
+    if (!error && data) {
+      setComments((prev) => [...prev, data as unknown as DbComment]);
+      setCommentBody('');
+    }
+    setSubmitting(false);
+  };
+
+  if (post === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <main className="max-w-6xl mx-auto px-4 py-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-1/3" />
+            <div className="h-6 bg-gray-200 rounded w-2/3" />
+            <div className="h-80 bg-gray-200 rounded-xl" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (post === null) notFound();
+
+  if (presentationMode) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black flex flex-col">
+        <div className="flex items-center justify-between px-4 py-2 bg-black/90 flex-shrink-0">
+          <span className="text-white text-sm font-medium truncate max-w-lg">{post.title}</span>
+          <button
+            onClick={() => setPresentationMode(false)}
+            className="text-gray-400 hover:text-white text-sm px-3 py-1.5 rounded border border-gray-600 hover:border-gray-400 transition-colors flex-shrink-0 ml-4"
+          >
+            ESC で終了
+          </button>
+        </div>
+        <iframe
+          srcDoc={post.html_content}
+          sandbox="allow-scripts"
+          className="flex-1 w-full"
+          style={{ border: 'none' }}
+          title={post.title}
+        />
+      </div>
+    );
+  }
+
+  const authorName = post.profiles?.display_name ?? post.profiles?.name ?? '不明';
+  const initial = authorName[0]?.toUpperCase() ?? '?';
+  const username = post.profiles?.name ?? '';
+  const tags = post.post_tags.map((t) => t.tag);
+
+  const related: DbPost[] = []; // 関連投稿は将来実装
 
   return (
+    <>
     <div className="min-h-screen bg-gray-50">
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-gray-400 mb-5">
-          <Link href="/" className="hover:text-gray-600 transition-colors">
+          <Link href="/feed" className="hover:text-gray-600 transition-colors">
             フィード
           </Link>
           <span>/</span>
@@ -50,33 +211,32 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
                 style={{ backgroundColor: '#00782F' }}
               >
-                {post.author.initial}
+                {initial}
               </div>
               <div>
-                <Link href={`/user/${post.author.name}`} className="text-sm font-medium text-gray-800 hover:text-[#00782F] transition-colors">
-                  {post.author.name}
+                <Link href={`/user/${username}`} className="text-sm font-medium text-gray-800 hover:text-[#00782F] transition-colors">
+                  {authorName}
                 </Link>
-                <p className="text-xs text-gray-400">{post.createdAt}</p>
+                <p className="text-xs text-gray-400">{formatDate(post.created_at)}</p>
               </div>
-              <button
-                className="ml-auto text-xs font-medium px-3 py-1.5 rounded-full border border-[#00782F] text-[#00782F] hover:bg-[#00782F] hover:text-white transition-colors"
-              >
+              <button className="ml-auto text-xs font-medium px-3 py-1.5 rounded-full border border-[#00782F] text-[#00782F] hover:bg-[#00782F] hover:text-white transition-colors">
                 フォロー
               </button>
             </div>
 
             {/* Tags */}
-            <div className="flex gap-2 flex-wrap mb-5">
-              {post.tags.map((tag) => (
-                <Link
-                  key={tag}
-                  href={`/?tag=${tag}`}
-                  className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                >
-                  {tag}
-                </Link>
-              ))}
-            </div>
+            {tags.length > 0 && (
+              <div className="flex gap-2 flex-wrap mb-5">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-600"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* HTML Preview iframe */}
             <div className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm mb-5">
@@ -85,9 +245,19 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
                 <span className="ml-3 text-xs text-gray-400 font-mono">preview</span>
+                <button
+                  onClick={() => setPresentationMode(true)}
+                  className="ml-auto flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#00782F] transition-colors font-medium"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+                    <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+                  </svg>
+                  全画面プレゼン
+                </button>
               </div>
               <iframe
-                srcDoc={post.htmlContent}
+                srcDoc={post.html_content}
                 sandbox="allow-scripts"
                 className="w-full"
                 style={{ height: '480px', border: 'none' }}
@@ -104,7 +274,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 }`}
               >
                 <HeartIcon filled={liked} size={18} />
-                {post.likes + (liked ? 1 : 0)}
+                {post.likes_count + (liked ? 1 : 0)}
               </button>
               <button
                 onClick={() => setBookmarked(!bookmarked)}
@@ -113,7 +283,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 }`}
               >
                 <BookmarkIcon filled={bookmarked} size={18} />
-                {post.bookmarks + (bookmarked ? 1 : 0)}
+                {post.bookmarks_count + (bookmarked ? 1 : 0)}
               </button>
               <button className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors">
                 <ShareIcon size={18} />
@@ -126,87 +296,117 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 <ForkIcon size={18} />
                 リミックス
               </Link>
+              <button
+                onClick={() => !reported && setReportOpen(true)}
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                  reported
+                    ? 'text-gray-300 cursor-default'
+                    : 'text-gray-400 hover:text-red-400'
+                }`}
+              >
+                <FlagIcon size={16} />
+                {reported ? '報告済み' : '通報'}
+              </button>
+              {currentUserId && currentUserId === post.user_id && (
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex items-center gap-1.5 text-sm font-medium text-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                >
+                  <TrashIcon size={18} />
+                  {deleting ? '削除中...' : '削除'}
+                </button>
+              )}
             </div>
 
-            {/* Related posts */}
             {related.length > 0 && (
               <section className="mb-8">
                 <h2 className="text-sm font-semibold text-gray-700 mb-3">関連コンテンツ</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {related.map((r) => (
-                    <Link
-                      key={r.id}
-                      href={`/post/${r.id}`}
-                      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-sm transition-shadow group"
-                    >
-                      <div className={`h-24 bg-gradient-to-br ${r.previewGradient}`} />
-                      <div className="p-3">
-                        <p className="text-xs font-semibold text-gray-800 line-clamp-2 group-hover:text-[#00782F] transition-colors">
-                          {r.title}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">{r.author.name}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
               </section>
             )}
 
             {/* Comments */}
             <section>
               <h2 className="text-sm font-semibold text-gray-700 mb-4">
-                コメント {comments.length > 0 && <span className="text-gray-400 font-normal">({comments.length})</span>}
+                コメント
+                {comments.length > 0 && (
+                  <span className="ml-2 text-xs font-normal text-gray-400">{comments.length}件</span>
+                )}
               </h2>
-
-              {/* Comment input */}
-              <div className="flex gap-3 mb-6">
-                <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: '#00782F' }}>
-                  あ
-                </div>
-                <div className="flex-1">
-                  <textarea
-                    value={commentInput}
-                    onChange={(e) => setCommentInput(e.target.value)}
-                    placeholder="コメントを入力..."
-                    rows={2}
-                    className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition placeholder-gray-400"
-                  />
-                  {commentInput.trim() && (
-                    <div className="flex justify-end mt-2">
-                      <button
-                        onClick={() => {
-                          setComments([
-                            {
-                              id: `new-${Date.now()}`,
-                              postId: id,
-                              author: { name: 'あなた', initial: 'あ' },
-                              body: commentInput.trim(),
-                              createdAt: 'たった今',
-                              likes: 0,
-                            },
-                            ...comments,
-                          ]);
-                          setCommentInput('');
-                        }}
-                        className="text-sm font-medium text-white px-4 py-1.5 rounded-full hover:opacity-90 transition-opacity"
-                        style={{ backgroundColor: '#00782F' }}
-                      >
-                        投稿
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
 
               {/* Comment list */}
               {comments.length > 0 ? (
-                <div className="space-y-4">
-                  {comments.map((comment) => (
-                    <CommentItem key={comment.id} comment={comment} />
-                  ))}
+                <ul className="space-y-4 mb-6">
+                  {comments.map((c) => {
+                    const name = c.profiles?.display_name ?? c.profiles?.name ?? '不明';
+                    const initial = name[0]?.toUpperCase() ?? '?';
+                    return (
+                      <li key={c.id} className="flex gap-3">
+                        <div
+                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 mt-0.5"
+                          style={{ backgroundColor: '#00782F' }}
+                        >
+                          {initial}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline gap-2 mb-1">
+                            <span className="text-xs font-semibold text-gray-800">{name}</span>
+                            <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+                          </div>
+                          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{c.body}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-400 mb-6">まだコメントがありません。最初のコメントを書きましょう！</p>
+              )}
+
+              {/* Comment form */}
+              {currentUserId ? (
+                <div className="flex gap-3">
+                  <div
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 mt-0.5"
+                    style={{ backgroundColor: '#00782F' }}
+                  >
+                    {currentUserInitial || 'U'}
+                  </div>
+                  <div className="flex-1">
+                    <textarea
+                      value={commentBody}
+                      onChange={(e) => setCommentBody(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleComment();
+                      }}
+                      placeholder="コメントを書く…"
+                      rows={3}
+                      className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition-colors placeholder:text-gray-300"
+                    />
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="text-xs text-gray-400">⌘+Enter で送信</span>
+                      <button
+                        onClick={handleComment}
+                        disabled={!commentBody.trim() || submitting}
+                        className="text-xs font-semibold text-white px-4 py-1.5 rounded-full transition-opacity disabled:opacity-40"
+                        style={{ backgroundColor: '#00782F' }}
+                      >
+                        {submitting ? '送信中…' : '送信'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-400 text-center py-8">まだコメントがありません。最初のコメントを投稿しましょう。</p>
+                <div className="text-center py-5 border border-dashed border-gray-200 rounded-xl">
+                  <p className="text-xs text-gray-400 mb-3">コメントするにはログインが必要です</p>
+                  <Link
+                    href="/auth/callback"
+                    className="text-xs font-semibold text-white px-5 py-2 rounded-full hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: '#00782F' }}
+                  >
+                    ログイン
+                  </Link>
+                </div>
               )}
             </section>
           </div>
@@ -223,7 +423,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                     <EyeIcon size={13} /> 閲覧数
                   </span>
                   <span className="text-sm font-semibold text-gray-800">
-                    {post.views.toLocaleString()}
+                    {post.views_count.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -231,7 +431,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                     <HeartIcon filled={false} size={13} /> いいね
                   </span>
                   <span className="text-sm font-semibold text-gray-800">
-                    {post.likes + (liked ? 1 : 0)}
+                    {post.likes_count + (liked ? 1 : 0)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -239,7 +439,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                     <BookmarkIcon filled={false} size={13} /> ブックマーク
                   </span>
                   <span className="text-sm font-semibold text-gray-800">
-                    {post.bookmarks + (bookmarked ? 1 : 0)}
+                    {post.bookmarks_count + (bookmarked ? 1 : 0)}
                   </span>
                 </div>
               </div>
@@ -250,12 +450,25 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 HTMLを取得
               </h3>
               <button
+                onClick={() => {
+                  const blob = new Blob([post.html_content], { type: 'text/html' });
+                  const a = document.createElement('a');
+                  a.href = URL.createObjectURL(blob);
+                  a.download = `${post.title}.html`;
+                  a.click();
+                }}
                 className="w-full text-sm font-medium text-white py-2 rounded-lg transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#00782F' }}
               >
                 ダウンロード
               </button>
-              <button className="w-full mt-2 text-sm font-medium text-gray-600 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+              <button
+                onClick={() => {
+                  const win = window.open('', '_blank');
+                  win?.document.write(post.html_content);
+                }}
+                className="w-full mt-2 text-sm font-medium text-gray-600 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+              >
                 ソースを見る
               </button>
             </div>
@@ -263,35 +476,39 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
         </div>
       </main>
     </div>
-  );
-}
 
-function CommentItem({ comment }: { comment: Comment }) {
-  const [liked, setLiked] = useState(false);
-  return (
-    <div className="flex gap-3">
-      <Link href={`/user/${comment.author.name}`} className="flex-shrink-0">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: '#00782F' }}>
-          {comment.author.initial}
+    {/* Report modal */}
+    {reportOpen && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+        onClick={(e) => { if (e.target === e.currentTarget) setReportOpen(false); }}
+      >
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+          <div className="flex items-center justify-between px-5 pt-5 pb-3">
+            <h2 className="text-sm font-bold text-gray-900">この投稿を通報する</h2>
+            <button onClick={() => setReportOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 px-5 mb-4">通報の理由を選んでください</p>
+          <div className="px-5 pb-5 space-y-2">
+            {['スパム・宣伝', '不適切なコンテンツ', '著作権侵害', 'その他'].map((reason) => (
+              <button
+                key={reason}
+                onClick={() => handleReport(reason)}
+                className="w-full text-left text-sm text-gray-700 px-4 py-2.5 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 hover:text-red-600 transition-colors"
+              >
+                {reason}
+              </button>
+            ))}
+          </div>
         </div>
-      </Link>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2 mb-1">
-          <Link href={`/user/${comment.author.name}`} className="text-xs font-semibold text-gray-800 hover:text-[#00782F] transition-colors">
-            {comment.author.name}
-          </Link>
-          <span className="text-xs text-gray-400">{comment.createdAt}</span>
-        </div>
-        <p className="text-sm text-gray-700 leading-relaxed">{comment.body}</p>
-        <button
-          onClick={() => setLiked(!liked)}
-          className={`flex items-center gap-1 text-xs mt-1.5 transition-colors ${liked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'}`}
-        >
-          <HeartIcon filled={liked} size={12} />
-          {comment.likes + (liked ? 1 : 0)}
-        </button>
       </div>
-    </div>
+    )}
+    </>
   );
 }
 
@@ -334,6 +551,22 @@ function ForkIcon({ size = 14 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><circle cx="18" cy="6" r="3" />
       <path d="M6 9v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9" /><line x1="12" y1="12" x2="12" y2="15" />
+    </svg>
+  );
+}
+
+function TrashIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" />
+    </svg>
+  );
+}
+
+function FlagIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" />
     </svg>
   );
 }

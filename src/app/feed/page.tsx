@@ -1,21 +1,82 @@
 'use client';
 
-import { useState } from 'react';
-import { POSTS, type Post } from '@/lib/posts';
+import { useState, useEffect, useRef } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/Header';
 import Link from 'next/link';
 
-const ALL_TAGS = ['すべて', 'スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック'];
-const TABS = ['トレンド', '新着', 'フォロー中'] as const;
+type DbPost = {
+  id: string;
+  title: string;
+  html_content: string;
+  likes_count: number;
+  bookmarks_count: number;
+  views_count: number;
+  created_at: string;
+  profiles: { name: string; display_name: string } | null;
+  post_tags: { tag: string }[];
+};
+
+const GRADIENTS = [
+  'from-blue-400 to-purple-600',
+  'from-green-400 to-teal-600',
+  'from-orange-400 to-red-600',
+  'from-pink-400 to-rose-600',
+  'from-indigo-400 to-blue-600',
+  'from-yellow-400 to-orange-600',
+  'from-teal-400 to-cyan-600',
+  'from-purple-400 to-pink-600',
+];
+
+function gradientFor(id: string) {
+  const n = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  return GRADIENTS[n % GRADIENTS.length];
+}
+
+function formatDate(iso: string) {
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (diff === 0) return '今日';
+  if (diff === 1) return '昨日';
+  if (diff < 7) return `${diff}日前`;
+  return new Date(iso).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+}
+
+const TABS = ['新着', 'トレンド'] as const;
 type Tab = (typeof TABS)[number];
 
 export default function FeedPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('トレンド');
+  const [activeTab, setActiveTab] = useState<Tab>('新着');
   const [activeTag, setActiveTag] = useState('すべて');
+  const [posts, setPosts] = useState<DbPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredPosts = POSTS.filter(
-    (p) => activeTag === 'すべて' || p.tags.includes(activeTag)
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('posts')
+      .select(`
+        id, title, html_content, likes_count, bookmarks_count, views_count, created_at,
+        profiles!posts_user_id_fkey ( name, display_name ),
+        post_tags ( tag )
+      `)
+      .eq('visibility', 'public')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setPosts((data as unknown as DbPost[]) ?? []);
+        setLoading(false);
+      });
+  }, []);
+
+  const allTags = ['すべて', ...Array.from(new Set(posts.flatMap((p) => p.post_tags.map((t) => t.tag))))];
+
+  const filtered = posts.filter(
+    (p) => activeTag === 'すべて' || p.post_tags.some((t) => t.tag === activeTag)
   );
+
+  const sorted =
+    activeTab === 'トレンド'
+      ? [...filtered].sort((a, b) => b.likes_count - a.likes_count)
+      : filtered;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -40,32 +101,55 @@ export default function FeedPage() {
         </div>
 
         {/* Tag filters */}
-        <div className="flex gap-2 flex-wrap mb-6">
-          {ALL_TAGS.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setActiveTag(tag)}
-              className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                activeTag === tag
-                  ? 'bg-[#00782F] text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        {!loading && allTags.length > 1 && (
+          <div className="flex gap-2 flex-wrap mb-6">
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setActiveTag(tag)}
+                className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                  activeTag === tag
+                    ? 'bg-[#00782F] text-white'
+                    : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Card grid */}
-        {filteredPosts.length > 0 ? (
+        {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredPosts.map((post) => (
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+                <div className="h-40 bg-gray-200" />
+                <div className="p-4 space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : sorted.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sorted.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </div>
         ) : (
           <div className="text-center py-20 text-gray-400">
-            <p className="text-sm">このカテゴリにはまだ投稿がありません</p>
+            <p className="text-sm">
+              {posts.length === 0 ? 'まだ投稿がありません。最初の投稿者になりましょう！' : 'このカテゴリにはまだ投稿がありません'}
+            </p>
+            <Link
+              href="/post/new"
+              className="inline-block mt-4 text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#00782F' }}
+            >
+              投稿する
+            </Link>
           </div>
         )}
       </main>
@@ -73,27 +157,61 @@ export default function FeedPage() {
   );
 }
 
-
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post }: { post: DbPost }) {
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setScale(entry.contentRect.width / 1200);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const authorName = post.profiles?.display_name ?? post.profiles?.name ?? '不明';
+  const initial = authorName[0]?.toUpperCase() ?? '?';
+  const gradient = gradientFor(post.id);
+  const firstTag = post.post_tags[0]?.tag;
 
   return (
-    <article className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
+    <article className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
       <Link href={`/post/${post.id}`} className="block">
-        {/* Preview */}
-        <div className={`h-40 bg-gradient-to-br ${post.previewGradient} relative`}>
-          <PreviewIcon />
-          <div className="absolute top-3 right-3">
-            <span className="text-xs bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-              {post.tags[0]}
-            </span>
-          </div>
+        <div ref={containerRef} className="relative overflow-hidden h-44">
+          <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+          {scale > 0 && post.html_content && (
+            <iframe
+              srcDoc={post.html_content}
+              sandbox="allow-scripts"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '1200px',
+                height: '600px',
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                border: 'none',
+                pointerEvents: 'none',
+              }}
+              title={post.title}
+            />
+          )}
+          {firstTag && (
+            <div className="absolute top-3 right-3 z-10">
+              <span className="text-xs bg-black/25 text-white px-2.5 py-1 rounded-full backdrop-blur-sm font-medium">
+                {firstTag}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Content */}
-        <div className="p-4">
-          <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-3 group-hover:text-[#00782F] transition-colors leading-snug">
+        <div className="px-4 pt-3 pb-2">
+          <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2.5 group-hover:text-[#00782F] transition-colors leading-snug">
             {post.title}
           </h2>
           <div className="flex items-center gap-2">
@@ -101,17 +219,16 @@ function PostCard({ post }: { post: Post }) {
               className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
               style={{ backgroundColor: '#00782F' }}
             >
-              {post.author.initial}
+              {initial}
             </div>
-            <span className="text-xs text-gray-500 truncate">{post.author.name}</span>
+            <span className="text-xs text-gray-500 truncate">{authorName}</span>
             <span className="text-xs text-gray-300 flex-shrink-0">·</span>
-            <span className="text-xs text-gray-400 flex-shrink-0">{post.createdAt}</span>
+            <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(post.created_at)}</span>
           </div>
         </div>
       </Link>
 
-      {/* Stats — outside Link to allow independent click */}
-      <div className="flex items-center gap-3 px-4 pb-4 border-t border-gray-100 pt-3">
+      <div className="flex items-center gap-3 px-4 pt-2 pb-3 border-t border-gray-50">
         <button
           onClick={() => setLiked(!liked)}
           className={`flex items-center gap-1 text-xs transition-colors ${
@@ -119,7 +236,7 @@ function PostCard({ post }: { post: Post }) {
           }`}
         >
           <HeartIcon filled={liked} />
-          {post.likes + (liked ? 1 : 0)}
+          {post.likes_count + (liked ? 1 : 0)}
         </button>
         <button
           onClick={() => setBookmarked(!bookmarked)}
@@ -128,28 +245,17 @@ function PostCard({ post }: { post: Post }) {
           }`}
         >
           <BookmarkIcon filled={bookmarked} />
-          {post.bookmarks + (bookmarked ? 1 : 0)}
+          {post.bookmarks_count + (bookmarked ? 1 : 0)}
         </button>
         <span className="flex items-center gap-1 text-xs text-gray-400 ml-auto">
           <EyeIcon />
-          {post.views.toLocaleString()}
+          {post.views_count.toLocaleString()}
         </span>
       </div>
     </article>
   );
 }
 
-function PreviewIcon() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center opacity-20">
-      <svg width="64" height="64" viewBox="0 0 64 64" fill="white">
-        <rect x="8" y="6" width="48" height="36" rx="4" />
-        <rect x="14" y="46" width="36" height="5" rx="2.5" />
-        <rect x="22" y="51" width="20" height="5" rx="2.5" />
-      </svg>
-    </div>
-  );
-}
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (

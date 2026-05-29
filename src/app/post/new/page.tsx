@@ -6,6 +6,7 @@ import { Suspense, useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import { getPostById } from '@/lib/posts';
 import { createClient } from '@/lib/supabase/client';
+import { checkContent } from '@/lib/content-filter';
 
 const PRESET_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック', 'ツール', 'ポートフォリオ', 'データ', 'AI', 'デザイン'];
 
@@ -112,13 +113,24 @@ function NewPostForm() {
     setSubmitError('');
     setSubmitting(true);
 
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      setSubmitError('投稿するにはログインが必要です');
+    const filterResult = checkContent(html);
+    if (!filterResult.ok) {
+      setSubmitError(filterResult.reason);
       setSubmitting(false);
       return;
+    }
+
+    const supabase = createClient();
+    let { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      const { data, error } = await supabase.auth.signInAnonymously();
+      if (error || !data.user) {
+        setSubmitError('セッションの作成に失敗しました。再度お試しください。');
+        setSubmitting(false);
+        return;
+      }
+      user = data.user;
     }
 
     const { data: post, error } = await supabase
@@ -134,7 +146,13 @@ function NewPostForm() {
       .single();
 
     if (error || !post) {
-      setSubmitError(`投稿に失敗しました: ${error?.message ?? 'unknown error'}`);
+      const isRateLimit =
+        error?.code === 'P0001' && error?.message?.includes('rate_limit_exceeded');
+      setSubmitError(
+        isRateLimit
+          ? '1時間に投稿できるのは5件までです。しばらく待ってから再試行してください。'
+          : `投稿に失敗しました: ${error?.message ?? 'unknown error'}`
+      );
       setSubmitting(false);
       return;
     }

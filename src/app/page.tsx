@@ -1,12 +1,30 @@
 import Link from 'next/link';
-import { POSTS } from '@/lib/posts';
+import { createClient } from '@/lib/supabase/server';
+import { HtmlPreviewCard } from '@/components/HtmlPreviewCard';
 
-const STATS = [
-  { value: '1,200+', label: '投稿数' },
-  { value: '480+', label: 'クリエイター' },
-  { value: '45,000+', label: '月間閲覧数' },
-  { value: '92%', label: 'Claude生成' },
+type GalleryPost = {
+  id: string;
+  title: string;
+  html_content: string;
+  post_tags: { tag: string }[];
+  profiles: { name: string; display_name: string } | null;
+};
+
+const GRADIENTS = [
+  'from-blue-400 to-purple-600',
+  'from-green-400 to-teal-600',
+  'from-orange-400 to-red-600',
+  'from-pink-400 to-rose-600',
+  'from-indigo-400 to-blue-600',
+  'from-yellow-400 to-orange-600',
+  'from-teal-400 to-cyan-600',
+  'from-purple-400 to-pink-600',
 ];
+
+function gradientFor(id: string) {
+  const n = id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  return GRADIENTS[n % GRADIENTS.length];
+}
 
 const FEATURES = [
   {
@@ -45,10 +63,55 @@ const STEPS = [
   { num: '03', title: 'コミュニティで広まる', desc: 'フィードに表示され、世界中のクリエイターに発見されます。いいね・コメントで反響を確認。' },
 ];
 
-const GALLERY_IDS = ['5', '8', '2', '3', '9', '1'];
+export default async function LandingPage() {
+  const supabase = await createClient();
 
-export default function LandingPage() {
-  const galleryPosts = GALLERY_IDS.map((id) => POSTS.find((p) => p.id === id)).filter(Boolean) as typeof POSTS;
+  const [
+    { count: postsCount },
+    { data: userIds },
+    { data: viewsData },
+    { data: galleryPosts },
+  ] = await Promise.all([
+    supabase
+      .from('posts')
+      .select('id', { count: 'exact', head: true })
+      .eq('visibility', 'public'),
+    supabase
+      .from('posts')
+      .select('user_id')
+      .eq('visibility', 'public'),
+    supabase
+      .from('posts')
+      .select('views_count')
+      .eq('visibility', 'public'),
+    supabase
+      .from('posts')
+      .select('id, title, html_content, post_tags(tag), profiles!posts_user_id_fkey(name, display_name)')
+      .eq('visibility', 'public')
+      .order('likes_count', { ascending: false })
+      .limit(6),
+  ]);
+
+  const creatorsCount = new Set(userIds?.map((r) => r.user_id)).size;
+  const viewsTotal = viewsData?.reduce((sum, r) => sum + (r.views_count ?? 0), 0) ?? 0;
+
+  const STATS = [
+    {
+      value: postsCount ? `${postsCount.toLocaleString()}+` : '1,200+',
+      label: '投稿数',
+    },
+    {
+      value: creatorsCount ? `${creatorsCount.toLocaleString()}+` : '480+',
+      label: 'クリエイター',
+    },
+    {
+      value: viewsTotal ? `${viewsTotal.toLocaleString()}+` : '45,000+',
+      label: '月間閲覧数',
+    },
+    { value: '92%', label: 'Claude生成' },
+  ];
+
+  const gallery = (galleryPosts ?? []) as unknown as GalleryPost[];
 
   return (
     <div className="min-h-screen bg-white">
@@ -106,30 +169,32 @@ export default function LandingPage() {
 
       {/* Gallery preview */}
       <section className="max-w-6xl mx-auto px-4 pb-20">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {galleryPosts.map((post) => (
+        {gallery.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {gallery.map((post) => (
+              <HtmlPreviewCard
+                key={post.id}
+                href={`/post/${post.id}`}
+                title={post.title}
+                authorName={post.profiles?.name ?? ''}
+                firstTag={post.post_tags?.[0]?.tag}
+                html={post.html_content ?? ''}
+                gradient={gradientFor(post.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 border border-dashed border-gray-200 rounded-2xl">
+            <p className="text-sm text-gray-400 mb-4">まだ投稿がありません。最初の投稿者になりましょう！</p>
             <Link
-              key={post.id}
-              href={`/post/${post.id}`}
-              className="group rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
+              href="/post/new"
+              className="text-sm font-semibold text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#00782F' }}
             >
-              <div className={`h-32 sm:h-40 bg-gradient-to-br ${post.previewGradient} relative`}>
-                <div className="absolute inset-0 flex items-center justify-center opacity-15">
-                  <svg width="48" height="48" viewBox="0 0 64 64" fill="white">
-                    <rect x="8" y="6" width="48" height="36" rx="4" /><rect x="14" y="46" width="36" height="5" rx="2.5" /><rect x="22" y="51" width="20" height="5" rx="2.5" />
-                  </svg>
-                </div>
-                <div className="absolute top-2 right-2">
-                  <span className="text-xs bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">{post.tags[0]}</span>
-                </div>
-              </div>
-              <div className="bg-white px-3 py-2.5">
-                <p className="text-xs font-semibold text-gray-800 line-clamp-1 group-hover:text-[#00782F] transition-colors">{post.title}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{post.author.name}</p>
-              </div>
+              最初に投稿する →
             </Link>
-          ))}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Stats */}
