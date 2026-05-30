@@ -64,32 +64,36 @@ export default function UserPage({ params }: { params: Promise<{ name: string }>
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data: authData }) => {
-      const uid = authData.user?.id;
-      if (uid) {
-        const { data: myProfile } = await supabase.from('profiles').select('name').eq('id', uid).single();
-        if (myProfile?.name === name) setIsOwnProfile(true);
-      }
-    });
+    Promise.all([
+      supabase.auth.getUser(),
+      supabase.from('profiles').select('*').eq('name', name).single(),
+    ]).then(async ([{ data: authData }, { data: profileData }]) => {
+      if (!profileData) { setProfile(null); return; }
+      setProfile(profileData as Profile);
 
-    supabase
-      .from('profiles')
-      .select('*')
-      .eq('name', name)
-      .single()
-      .then(({ data: profileData }) => {
-        if (!profileData) { setProfile(null); return; }
-        setProfile(profileData as Profile);
-        supabase
-          .from('posts')
-          .select('id, title, likes_count, views_count, created_at, post_tags(tag)')
-          .eq('user_id', profileData.id)
-          .eq('visibility', 'public')
-          .order('created_at', { ascending: false })
-          .then(({ data: postsData }) => {
-            setUserPosts((postsData as unknown as DbPost[]) ?? []);
-          });
-      });
+      const uid = authData.user?.id;
+      const isAnon = authData.user?.is_anonymous;
+
+      if (uid && profileData.id === uid) {
+        setIsOwnProfile(true);
+      } else if (uid && !isAnon) {
+        const { data: followRow } = await supabase
+          .from('follows')
+          .select('follower_id')
+          .eq('follower_id', uid)
+          .eq('following_id', profileData.id)
+          .maybeSingle();
+        setFollowing(!!followRow);
+      }
+
+      const { data: postsData } = await supabase
+        .from('posts')
+        .select('id, title, likes_count, views_count, created_at, post_tags(tag)')
+        .eq('user_id', profileData.id)
+        .eq('visibility', 'public')
+        .order('created_at', { ascending: false });
+      setUserPosts((postsData as unknown as DbPost[]) ?? []);
+    });
   }, [name]);
 
   if (profile === 'loading') {
@@ -156,7 +160,21 @@ export default function UserPage({ params }: { params: Promise<{ name: string }>
                   </Link>
                 ) : (
                   <button
-                    onClick={() => setFollowing(!following)}
+                    onClick={async () => {
+                      if (typeof profile !== 'object' || !profile) return;
+                      const supabase = createClient();
+                      const { data: { user } } = await supabase.auth.getUser();
+                      if (!user || user.is_anonymous) return;
+                      const newFollowing = !following;
+                      setFollowing(newFollowing);
+                      if (newFollowing) {
+                        const { error } = await supabase.from('follows').insert({ follower_id: user.id, following_id: profile.id });
+                        if (error) setFollowing(!newFollowing);
+                      } else {
+                        const { error } = await supabase.from('follows').delete().match({ follower_id: user.id, following_id: profile.id });
+                        if (error) setFollowing(!newFollowing);
+                      }
+                    }}
                     className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
                       following
                         ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'

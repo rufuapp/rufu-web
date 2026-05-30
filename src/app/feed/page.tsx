@@ -58,7 +58,7 @@ async function ensureAuth(supabase: ReturnType<typeof createClient>): Promise<st
 }
 
 const PAGE_SIZE = 12;
-const TABS = ['新着', 'トレンド'] as const;
+const TABS = ['新着', 'トレンド', 'フォロー中'] as const;
 type Tab = (typeof TABS)[number];
 
 export default function FeedPage() {
@@ -69,27 +69,14 @@ export default function FeedPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isRealUser, setIsRealUser] = useState(false);
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const sentinelRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef(0);
   const tabRef = useRef<Tab>('新着');
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(async ({ data }) => {
-      const uid = data.user?.id ?? null;
-      setCurrentUserId(uid);
-      if (uid) {
-        const [{ data: likeData }, { data: bookmarkData }] = await Promise.all([
-          supabase.from('likes').select('post_id').eq('user_id', uid),
-          supabase.from('bookmarks').select('post_id').eq('user_id', uid),
-        ]);
-        setLikedIds(new Set(likeData?.map((r) => r.post_id) ?? []));
-        setBookmarkedIds(new Set(bookmarkData?.map((r) => r.post_id) ?? []));
-      }
-    });
-  }, []);
+  const userIdRef = useRef<string | null>(null);
+  const isRealUserRef = useRef(false);
 
   const fetchPosts = useCallback(async (pageNum: number, reset: boolean, tab: Tab) => {
     if (reset) {
@@ -102,6 +89,47 @@ export default function FeedPage() {
     const supabase = createClient();
     const from = pageNum * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
+
+    if (tab === 'フォロー中') {
+      const uid = userIdRef.current;
+      if (!uid || !isRealUserRef.current) {
+        setFetchedPosts((prev) => reset ? [] : prev);
+        setHasMore(false);
+        setLoading(false);
+        setLoadingMore(false);
+        return;
+      }
+      const { data: followsData } = await supabase
+        .from('follows')
+        .select('following_id')
+        .eq('follower_id', uid);
+      const followingIds = (followsData ?? []).map((f: { following_id: string }) => f.following_id);
+      if (followingIds.length === 0) {
+        setFetchedPosts((prev) => reset ? [] : prev);
+        setHasMore(false);
+        setLoading(false);
+        setLoadingMore(false);
+        return;
+      }
+      const { data } = await supabase
+        .from('posts')
+        .select(`
+          id, title, html_content, likes_count, bookmarks_count, views_count, created_at, author_name,
+          profiles!posts_user_id_fkey ( name, display_name ),
+          post_tags ( tag )
+        `)
+        .eq('visibility', 'public')
+        .in('user_id', followingIds)
+        .order('created_at', { ascending: false })
+        .range(from, to);
+      const newPosts = (data as unknown as DbPost[]) ?? [];
+      setFetchedPosts((prev) => reset ? newPosts : [...prev, ...newPosts]);
+      setHasMore(newPosts.length === PAGE_SIZE);
+      setLoading(false);
+      setLoadingMore(false);
+      return;
+    }
+
     const orderCol = tab === 'トレンド' ? 'likes_count' : 'created_at';
     const { data } = await supabase
       .from('posts')
@@ -119,6 +147,30 @@ export default function FeedPage() {
     setLoading(false);
     setLoadingMore(false);
   }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data }) => {
+      const uid = data.user?.id ?? null;
+      const realUser = !!uid && !data.user?.is_anonymous;
+      setCurrentUserId(uid);
+      setIsRealUser(realUser);
+      userIdRef.current = uid;
+      isRealUserRef.current = realUser;
+      if (uid) {
+        const [{ data: likeData }, { data: bookmarkData }] = await Promise.all([
+          supabase.from('likes').select('post_id').eq('user_id', uid),
+          supabase.from('bookmarks').select('post_id').eq('user_id', uid),
+        ]);
+        setLikedIds(new Set(likeData?.map((r) => r.post_id) ?? []));
+        setBookmarkedIds(new Set(bookmarkData?.map((r) => r.post_id) ?? []));
+      }
+      if (tabRef.current === 'フォロー中') {
+        pageRef.current = 0;
+        fetchPosts(0, true, 'フォロー中');
+      }
+    });
+  }, [fetchPosts]);
 
   useEffect(() => {
     pageRef.current = 0;
@@ -200,6 +252,11 @@ export default function FeedPage() {
               </div>
             ))}
           </div>
+        ) : activeTab === 'フォロー中' && !isRealUser ? (
+          <div className="text-center py-20 text-gray-400">
+            <p className="text-sm mb-4">フォロー中の投稿を見るにはログインが必要です</p>
+            <p className="text-xs text-gray-300">ユーザーページからフォローすると、その方の投稿がここに表示されます</p>
+          </div>
         ) : displayPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayPosts.map((post) => (
@@ -215,15 +272,21 @@ export default function FeedPage() {
         ) : (
           <div className="text-center py-20 text-gray-400">
             <p className="text-sm">
-              {fetchedPosts.length === 0 ? 'まだ投稿がありません。最初の投稿者になりましょう！' : 'このカテゴリにはまだ投稿がありません'}
+              {activeTab === 'フォロー中'
+                ? 'フォロー中のユーザーの投稿がここに表示されます'
+                : fetchedPosts.length === 0
+                ? 'まだ投稿がありません。最初の投稿者になりましょう！'
+                : 'このカテゴリにはまだ投稿がありません'}
             </p>
-            <Link
-              href="/post/new"
-              className="inline-block mt-4 text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#00782F' }}
-            >
-              投稿する
-            </Link>
+            {activeTab !== 'フォロー中' && (
+              <Link
+                href="/post/new"
+                className="inline-block mt-4 text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: '#00782F' }}
+              >
+                投稿する
+              </Link>
+            )}
           </div>
         )}
 
