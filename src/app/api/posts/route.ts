@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { checkContent } from '@/lib/content-filter';
+import { isRateLimitError } from '@/lib/guest-post';
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
@@ -8,12 +9,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'リクエストが不正です' }, { status: 400 });
   }
 
-  const { title, html_content, visibility, tags, remix_source_id } = body as {
+  const { title, html_content, visibility, tags, remix_source_id, author_name } = body as {
     title: string;
     html_content: string;
     visibility: string;
     tags: string[];
     remix_source_id: string | null;
+    author_name: string | null;
   };
 
   if (!title?.trim() || !html_content?.trim()) {
@@ -59,6 +61,7 @@ export async function POST(req: NextRequest) {
       user_id: user.id,
       title: title.trim(),
       html_content,
+      author_name: author_name ?? null,
       visibility: visibility ?? 'public',
       remix_source_id: remix_source_id ?? null,
     })
@@ -66,11 +69,9 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (postError || !post) {
-    const isRateLimit =
-      postError?.code === 'P0001' && postError?.message?.includes('rate_limit_exceeded');
     return NextResponse.json(
-      { error: isRateLimit ? 'rate_limit_exceeded' : (postError?.message ?? 'unknown error') },
-      { status: isRateLimit ? 429 : 500 }
+      { error: isRateLimitError(postError) ? 'rate_limit_exceeded' : (postError?.message ?? 'unknown error') },
+      { status: isRateLimitError(postError) ? 429 : 500 }
     );
   }
 

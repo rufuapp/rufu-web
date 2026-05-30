@@ -94,6 +94,9 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
         if (p) { setLikeCount(p.likes_count); setBookmarkCount(p.bookmarks_count); }
       });
 
+    // 閲覧数をインクリメント（fire-and-forget）
+    supabase.rpc('increment_views', { post_id: id });
+
     supabase
       .from('comments')
       .select('id, body, likes_count, created_at, profiles!comments_user_id_fkey(name, display_name)')
