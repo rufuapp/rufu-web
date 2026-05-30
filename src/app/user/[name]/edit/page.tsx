@@ -14,6 +14,9 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
   const [error, setError] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -33,6 +36,20 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
       setLoading(false);
     });
   }, [name, router]);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    const res = await fetch('/api/account', { method: 'DELETE' });
+    if (!res.ok) {
+      setDeleting(false);
+      setShowDeleteModal(false);
+      setError('退会処理に失敗しました。再度お試しください。');
+      return;
+    }
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.replace('/');
+  };
 
   const handleSave = async () => {
     if (!displayName.trim()) { setError('表示名は必須です'); return; }
@@ -126,7 +143,54 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
             </button>
           </div>
         </div>
+
+        {/* 危険ゾーン */}
+        <div className="mt-6 bg-white rounded-2xl border border-red-100 p-6">
+          <h2 className="text-sm font-semibold text-red-600 mb-1">危険ゾーン</h2>
+          <p className="text-xs text-gray-500 mb-4">アカウントを削除すると、投稿・コメント・いいねを含む全てのデータが完全に削除されます。この操作は取り消せません。</p>
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="text-sm font-medium text-red-500 border border-red-200 rounded-full px-4 py-2 hover:bg-red-50 transition-colors"
+          >
+            アカウントを削除する
+          </button>
+        </div>
       </main>
+
+      {/* 退会確認モーダル */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <h2 className="text-base font-bold text-gray-900 mb-2">本当に退会しますか？</h2>
+            <p className="text-xs text-gray-500 mb-4">
+              全ての投稿・コメント・データが削除されます。確認のため <span className="font-semibold text-gray-700">「退会する」</span> と入力してください。
+            </p>
+            <input
+              type="text"
+              value={deleteConfirm}
+              onChange={(e) => setDeleteConfirm(e.target.value)}
+              placeholder="退会する"
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition mb-4"
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setShowDeleteModal(false); setDeleteConfirm(''); }}
+                disabled={deleting}
+                className="flex-1 py-2.5 text-sm font-medium text-gray-600 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirm !== '退会する' || deleting}
+                className="flex-1 py-2.5 text-sm font-medium text-white bg-red-500 rounded-full hover:bg-red-600 transition-colors disabled:opacity-40"
+              >
+                {deleting ? '処理中...' : '退会する'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
