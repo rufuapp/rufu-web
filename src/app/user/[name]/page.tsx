@@ -60,9 +60,18 @@ export default function UserPage({ params }: { params: Promise<{ name: string }>
   const [userPosts, setUserPosts] = useState<DbPost[]>([]);
   const [following, setFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState<'posts' | 'likes'>('posts');
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data: authData }) => {
+      const uid = authData.user?.id;
+      if (uid) {
+        const { data: myProfile } = await supabase.from('profiles').select('name').eq('id', uid).single();
+        if (myProfile?.name === name) setIsOwnProfile(true);
+      }
+    });
+
     supabase
       .from('profiles')
       .select('*')

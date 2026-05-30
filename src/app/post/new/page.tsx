@@ -6,7 +6,6 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import { createClient } from '@/lib/supabase/client';
 import { checkContent } from '@/lib/content-filter';
-import { isRateLimitError } from '@/lib/guest-post';
 import type { User } from '@supabase/supabase-js';
 
 const PRESET_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック', 'ツール', 'ポートフォリオ', 'データ', 'AI', 'デザイン'];

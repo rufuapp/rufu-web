@@ -55,6 +55,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   const [reported, setReported] = useState(false);
   const [copied, setCopied] = useState(false);
   const [followed, setFollowed] = useState(false);
+  const [likedCommentIds, setLikedCommentIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!presentationMode) return;
@@ -69,14 +70,16 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
       const uid = data.user?.id ?? null;
       setCurrentUserId(uid);
       if (uid) {
-        const [{ data: profile }, { data: likeRow }, { data: bookmarkRow }] = await Promise.all([
+        const [{ data: profile }, { data: likeRow }, { data: bookmarkRow }, { data: commentLikeRows }] = await Promise.all([
           supabase.from('profiles').select('name, display_name').eq('id', uid).single(),
           supabase.from('likes').select('post_id').eq('user_id', uid).eq('post_id', id).maybeSingle(),
           supabase.from('bookmarks').select('post_id').eq('user_id', uid).eq('post_id', id).maybeSingle(),
+          supabase.from('comment_likes').select('comment_id').eq('user_id', uid),
         ]);
         setCurrentUserInitial((profile?.display_name ?? profile?.name ?? 'U')[0].toUpperCase());
         setLiked(!!likeRow);
         setBookmarked(!!bookmarkRow);
+        setLikedCommentIds(new Set(commentLikeRows?.map((r: { comment_id: string }) => r.comment_id) ?? []));
       }
     });
     supabase
@@ -212,6 +215,31 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
       return;
     }
     router.push('/feed');
+  };
+
+  const handleCommentLike = async (commentId: string) => {
+    if (!currentUserId) return;
+    const isLiked = likedCommentIds.has(commentId);
+    const next = new Set(likedCommentIds);
+    isLiked ? next.delete(commentId) : next.add(commentId);
+    setLikedCommentIds(next);
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === commentId ? { ...c, likes_count: c.likes_count + (isLiked ? -1 : 1) } : c
+      )
+    );
+    const supabase = createClient();
+    const { error } = isLiked
+      ? await supabase.from('comment_likes').delete().match({ user_id: currentUserId, comment_id: commentId })
+      : await supabase.from('comment_likes').insert({ user_id: currentUserId, comment_id: commentId });
+    if (error) {
+      setLikedCommentIds(likedCommentIds);
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === commentId ? { ...c, likes_count: c.likes_count + (isLiked ? 1 : -1) } : c
+        )
+      );
+    }
   };
 
   const handleComment = async () => {
@@ -461,7 +489,16 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                             <span className="text-xs font-semibold text-gray-800">{name}</span>
                             <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
                           </div>
-                          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{c.body}</p>
+                          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap mb-1">{c.body}</p>
+                          <button
+                            onClick={() => handleCommentLike(c.id)}
+                            className={`flex items-center gap-1 text-xs transition-colors ${likedCommentIds.has(c.id) ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'}`}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill={likedCommentIds.has(c.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                            {c.likes_count > 0 && c.likes_count}
+                          </button>
                         </div>
                       </li>
                     );

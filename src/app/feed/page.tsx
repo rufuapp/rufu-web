@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/Header';
 import Link from 'next/link';
@@ -57,21 +57,26 @@ async function ensureAuth(supabase: ReturnType<typeof createClient>): Promise<st
   return user.id;
 }
 
+const PAGE_SIZE = 12;
 const TABS = ['新着', 'トレンド'] as const;
 type Tab = (typeof TABS)[number];
 
 export default function FeedPage() {
   const [activeTab, setActiveTab] = useState<Tab>('新着');
   const [activeTag, setActiveTag] = useState('すべて');
-  const [posts, setPosts] = useState<DbPost[]>([]);
+  const [fetchedPosts, setFetchedPosts] = useState<DbPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef(0);
+  const tabRef = useRef<Tab>('新着');
 
   useEffect(() => {
     const supabase = createClient();
-
     supabase.auth.getUser().then(async ({ data }) => {
       const uid = data.user?.id ?? null;
       setCurrentUserId(uid);
@@ -84,8 +89,16 @@ export default function FeedPage() {
         setBookmarkedIds(new Set(bookmarkData?.map((r) => r.post_id) ?? []));
       }
     });
+  }, []);
 
-    supabase
+  const fetchPosts = useCallback(async (pageNum: number, reset: boolean, tab: Tab) => {
+    if (reset) setLoading(true);
+    else setLoadingMore(true);
+    const supabase = createClient();
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    const orderCol = tab === 'トレンド' ? 'likes_count' : 'created_at';
+    const { data } = await supabase
       .from('posts')
       .select(`
         id, title, html_content, likes_count, bookmarks_count, views_count, created_at, author_name,
@@ -93,23 +106,41 @@ export default function FeedPage() {
         post_tags ( tag )
       `)
       .eq('visibility', 'public')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        setPosts((data as unknown as DbPost[]) ?? []);
-        setLoading(false);
-      });
+      .order(orderCol, { ascending: false })
+      .range(from, to);
+    const newPosts = (data as unknown as DbPost[]) ?? [];
+    setFetchedPosts((prev) => reset ? newPosts : [...prev, ...newPosts]);
+    setHasMore(newPosts.length === PAGE_SIZE);
+    setLoading(false);
+    setLoadingMore(false);
   }, []);
 
-  const allTags = ['すべて', ...Array.from(new Set(posts.flatMap((p) => p.post_tags.map((t) => t.tag))))];
+  useEffect(() => {
+    pageRef.current = 0;
+    tabRef.current = activeTab;
+    setFetchedPosts([]);
+    setHasMore(true);
+    fetchPosts(0, true, activeTab);
+  }, [activeTab, fetchPosts]);
 
-  const filtered = posts.filter(
-    (p) => activeTag === 'すべて' || p.post_tags.some((t) => t.tag === activeTag)
-  );
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasMore && !loadingMore && !loading) {
+        const next = pageRef.current + 1;
+        pageRef.current = next;
+        fetchPosts(next, false, tabRef.current);
+      }
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [hasMore, loadingMore, loading, fetchPosts]);
 
-  const sorted =
-    activeTab === 'トレンド'
-      ? [...filtered].sort((a, b) => b.likes_count - a.likes_count)
-      : filtered;
+  const allTags = ['すべて', ...Array.from(new Set(fetchedPosts.flatMap((p) => p.post_tags.map((t) => t.tag))))];
+  const displayPosts = activeTag === 'すべて'
+    ? fetchedPosts
+    : fetchedPosts.filter((p) => p.post_tags.some((t) => t.tag === activeTag));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -121,7 +152,7 @@ export default function FeedPage() {
           {TABS.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => { setActiveTag('すべて'); setActiveTab(tab); }}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 activeTab === tab
                   ? 'border-[#00782F] text-[#00782F]'
@@ -165,22 +196,22 @@ export default function FeedPage() {
               </div>
             ))}
           </div>
-        ) : sorted.length > 0 ? (
+        ) : displayPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {sorted.map((post) => (
+            {displayPosts.map((post) => (
               <PostCard
                 key={post.id}
                 post={post}
                 currentUserId={currentUserId}
-                initialLiked={likedIds.has(post.id)}
-                initialBookmarked={bookmarkedIds.has(post.id)}
+                likedIds={likedIds}
+                bookmarkedIds={bookmarkedIds}
               />
             ))}
           </div>
         ) : (
           <div className="text-center py-20 text-gray-400">
             <p className="text-sm">
-              {posts.length === 0 ? 'まだ投稿がありません。最初の投稿者になりましょう！' : 'このカテゴリにはまだ投稿がありません'}
+              {fetchedPosts.length === 0 ? 'まだ投稿がありません。最初の投稿者になりましょう！' : 'このカテゴリにはまだ投稿がありません'}
             </p>
             <Link
               href="/post/new"
@@ -191,6 +222,19 @@ export default function FeedPage() {
             </Link>
           </div>
         )}
+
+        {/* Sentinel — infinite scroll trigger */}
+        <div ref={sentinelRef} className="py-6 flex justify-center">
+          {loadingMore && (
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <div className="w-4 h-4 border-2 border-gray-200 border-t-[#00782F] rounded-full animate-spin" />
+              読み込み中...
+            </div>
+          )}
+          {!loading && !loadingMore && !hasMore && fetchedPosts.length > 0 && (
+            <p className="text-xs text-gray-400">すべての投稿を表示しました</p>
+          )}
+        </div>
       </main>
     </div>
   );
@@ -199,23 +243,24 @@ export default function FeedPage() {
 function PostCard({
   post,
   currentUserId,
-  initialLiked,
-  initialBookmarked,
+  likedIds,
+  bookmarkedIds,
 }: {
   post: DbPost;
   currentUserId: string | null;
-  initialLiked: boolean;
-  initialBookmarked: boolean;
+  likedIds: Set<string>;
+  bookmarkedIds: Set<string>;
 }) {
-  const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  // null = 親Set から派生、true/false = ユーザーが明示的にトグル済み
+  const [localLiked, setLocalLiked] = useState<boolean | null>(null);
+  const [localBookmarked, setLocalBookmarked] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState(post.likes_count);
   const [bookmarkCount, setBookmarkCount] = useState(post.bookmarks_count);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
 
-  useEffect(() => { setLiked(initialLiked); }, [initialLiked]);
-  useEffect(() => { setBookmarked(initialBookmarked); }, [initialBookmarked]);
+  const liked = localLiked ?? likedIds.has(post.id);
+  const bookmarked = localBookmarked ?? bookmarkedIds.has(post.id);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -286,15 +331,15 @@ function PostCard({
         <button
           onClick={async () => {
             const newLiked = !liked;
-            setLiked(newLiked);
+            setLocalLiked(newLiked);
             setLikeCount((c) => newLiked ? c + 1 : c - 1);
             const supabase = createClient();
             const uid = currentUserId ?? await ensureAuth(supabase);
-            if (!uid) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); return; }
+            if (!uid) { setLocalLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); return; }
             const { error } = newLiked
               ? await supabase.from('likes').insert({ user_id: uid, post_id: post.id })
               : await supabase.from('likes').delete().match({ user_id: uid, post_id: post.id });
-            if (error) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); }
+            if (error) { setLocalLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); }
           }}
           className={`flex items-center gap-1 text-xs transition-colors ${
             liked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'
@@ -306,15 +351,15 @@ function PostCard({
         <button
           onClick={async () => {
             const newBookmarked = !bookmarked;
-            setBookmarked(newBookmarked);
+            setLocalBookmarked(newBookmarked);
             setBookmarkCount((c) => newBookmarked ? c + 1 : c - 1);
             const supabase = createClient();
             const uid = currentUserId ?? await ensureAuth(supabase);
-            if (!uid) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); return; }
+            if (!uid) { setLocalBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); return; }
             const { error } = newBookmarked
               ? await supabase.from('bookmarks').insert({ user_id: uid, post_id: post.id })
               : await supabase.from('bookmarks').delete().match({ user_id: uid, post_id: post.id });
-            if (error) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); }
+            if (error) { setLocalBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); }
           }}
           className={`flex items-center gap-1 text-xs transition-colors ${
             bookmarked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'

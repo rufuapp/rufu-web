@@ -108,7 +108,6 @@ export default async function LandingPage() {
       value: viewsTotal ? `${viewsTotal.toLocaleString()}+` : '45,000+',
       label: '月間閲覧数',
     },
-    { value: '92%', label: 'Claude生成' },
   ];
 
   const gallery = (galleryPosts ?? []) as unknown as GalleryPost[];
