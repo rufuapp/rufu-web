@@ -15,6 +15,7 @@ type DbPost = {
   bookmarks_count: number;
   views_count: number;
   created_at: string;
+  author_name: string | null;
   profiles: { name: string; display_name: string } | null;
   post_tags: { tag: string }[];
 };
@@ -41,6 +42,8 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   const [post, setPost] = useState<DbPost | null | 'loading'>('loading');
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [bookmarkCount, setBookmarkCount] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserInitial, setCurrentUserInitial] = useState('');
   const [deleting, setDeleting] = useState(false);
@@ -50,6 +53,8 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
   const [submitting, setSubmitting] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [reported, setReported] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [followed, setFollowed] = useState(false);
 
   useEffect(() => {
     if (!presentationMode) return;
@@ -64,25 +69,29 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
       const uid = data.user?.id ?? null;
       setCurrentUserId(uid);
       if (uid) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('name, display_name')
-          .eq('id', uid)
-          .single();
+        const [{ data: profile }, { data: likeRow }, { data: bookmarkRow }] = await Promise.all([
+          supabase.from('profiles').select('name, display_name').eq('id', uid).single(),
+          supabase.from('likes').select('post_id').eq('user_id', uid).eq('post_id', id).maybeSingle(),
+          supabase.from('bookmarks').select('post_id').eq('user_id', uid).eq('post_id', id).maybeSingle(),
+        ]);
         setCurrentUserInitial((profile?.display_name ?? profile?.name ?? 'U')[0].toUpperCase());
+        setLiked(!!likeRow);
+        setBookmarked(!!bookmarkRow);
       }
     });
     supabase
       .from('posts')
       .select(`
-        id, title, html_content, likes_count, bookmarks_count, views_count, created_at, user_id,
+        id, title, html_content, likes_count, bookmarks_count, views_count, created_at, user_id, author_name,
         profiles!posts_user_id_fkey ( name, display_name ),
         post_tags ( tag )
       `)
       .eq('id', id)
       .single()
       .then(({ data }) => {
-        setPost((data as unknown as DbPost) ?? null);
+        const p = data as unknown as DbPost | null;
+        setPost(p ?? null);
+        if (p) { setLikeCount(p.likes_count); setBookmarkCount(p.bookmarks_count); }
       });
 
     supabase
@@ -94,6 +103,88 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
         setComments((data as unknown as DbComment[]) ?? []);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (!currentUserId || post === 'loading' || post === null) return;
+    if (currentUserId === post.user_id) return;
+    const supabase = createClient();
+    supabase
+      .from('follows')
+      .select('follower_id')
+      .eq('follower_id', currentUserId)
+      .eq('following_id', post.user_id)
+      .maybeSingle()
+      .then(({ data }) => setFollowed(!!data));
+  }, [currentUserId, post]);
+
+  const handleFollow = async () => {
+    if (post === 'loading' || post === null || !currentUserId) return;
+    const newFollowed = !followed;
+    setFollowed(newFollowed);
+    const supabase = createClient();
+    const { error } = newFollowed
+      ? await supabase.from('follows').insert({ follower_id: currentUserId, following_id: post.user_id })
+      : await supabase.from('follows').delete().match({ follower_id: currentUserId, following_id: post.user_id });
+    if (error) setFollowed(!newFollowed);
+  };
+
+  const handleLike = async () => {
+    if (post === 'loading' || post === null) return;
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikeCount((c) => newLiked ? c + 1 : c - 1);
+    const supabase = createClient();
+    let uid = currentUserId;
+    if (!uid) {
+      const { data } = await supabase.auth.signInAnonymously();
+      if (!data.user) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); return; }
+      uid = data.user.id;
+      setCurrentUserId(uid);
+      const name = `user_${uid.replace(/-/g, '').substring(0, 8)}`;
+      await supabase.from('profiles').upsert({ id: uid, name, display_name: name }, { onConflict: 'id' });
+    }
+    const { error } = newLiked
+      ? await supabase.from('likes').insert({ user_id: uid, post_id: id })
+      : await supabase.from('likes').delete().match({ user_id: uid, post_id: id });
+    if (error) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); }
+  };
+
+  const handleBookmark = async () => {
+    if (post === 'loading' || post === null) return;
+    const newBookmarked = !bookmarked;
+    setBookmarked(newBookmarked);
+    setBookmarkCount((c) => newBookmarked ? c + 1 : c - 1);
+    const supabase = createClient();
+    let uid = currentUserId;
+    if (!uid) {
+      const { data } = await supabase.auth.signInAnonymously();
+      if (!data.user) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); return; }
+      uid = data.user.id;
+      setCurrentUserId(uid);
+      const name = `user_${uid.replace(/-/g, '').substring(0, 8)}`;
+      await supabase.from('profiles').upsert({ id: uid, name, display_name: name }, { onConflict: 'id' });
+    }
+    const { error } = newBookmarked
+      ? await supabase.from('bookmarks').insert({ user_id: uid, post_id: id })
+      : await supabase.from('bookmarks').delete().match({ user_id: uid, post_id: id });
+    if (error) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); }
+  };
+
+  const handleShare = async () => {
+    if (post === 'loading' || post === null) return;
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: post.title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {
+      // cancelled or not supported
+    }
+  };
 
   const handleReport = async (reason: string) => {
     const supabase = createClient();
@@ -176,7 +267,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
     );
   }
 
-  const authorName = post.profiles?.display_name ?? post.profiles?.name ?? '不明';
+  const authorName = post.author_name ?? post.profiles?.display_name ?? post.profiles?.name ?? '不明';
   const initial = authorName[0]?.toUpperCase() ?? '?';
   const username = post.profiles?.name ?? '';
   const tags = post.post_tags.map((t) => t.tag);
@@ -219,9 +310,18 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                 </Link>
                 <p className="text-xs text-gray-400">{formatDate(post.created_at)}</p>
               </div>
-              <button className="ml-auto text-xs font-medium px-3 py-1.5 rounded-full border border-[#00782F] text-[#00782F] hover:bg-[#00782F] hover:text-white transition-colors">
-                フォロー
-              </button>
+              {currentUserId !== post.user_id && (
+                <button
+                  onClick={handleFollow}
+                  className={`ml-auto text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
+                    followed
+                      ? 'bg-[#00782F] border-[#00782F] text-white hover:bg-red-500 hover:border-red-500'
+                      : 'border-[#00782F] text-[#00782F] hover:bg-[#00782F] hover:text-white'
+                  }`}
+                >
+                  {followed ? 'フォロー中' : 'フォロー'}
+                </button>
+              )}
             </div>
 
             {/* Tags */}
@@ -268,26 +368,31 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
             {/* Action bar */}
             <div className="flex items-center gap-4 py-3 border-t border-b border-gray-200 mb-8">
               <button
-                onClick={() => setLiked(!liked)}
+                onClick={handleLike}
                 className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
                   liked ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <HeartIcon filled={liked} size={18} />
-                {post.likes_count + (liked ? 1 : 0)}
+                {likeCount}
               </button>
               <button
-                onClick={() => setBookmarked(!bookmarked)}
+                onClick={handleBookmark}
                 className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
                   bookmarked ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <BookmarkIcon filled={bookmarked} size={18} />
-                {post.bookmarks_count + (bookmarked ? 1 : 0)}
+                {bookmarkCount}
               </button>
-              <button className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors">
+              <button
+                onClick={handleShare}
+                className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
+                  copied ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
                 <ShareIcon size={18} />
-                シェア
+                {copied ? 'コピー済み！' : 'シェア'}
               </button>
               <Link
                 href={`/post/new?remix=${post.id}`}
@@ -381,7 +486,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                       }}
                       placeholder="コメントを書く…"
                       rows={3}
-                      className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition-colors placeholder:text-gray-300"
+                      className="w-full text-sm text-gray-900 border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition-colors placeholder:text-gray-400"
                     />
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-xs text-gray-400">⌘+Enter で送信</span>
@@ -431,7 +536,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                     <HeartIcon filled={false} size={13} /> いいね
                   </span>
                   <span className="text-sm font-semibold text-gray-800">
-                    {post.likes_count + (liked ? 1 : 0)}
+                    {likeCount}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -439,7 +544,7 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
                     <BookmarkIcon filled={false} size={13} /> ブックマーク
                   </span>
                   <span className="text-sm font-semibold text-gray-800">
-                    {post.bookmarks_count + (bookmarked ? 1 : 0)}
+                    {bookmarkCount}
                   </span>
                 </div>
               </div>

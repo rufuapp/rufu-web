@@ -13,6 +13,7 @@ type DbPost = {
   bookmarks_count: number;
   views_count: number;
   created_at: string;
+  author_name: string | null;
   profiles: { name: string; display_name: string } | null;
   post_tags: { tag: string }[];
 };
@@ -41,6 +42,21 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
 }
 
+async function ensureAuth(supabase: ReturnType<typeof createClient>): Promise<string | null> {
+  let { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    const { data } = await supabase.auth.signInAnonymously();
+    if (!data.user) return null;
+    user = data.user;
+  }
+  const { data: profile } = await supabase.from('profiles').select('id').eq('id', user.id).maybeSingle();
+  if (!profile) {
+    const name = `user_${user.id.replace(/-/g, '').substring(0, 8)}`;
+    await supabase.from('profiles').insert({ id: user.id, name, display_name: name });
+  }
+  return user.id;
+}
+
 const TABS = ['新着', 'トレンド'] as const;
 type Tab = (typeof TABS)[number];
 
@@ -49,13 +65,30 @@ export default function FeedPage() {
   const [activeTag, setActiveTag] = useState('すべて');
   const [posts, setPosts] = useState<DbPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [likedIds, setLikedIds] = useState<Set<string>>(new Set());
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const supabase = createClient();
+
+    supabase.auth.getUser().then(async ({ data }) => {
+      const uid = data.user?.id ?? null;
+      setCurrentUserId(uid);
+      if (uid) {
+        const [{ data: likeData }, { data: bookmarkData }] = await Promise.all([
+          supabase.from('likes').select('post_id').eq('user_id', uid),
+          supabase.from('bookmarks').select('post_id').eq('user_id', uid),
+        ]);
+        setLikedIds(new Set(likeData?.map((r) => r.post_id) ?? []));
+        setBookmarkedIds(new Set(bookmarkData?.map((r) => r.post_id) ?? []));
+      }
+    });
+
     supabase
       .from('posts')
       .select(`
-        id, title, html_content, likes_count, bookmarks_count, views_count, created_at,
+        id, title, html_content, likes_count, bookmarks_count, views_count, created_at, author_name,
         profiles!posts_user_id_fkey ( name, display_name ),
         post_tags ( tag )
       `)
@@ -135,7 +168,13 @@ export default function FeedPage() {
         ) : sorted.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {sorted.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard
+                key={post.id}
+                post={post}
+                currentUserId={currentUserId}
+                initialLiked={likedIds.has(post.id)}
+                initialBookmarked={bookmarkedIds.has(post.id)}
+              />
             ))}
           </div>
         ) : (
@@ -157,11 +196,26 @@ export default function FeedPage() {
   );
 }
 
-function PostCard({ post }: { post: DbPost }) {
+function PostCard({
+  post,
+  currentUserId,
+  initialLiked,
+  initialBookmarked,
+}: {
+  post: DbPost;
+  currentUserId: string | null;
+  initialLiked: boolean;
+  initialBookmarked: boolean;
+}) {
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
+  const [likeCount, setLikeCount] = useState(post.likes_count);
+  const [bookmarkCount, setBookmarkCount] = useState(post.bookmarks_count);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
+
+  useEffect(() => { setLiked(initialLiked); }, [initialLiked]);
+  useEffect(() => { setBookmarked(initialBookmarked); }, [initialBookmarked]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -173,7 +227,7 @@ function PostCard({ post }: { post: DbPost }) {
     return () => ro.disconnect();
   }, []);
 
-  const authorName = post.profiles?.display_name ?? post.profiles?.name ?? '不明';
+  const authorName = post.author_name ?? post.profiles?.display_name ?? post.profiles?.name ?? '不明';
   const initial = authorName[0]?.toUpperCase() ?? '?';
   const gradient = gradientFor(post.id);
   const firstTag = post.post_tags[0]?.tag;
@@ -230,22 +284,44 @@ function PostCard({ post }: { post: DbPost }) {
 
       <div className="flex items-center gap-3 px-4 pt-2 pb-3 border-t border-gray-50">
         <button
-          onClick={() => setLiked(!liked)}
+          onClick={async () => {
+            const newLiked = !liked;
+            setLiked(newLiked);
+            setLikeCount((c) => newLiked ? c + 1 : c - 1);
+            const supabase = createClient();
+            const uid = currentUserId ?? await ensureAuth(supabase);
+            if (!uid) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); return; }
+            const { error } = newLiked
+              ? await supabase.from('likes').insert({ user_id: uid, post_id: post.id })
+              : await supabase.from('likes').delete().match({ user_id: uid, post_id: post.id });
+            if (error) { setLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); }
+          }}
           className={`flex items-center gap-1 text-xs transition-colors ${
             liked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <HeartIcon filled={liked} />
-          {post.likes_count + (liked ? 1 : 0)}
+          {likeCount}
         </button>
         <button
-          onClick={() => setBookmarked(!bookmarked)}
+          onClick={async () => {
+            const newBookmarked = !bookmarked;
+            setBookmarked(newBookmarked);
+            setBookmarkCount((c) => newBookmarked ? c + 1 : c - 1);
+            const supabase = createClient();
+            const uid = currentUserId ?? await ensureAuth(supabase);
+            if (!uid) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); return; }
+            const { error } = newBookmarked
+              ? await supabase.from('bookmarks').insert({ user_id: uid, post_id: post.id })
+              : await supabase.from('bookmarks').delete().match({ user_id: uid, post_id: post.id });
+            if (error) { setBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); }
+          }}
           className={`flex items-center gap-1 text-xs transition-colors ${
             bookmarked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'
           }`}
         >
           <BookmarkIcon filled={bookmarked} />
-          {post.bookmarks_count + (bookmarked ? 1 : 0)}
+          {bookmarkCount}
         </button>
         <span className="flex items-center gap-1 text-xs text-gray-400 ml-auto">
           <EyeIcon />

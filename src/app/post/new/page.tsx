@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useCallback, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
-import { getPostById } from '@/lib/posts';
 import { createClient } from '@/lib/supabase/client';
 import { checkContent } from '@/lib/content-filter';
+import type { User } from '@supabase/supabase-js';
 
 const PRESET_TAGS = ['スライド', 'ダッシュボード', 'ビジュアライゼーション', 'ランディングページ', 'インフォグラフィック', 'ツール', 'ポートフォリオ', 'データ', 'AI', 'デザイン'];
 
@@ -41,25 +41,67 @@ const PLACEHOLDER_HTML = `<!DOCTYPE html>
 </body>
 </html>`;
 
+type RemixMeta = {
+  id: string;
+  title: string;
+  htmlContent: string;
+  tags: string[];
+  author: { name: string };
+};
+
 function NewPostForm() {
   const searchParams = useSearchParams();
   const remixId = searchParams.get('remix');
-  const remixSource = remixId ? getPostById(remixId) : undefined;
+  const [remixSource, setRemixSource] = useState<RemixMeta | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [currentUser, setCurrentUser] = useState<User | null | undefined>(undefined);
   const [inputMode, setInputMode] = useState<InputMode>('paste');
-  const [title, setTitle] = useState(() => remixSource ? `【リミックス】${remixSource.title}` : '');
-  const [html, setHtml] = useState(() => remixSource?.htmlContent ?? '');
-  const [previewHtml, setPreviewHtml] = useState(() => remixSource?.htmlContent ?? PLACEHOLDER_HTML);
-  const [tags, setTags] = useState<string[]>(() => remixSource ? remixSource.tags.slice(0, 5) : []);
+  const [title, setTitle] = useState('');
+  const [html, setHtml] = useState('');
+  const [previewHtml, setPreviewHtml] = useState(PLACEHOLDER_HTML);
+  const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+  const [nickname, setNickname] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [newPostId, setNewPostId] = useState('');
   const [fileName, setFileName] = useState('');
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setCurrentUser(data.user ?? null));
+  }, []);
+
+  useEffect(() => {
+    if (!remixId) return;
+    const supabase = createClient();
+    supabase
+      .from('posts')
+      .select('id, title, html_content, post_tags(tag), profiles!posts_user_id_fkey(name)')
+      .eq('id', remixId)
+      .single()
+      .then(({ data }) => {
+        if (!data) return;
+        const raw = data as unknown as {
+          id: string; title: string; html_content: string;
+          post_tags: { tag: string }[]; profiles: { name: string } | null;
+        };
+        const meta: RemixMeta = {
+          id: raw.id, title: raw.title, htmlContent: raw.html_content,
+          tags: (raw.post_tags ?? []).map((t) => t.tag),
+          author: { name: raw.profiles?.name ?? '不明' },
+        };
+        setRemixSource(meta);
+        setTitle(`【リミックス】${raw.title}`);
+        setHtml(raw.html_content);
+        setPreviewHtml(raw.html_content);
+        setTags((raw.post_tags ?? []).slice(0, 5).map((t) => t.tag));
+      });
+  }, [remixId]);
 
   const updatePreview = useCallback((value: string) => {
     setPreviewHtml(value.trim() ? value : PLACEHOLDER_HTML);
@@ -106,13 +148,15 @@ function NewPostForm() {
     }
   };
 
-  const canSubmit = title.trim() && html.trim() && tags.length > 0;
+  const isGuest = currentUser === undefined || currentUser === null || currentUser.is_anonymous;
+  const canSubmit = title.trim() && html.trim() && tags.length > 0 && (!isGuest || nickname.trim().length > 0);
 
   const handleSubmit = async () => {
     if (!canSubmit || submitting) return;
     setSubmitError('');
     setSubmitting(true);
 
+    // Client-side check for immediate feedback
     const filterResult = checkContent(html);
     if (!filterResult.ok) {
       setSubmitError(filterResult.reason);
@@ -120,50 +164,44 @@ function NewPostForm() {
       return;
     }
 
+    // Ensure session exists before calling the API route
     const supabase = createClient();
-    let { data: { user } } = await supabase.auth.getUser();
-
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      const { data, error } = await supabase.auth.signInAnonymously();
-      if (error || !data.user) {
+      const { error: authError } = await supabase.auth.signInAnonymously();
+      if (authError) {
         setSubmitError('セッションの作成に失敗しました。再度お試しください。');
         setSubmitting(false);
         return;
       }
-      user = data.user;
     }
 
-    const { data: post, error } = await supabase
-      .from('posts')
-      .insert({
-        user_id: user.id,
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         title: title.trim(),
         html_content: html,
         visibility,
-        remix_source_id: remixSource ? null : null,
-      })
-      .select('id')
-      .single();
+        tags,
+        remix_source_id: remixId ?? null,
+      }),
+    });
 
-    if (error || !post) {
-      const isRateLimit =
-        error?.code === 'P0001' && error?.message?.includes('rate_limit_exceeded');
+    const json = await res.json();
+
+    if (!res.ok) {
+      const isRateLimit = res.status === 429;
       setSubmitError(
         isRateLimit
-          ? '1時間に投稿できるのは5件までです。しばらく待ってから再試行してください。'
-          : `投稿に失敗しました: ${error?.message ?? 'unknown error'}`
+          ? 'ニックネーム投稿は1日3件までです。アカウントを作成すると無制限に投稿できます。'
+          : json.error ?? '投稿に失敗しました'
       );
       setSubmitting(false);
       return;
     }
 
-    if (tags.length > 0) {
-      await supabase.from('post_tags').insert(
-        tags.map((tag) => ({ post_id: post.id, tag }))
-      );
-    }
-
-    setNewPostId(post.id);
+    setNewPostId(json.id);
     setSubmitting(false);
     setSubmitted(true);
   };
@@ -238,6 +276,37 @@ function NewPostForm() {
                   </Link>
                 </div>
               </div>
+            )}
+
+            {/* Nickname input for guests */}
+            {isGuest && (
+              <section className="bg-amber-50 rounded-xl border border-amber-200 p-5">
+                <label className="block text-xs font-semibold text-amber-700 uppercase tracking-wider mb-2">
+                  ニックネーム <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  placeholder="例: anon_creator"
+                  maxLength={30}
+                  className="w-full text-sm border border-amber-200 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30 focus:border-amber-400 transition bg-white"
+                />
+                <p className="text-xs text-amber-700/80 mt-2">
+                  未ログインでは1日3件まで投稿できます。
+                  <span className="mx-1">·</span>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="underline"
+                  >
+                    ログインして無制限に投稿する
+                  </a>
+                </p>
+              </section>
             )}
 
             {/* Title */}
@@ -447,6 +516,7 @@ function NewPostForm() {
             </div>
             {!canSubmit && (
               <ul className="mt-3 space-y-1">
+                {isGuest && !nickname.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-300" />ニックネームを入力してください</li>}
                 {!title.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />タイトルを入力してください</li>}
                 {!html.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />HTMLを追加してください</li>}
                 {tags.length === 0 && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />タグを1つ以上追加してください</li>}
