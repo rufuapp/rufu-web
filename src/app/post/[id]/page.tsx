@@ -277,14 +277,19 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
 
   if (presentationMode) {
     return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col">
+      <div className="fixed inset-0 z-50 bg-black flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-center justify-between px-4 py-2 bg-black/90 flex-shrink-0">
-          <span className="text-white text-sm font-medium truncate max-w-lg">{post.title}</span>
+          <span className="text-white text-sm font-medium truncate mr-3">{post.title}</span>
           <button
             onClick={() => setPresentationMode(false)}
-            className="text-gray-400 hover:text-white text-sm px-3 py-1.5 rounded border border-gray-600 hover:border-gray-400 transition-colors flex-shrink-0 ml-4"
+            className="flex items-center gap-1.5 text-gray-400 hover:text-white text-xs px-3 py-2 rounded-lg border border-gray-600 hover:border-gray-400 transition-colors flex-shrink-0 min-w-[44px] min-h-[44px] justify-center"
+            aria-label="全画面表示を終了"
           >
-            ESC で終了
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            <span className="hidden sm:inline">ESC / 閉じる</span>
+            <span className="sm:hidden">閉じる</span>
           </button>
         </div>
         <iframe
@@ -390,14 +395,14 @@ export default function PostPage({ params }: { params: Promise<{ id: string }> }
               <iframe
                 srcDoc={post.html_content}
                 sandbox="allow-scripts"
-                className="w-full"
-                style={{ height: '480px', border: 'none' }}
+                className="w-full h-64 sm:h-80 md:h-[480px]"
+                style={{ border: 'none' }}
                 title={post.title}
               />
             </div>
 
             {/* Action bar */}
-            <div className="flex items-center gap-4 py-3 border-t border-b border-gray-200 mb-8">
+            <div className="flex items-center flex-wrap gap-x-4 gap-y-2 py-3 border-t border-b border-gray-200 mb-8">
               <button
                 onClick={handleLike}
                 className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
