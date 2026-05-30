@@ -92,8 +92,13 @@ export default function FeedPage() {
   }, []);
 
   const fetchPosts = useCallback(async (pageNum: number, reset: boolean, tab: Tab) => {
-    if (reset) setLoading(true);
-    else setLoadingMore(true);
+    if (reset) {
+      setLoading(true);
+      setFetchedPosts([]);
+      setHasMore(true);
+    } else {
+      setLoadingMore(true);
+    }
     const supabase = createClient();
     const from = pageNum * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
@@ -118,8 +123,7 @@ export default function FeedPage() {
   useEffect(() => {
     pageRef.current = 0;
     tabRef.current = activeTab;
-    setFetchedPosts([]);
-    setHasMore(true);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPosts(0, true, activeTab);
   }, [activeTab, fetchPosts]);
 
