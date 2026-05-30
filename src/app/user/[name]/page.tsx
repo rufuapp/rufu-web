@@ -147,17 +147,26 @@ export default function UserPage({ params }: { params: Promise<{ name: string }>
                   <h1 className="text-xl font-bold text-gray-900">{profile.display_name || profile.name}</h1>
                   <p className="text-sm text-gray-400">@{profile.name}</p>
                 </div>
-                <button
-                  onClick={() => setFollowing(!following)}
-                  className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-                    following
-                      ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      : 'text-white hover:opacity-90'
-                  }`}
-                  style={following ? {} : { backgroundColor: '#00782F' }}
-                >
-                  {following ? 'フォロー中' : 'フォロー'}
-                </button>
+                {isOwnProfile ? (
+                  <Link
+                    href={`/user/${name}/edit`}
+                    className="flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                  >
+                    編集
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => setFollowing(!following)}
+                    className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                      following
+                        ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        : 'text-white hover:opacity-90'
+                    }`}
+                    style={following ? {} : { backgroundColor: '#00782F' }}
+                  >
+                    {following ? 'フォロー中' : 'フォロー'}
+                  </button>
+                )}
               </div>
 
               {profile.bio && (
