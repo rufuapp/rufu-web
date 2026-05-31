@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getPostById } from '@/lib/posts';
+import { createClient } from '@/lib/supabase/server';
 
 export async function generateMetadata({
   params,
@@ -7,24 +7,40 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const post = getPostById(id);
-  if (!post) return { title: '投稿が見つかりません' };
+  const supabase = await createClient();
 
-  const description = `${post.author.name}が投稿した「${post.title}」— タグ: ${post.tags.join(', ')}`;
+  const { data } = await supabase
+    .from('posts')
+    .select(`
+      title, author_name, created_at,
+      profiles!posts_user_id_fkey ( name, display_name ),
+      post_tags ( tag )
+    `)
+    .eq('id', id)
+    .eq('visibility', 'public')
+    .single();
+
+  if (!data) return { title: '投稿が見つかりません' };
+
+  const profiles = data.profiles as unknown as { name: string; display_name: string } | null;
+  const authorName = data.author_name ?? profiles?.display_name ?? profiles?.name ?? '不明';
+  const tags = (data.post_tags as unknown as { tag: string }[]).map((t) => t.tag);
+  const description = `${authorName}が投稿した「${data.title}」— タグ: ${tags.join(', ')}`;
 
   return {
-    title: post.title,
+    title: data.title,
     description,
     openGraph: {
-      title: post.title,
+      title: data.title,
       description,
       type: 'article',
-      authors: [post.author.name],
-      tags: post.tags,
+      authors: [authorName],
+      tags,
+      publishedTime: data.created_at,
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
+      title: data.title,
       description,
     },
   };
