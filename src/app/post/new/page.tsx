@@ -510,8 +510,8 @@ function NewPostForm() {
               <iframe
                 srcDoc={previewHtml}
                 sandbox="allow-scripts"
-                className="w-full"
-                style={{ height: '460px', border: 'none' }}
+                className="w-full h-64 sm:h-80 md:h-[460px]"
+                style={{ border: 'none' }}
                 title="プレビュー"
               />
             </div>
