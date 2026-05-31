@@ -223,8 +223,17 @@ export default function PostPageClient({
 
   if (presentationMode) {
     return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        <div className="flex items-center justify-between px-4 py-2 bg-black/90 flex-shrink-0">
+      <div
+        className="fixed inset-0 z-50 bg-black flex flex-col"
+        style={{
+          paddingTop: 'env(safe-area-inset-top)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+          paddingLeft: 'env(safe-area-inset-left)',
+          paddingRight: 'env(safe-area-inset-right)',
+        }}
+      >
+        {/* 縦画面: タイトルバー表示 */}
+        <div className="landscape:hidden flex items-center justify-between px-4 py-2 bg-black/90 flex-shrink-0">
           <span className="text-white text-sm font-medium truncate mr-3">{post.title}</span>
           <button
             onClick={() => setPresentationMode(false)}
@@ -234,10 +243,22 @@ export default function PostPageClient({
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-            <span className="hidden sm:inline">ESC / 閉じる</span>
-            <span className="sm:hidden">閉じる</span>
+            閉じる
           </button>
         </div>
+
+        {/* 横画面: フローティング閉じるボタン */}
+        <button
+          onClick={() => setPresentationMode(false)}
+          className="hidden landscape:flex fixed top-3 right-3 z-[60] items-center gap-1.5 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-full border border-white/20 hover:bg-black/80 transition-colors min-w-[44px] min-h-[44px] justify-center"
+          aria-label="全画面表示を終了"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          閉じる
+        </button>
+
         <ScaledIframe html={post.html_content} title={post.title} className="flex-1 w-full" mode="contain" />
       </div>
     );
