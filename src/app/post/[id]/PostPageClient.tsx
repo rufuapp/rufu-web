@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
+import { ScaledIframe } from '@/components/ScaledIframe';
 import { createClient } from '@/lib/supabase/client';
 
 export type DbPost = {
@@ -237,7 +238,7 @@ export default function PostPageClient({
             <span className="sm:hidden">閉じる</span>
           </button>
         </div>
-        <iframe srcDoc={post.html_content} sandbox="allow-scripts" className="flex-1 w-full" style={{ border: 'none' }} title={post.title} />
+        <ScaledIframe html={post.html_content} title={post.title} className="flex-1 w-full" mode="contain" />
       </div>
     );
   }
@@ -300,7 +301,7 @@ export default function PostPageClient({
                     全画面プレゼン
                   </button>
                 </div>
-                <iframe srcDoc={post.html_content} sandbox="allow-scripts" className="w-full h-64 sm:h-80 md:h-[480px]" style={{ border: 'none' }} title={post.title} />
+                <ScaledIframe html={post.html_content} title={post.title} className="w-full h-64 sm:h-80 md:h-[480px]" mode="cover" />
               </div>
 
               <div className="flex items-center flex-wrap gap-x-4 gap-y-2 py-3 border-t border-b border-gray-200 mb-8">
