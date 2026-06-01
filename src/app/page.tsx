@@ -97,16 +97,16 @@ export default async function LandingPage() {
 
   const STATS = [
     {
-      value: postsCount ? `${postsCount.toLocaleString()}+` : '1,200+',
+      value: (postsCount ?? 0).toLocaleString(),
       label: '投稿数',
     },
     {
-      value: creatorsCount ? `${creatorsCount.toLocaleString()}+` : '480+',
+      value: creatorsCount.toLocaleString(),
       label: 'クリエイター',
     },
     {
-      value: viewsTotal ? `${viewsTotal.toLocaleString()}+` : '45,000+',
-      label: '月間閲覧数',
+      value: viewsTotal.toLocaleString(),
+      label: '累計閲覧数',
     },
   ];
 
@@ -198,9 +198,9 @@ export default async function LandingPage() {
 
       {/* Stats */}
       <section className="border-y border-gray-100 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 py-12 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+        <div className="max-w-4xl mx-auto px-4 py-12 flex flex-wrap justify-center gap-x-16 gap-y-8">
           {STATS.map((s) => (
-            <div key={s.label}>
+            <div key={s.label} className="text-center min-w-[100px]">
               <p className="text-3xl font-extrabold" style={{ color: '#00782F' }}>{s.value}</p>
               <p className="text-sm text-gray-500 mt-1">{s.label}</p>
             </div>
