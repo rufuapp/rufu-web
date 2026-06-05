@@ -123,10 +123,7 @@ export default async function LandingPage() {
             <span className="text-xs tracking-wider" style={{ color: '#444' }}>流布</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/feed" className="text-sm px-3 py-1.5 hidden sm:block transition-colors" style={{ color: '#888' }}
-              onMouseOver={e => (e.currentTarget.style.color = '#f0f0f2')}
-              onMouseOut={e => (e.currentTarget.style.color = '#888')}
-            >
+            <Link href="/feed" className="text-sm px-3 py-1.5 hidden sm:block transition-colors text-gray-500 hover:text-white">
               フィードを見る
             </Link>
             <Link
