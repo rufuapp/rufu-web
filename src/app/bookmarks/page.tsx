@@ -75,17 +75,17 @@ export default function BookmarksPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
         <main className="max-w-6xl mx-auto px-4 py-6">
-          <div className="h-7 bg-gray-200 rounded w-40 mb-6 animate-pulse" />
+          <div className="h-7 rounded w-40 mb-6 animate-pulse" style={{ backgroundColor: '#132a1a' }} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-                <div className="h-36 bg-gray-200" />
+              <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="h-36" style={{ backgroundColor: '#1a3a22' }} />
                 <div className="p-4 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  <div className="h-4 rounded w-3/4" style={{ backgroundColor: '#1a3a22' }} />
+                  <div className="h-3 rounded w-1/2" style={{ backgroundColor: '#132a1a' }} />
                 </div>
               </div>
             ))}
@@ -97,20 +97,20 @@ export default function BookmarksPage() {
 
   if (authed === false) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
         <main className="max-w-lg mx-auto px-4 py-32 text-center">
-          <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#132a1a' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7aad8a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
             </svg>
           </div>
-          <p className="text-sm font-medium text-gray-700 mb-1">ログインが必要です</p>
-          <p className="text-xs text-gray-400 mb-6">ブックマークを見るにはアカウントにログインしてください</p>
+          <p className="text-sm font-medium mb-1" style={{ color: '#e8f5ec' }}>ログインが必要です</p>
+          <p className="text-xs mb-6" style={{ color: '#7aad8a' }}>ブックマークを見るにはアカウントにログインしてください</p>
           <Link
             href="/"
-            className="inline-block text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: '#00782F' }}
+            className="inline-block text-sm font-medium px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
           >
             トップへ戻る
           </Link>
@@ -120,28 +120,28 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
       <main className="max-w-6xl mx-auto px-4 py-6">
-        <h1 className="text-lg font-bold text-gray-900 mb-6">
+        <h1 className="text-lg font-bold mb-6" style={{ color: '#e8f5ec' }}>
           ブックマーク
           {posts.length > 0 && (
-            <span className="ml-2 text-sm font-normal text-gray-400">{posts.length}件</span>
+            <span className="ml-2 text-sm font-normal" style={{ color: '#7aad8a' }}>{posts.length}件</span>
           )}
         </h1>
 
         {posts.length === 0 ? (
           <div className="text-center py-24">
-            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#132a1a' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7aad8a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
               </svg>
             </div>
-            <p className="text-sm text-gray-500 mb-4">まだブックマークがありません</p>
+            <p className="text-sm mb-4" style={{ color: '#7aad8a' }}>まだブックマークがありません</p>
             <Link
               href="/feed"
-              className="inline-block text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#00782F' }}
+              className="inline-block text-sm font-medium px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               フィードを見る
             </Link>
@@ -156,7 +156,8 @@ export default function BookmarksPage() {
                 <Link
                   key={post.id}
                   href={`/post/${post.id}`}
-                  className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                  className="rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                  style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   <div className={`h-36 bg-gradient-to-br ${gradientFor(post.id)} relative`}>
                     {firstTag && (
@@ -168,18 +169,18 @@ export default function BookmarksPage() {
                     )}
                   </div>
                   <div className="p-4">
-                    <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#00782F] transition-colors leading-snug">
+                    <h2 className="text-sm font-semibold line-clamp-2 mb-2 transition-colors leading-snug" style={{ color: '#e8f5ec' }}>
                       {post.title}
                     </h2>
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: '#00782F' }}>
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                         {initial}
                       </div>
-                      <span className="text-xs text-gray-500 truncate">{authorName}</span>
-                      <span className="text-xs text-gray-300 flex-shrink-0">·</span>
-                      <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(post.created_at)}</span>
+                      <span className="text-xs truncate" style={{ color: '#7aad8a' }}>{authorName}</span>
+                      <span className="text-xs flex-shrink-0" style={{ color: '#7aad8a' }}>·</span>
+                      <span className="text-xs flex-shrink-0" style={{ color: '#7aad8a' }}>{formatDate(post.created_at)}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-400">
+                    <div className="flex items-center gap-3 text-xs" style={{ color: '#7aad8a' }}>
                       <span className="flex items-center gap-1">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />

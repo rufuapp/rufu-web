@@ -266,32 +266,35 @@ export default function PostPageClient({
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
 
         <main className="max-w-6xl mx-auto px-4 py-6">
-          <nav className="flex items-center gap-2 text-xs text-gray-400 mb-5">
-            <Link href="/feed" className="hover:text-gray-600 transition-colors">フィード</Link>
+          <nav className="flex items-center gap-2 text-xs mb-5" style={{ color: '#7aad8a' }}>
+            <Link href="/feed" className="hover:opacity-80 transition-opacity">フィード</Link>
             <span>/</span>
-            <span className="text-gray-600 truncate max-w-xs">{post.title}</span>
+            <span className="truncate max-w-xs" style={{ color: '#e8f5ec' }}>{post.title}</span>
           </nav>
 
           <div className="flex gap-6 items-start">
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold text-gray-900 mb-4 leading-snug">{post.title}</h1>
+              <h1 className="text-xl font-bold mb-4 leading-snug" style={{ color: '#e8f5ec' }}>{post.title}</h1>
 
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0" style={{ backgroundColor: '#00782F' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                   {initial}
                 </div>
                 <div>
-                  <Link href={`/user/${username}`} className="text-sm font-medium text-gray-800 hover:text-[#00782F] transition-colors">{authorName}</Link>
-                  <p className="text-xs text-gray-400">{formatDate(post.created_at)}</p>
+                  <Link href={`/user/${username}`} className="text-sm font-medium transition-colors" style={{ color: '#e8f5ec' }}>{authorName}</Link>
+                  <p className="text-xs" style={{ color: '#7aad8a' }}>{formatDate(post.created_at)}</p>
                 </div>
                 {currentUserId !== post.user_id && (
                   <button
                     onClick={handleFollow}
-                    className={`ml-auto text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${followed ? 'bg-[#00782F] border-[#00782F] text-white hover:bg-red-500 hover:border-red-500' : 'border-[#00782F] text-[#00782F] hover:bg-[#00782F] hover:text-white'}`}
+                    className="ml-auto text-xs font-medium px-3 py-1.5 rounded-full border transition-colors"
+                    style={followed
+                      ? { backgroundColor: '#4ade80', borderColor: '#4ade80', color: '#0c1f12' }
+                      : { borderColor: '#4ade80', color: '#4ade80' }}
                   >
                     {followed ? 'フォロー中' : 'フォロー'}
                   </button>
@@ -301,20 +304,20 @@ export default function PostPageClient({
               {tags.length > 0 && (
                 <div className="flex gap-2 flex-wrap mb-5">
                   {tags.map((tag) => (
-                    <Link key={tag} href={`/tag/${encodeURIComponent(tag)}`} className="text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
+                    <Link key={tag} href={`/tag/${encodeURIComponent(tag)}`} className="text-xs px-3 py-1 rounded-full transition-colors" style={{ backgroundColor: '#132a1a', color: '#7aad8a' }}>
                       {tag}
                     </Link>
                   ))}
                 </div>
               )}
 
-              <div className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm mb-5">
-                <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-gray-100 bg-gray-50">
+              <div className="rounded-xl overflow-hidden shadow-sm mb-5" style={{ border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#132a1a' }}>
+                <div className="flex items-center gap-1.5 px-4 py-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#0c1f12' }}>
                   <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
                   <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                  <span className="ml-3 text-xs text-gray-400 font-mono">preview</span>
-                  <button onClick={() => setPresentationMode(true)} className="ml-auto flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#00782F] transition-colors font-medium">
+                  <span className="ml-3 text-xs font-mono" style={{ color: '#7aad8a' }}>preview</span>
+                  <button onClick={() => setPresentationMode(true)} className="ml-auto flex items-center gap-1.5 text-xs font-medium transition-colors" style={{ color: '#7aad8a' }}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
                       <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
@@ -325,22 +328,23 @@ export default function PostPageClient({
                 <ScaledIframe html={post.html_content} title={post.title} className="w-full h-64 sm:h-80 md:h-[480px]" mode="cover" />
               </div>
 
-              <div className="flex items-center flex-wrap gap-x-4 gap-y-2 py-3 border-t border-b border-gray-200 mb-8">
-                <button onClick={handleLike} className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${liked ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'}`}>
+              <div className="flex items-center flex-wrap gap-x-4 gap-y-2 py-3 mb-8" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                <button onClick={handleLike} className="flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: liked ? '#4ade80' : '#7aad8a' }}>
                   <HeartIcon filled={liked} size={18} />{likeCount}
                 </button>
-                <button onClick={handleBookmark} className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${bookmarked ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'}`}>
+                <button onClick={handleBookmark} className="flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: bookmarked ? '#4ade80' : '#7aad8a' }}>
                   <BookmarkIcon filled={bookmarked} size={18} />{bookmarkCount}
                 </button>
-                <button onClick={handleShare} className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${copied ? 'text-[#00782F]' : 'text-gray-500 hover:text-gray-700'}`}>
+                <button onClick={handleShare} className="flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: copied ? '#4ade80' : '#7aad8a' }}>
                   <ShareIcon size={18} />{copied ? 'コピー済み！' : 'シェア'}
                 </button>
-                <Link href={`/post/new?remix=${post.id}`} className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-[#00782F] transition-colors ml-auto">
+                <Link href={`/post/new?remix=${post.id}`} className="flex items-center gap-1.5 text-sm font-medium transition-colors ml-auto" style={{ color: '#7aad8a' }}>
                   <ForkIcon size={18} />リミックス
                 </Link>
                 <button
                   onClick={() => !reported && setReportOpen(true)}
-                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${reported ? 'text-gray-300 cursor-default' : 'text-gray-400 hover:text-red-400'}`}
+                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${reported ? 'text-gray-600 cursor-default' : 'hover:text-red-400'}`}
+                  style={reported ? { color: 'rgba(255,255,255,0.2)' } : { color: '#7aad8a' }}
                 >
                   <FlagIcon size={16} />{reported ? '報告済み' : '通報'}
                 </button>
@@ -352,8 +356,8 @@ export default function PostPageClient({
               </div>
 
               <section>
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">
-                  コメント{comments.length > 0 && <span className="ml-2 text-xs font-normal text-gray-400">{comments.length}件</span>}
+                <h2 className="text-sm font-semibold mb-4" style={{ color: '#e8f5ec' }}>
+                  コメント{comments.length > 0 && <span className="ml-2 text-xs font-normal" style={{ color: '#7aad8a' }}>{comments.length}件</span>}
                 </h2>
 
                 {comments.length > 0 ? (
@@ -363,16 +367,17 @@ export default function PostPageClient({
                       const ci = name[0]?.toUpperCase() ?? '?';
                       return (
                         <li key={c.id} className="flex gap-3">
-                          <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 mt-0.5" style={{ backgroundColor: '#00782F' }}>{ci}</div>
+                          <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>{ci}</div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-baseline gap-2 mb-1">
-                              <span className="text-xs font-semibold text-gray-800">{name}</span>
-                              <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+                              <span className="text-xs font-semibold" style={{ color: '#e8f5ec' }}>{name}</span>
+                              <span className="text-xs" style={{ color: '#7aad8a' }}>{formatDate(c.created_at)}</span>
                             </div>
-                            <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap mb-1">{c.body}</p>
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap mb-1" style={{ color: '#e8f5ec' }}>{c.body}</p>
                             <button
                               onClick={() => handleCommentLike(c.id)}
-                              className={`flex items-center gap-1 text-xs transition-colors ${likedCommentIds.has(c.id) ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'}`}
+                              className="flex items-center gap-1 text-xs transition-colors"
+                              style={{ color: likedCommentIds.has(c.id) ? '#4ade80' : '#7aad8a' }}
                             >
                               <svg width="12" height="12" viewBox="0 0 24 24" fill={likedCommentIds.has(c.id) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -385,12 +390,12 @@ export default function PostPageClient({
                     })}
                   </ul>
                 ) : (
-                  <p className="text-sm text-gray-400 mb-6">まだコメントがありません。最初のコメントを書きましょう！</p>
+                  <p className="text-sm mb-6" style={{ color: '#7aad8a' }}>まだコメントがありません。最初のコメントを書きましょう！</p>
                 )}
 
                 {currentUserId ? (
                   <div className="flex gap-3">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 mt-0.5" style={{ backgroundColor: '#00782F' }}>
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 mt-0.5" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                       {currentUserInitial || 'U'}
                     </div>
                     <div className="flex-1">
@@ -400,20 +405,21 @@ export default function PostPageClient({
                         onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleComment(); }}
                         placeholder="コメントを書く…"
                         rows={3}
-                        className="w-full text-sm text-gray-900 border border-gray-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition-colors placeholder:text-gray-400"
+                        className="w-full text-sm rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#4ade80]/30 focus:border-[#4ade80] transition-colors placeholder:text-gray-500"
+                        style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
                       />
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-gray-400">⌘+Enter で送信</span>
-                        <button onClick={handleComment} disabled={!commentBody.trim() || submitting} className="text-xs font-semibold text-white px-4 py-1.5 rounded-full transition-opacity disabled:opacity-40" style={{ backgroundColor: '#00782F' }}>
+                        <span className="text-xs" style={{ color: '#7aad8a' }}>⌘+Enter で送信</span>
+                        <button onClick={handleComment} disabled={!commentBody.trim() || submitting} className="text-xs font-semibold px-4 py-1.5 rounded-full transition-opacity disabled:opacity-40" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                           {submitting ? '送信中…' : '送信'}
                         </button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-5 border border-dashed border-gray-200 rounded-xl">
-                    <p className="text-xs text-gray-400 mb-3">コメントするにはログインが必要です</p>
-                    <Link href="/auth/callback" className="text-xs font-semibold text-white px-5 py-2 rounded-full hover:opacity-90 transition-opacity" style={{ backgroundColor: '#00782F' }}>
+                  <div className="text-center py-5 border border-dashed rounded-xl" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                    <p className="text-xs mb-3" style={{ color: '#7aad8a' }}>コメントするにはログインが必要です</p>
+                    <Link href="/auth/callback" className="text-xs font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                       ログイン
                     </Link>
                   </div>
@@ -422,26 +428,26 @@ export default function PostPageClient({
             </div>
 
             <aside className="w-64 flex-shrink-0 hidden lg:block">
-              <div className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">統計</h3>
+              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#7aad8a' }}>統計</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500 flex items-center gap-1.5"><EyeIcon size={13} /> 閲覧数</span>
-                    <span className="text-sm font-semibold text-gray-800">{post.views_count.toLocaleString()}</span>
+                    <span className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><EyeIcon size={13} /> 閲覧数</span>
+                    <span className="text-sm font-semibold" style={{ color: '#e8f5ec' }}>{post.views_count.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500 flex items-center gap-1.5"><HeartIcon filled={false} size={13} /> いいね</span>
-                    <span className="text-sm font-semibold text-gray-800">{likeCount}</span>
+                    <span className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><HeartIcon filled={false} size={13} /> いいね</span>
+                    <span className="text-sm font-semibold" style={{ color: '#e8f5ec' }}>{likeCount}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500 flex items-center gap-1.5"><BookmarkIcon filled={false} size={13} /> ブックマーク</span>
-                    <span className="text-sm font-semibold text-gray-800">{bookmarkCount}</span>
+                    <span className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><BookmarkIcon filled={false} size={13} /> ブックマーク</span>
+                    <span className="text-sm font-semibold" style={{ color: '#e8f5ec' }}>{bookmarkCount}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200 p-4">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">HTMLを取得</h3>
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <h3 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#7aad8a' }}>HTMLを取得</h3>
                 <button
                   onClick={() => {
                     const blob = new Blob([post.html_content], { type: 'text/html' });
@@ -450,14 +456,15 @@ export default function PostPageClient({
                     a.download = `${post.title}.html`;
                     a.click();
                   }}
-                  className="w-full text-sm font-medium text-white py-2 rounded-lg transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: '#00782F' }}
+                  className="w-full text-sm font-medium py-2 rounded-lg transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
                 >
                   ダウンロード
                 </button>
                 <button
                   onClick={() => { const win = window.open('', '_blank'); win?.document.write(post.html_content); }}
-                  className="w-full mt-2 text-sm font-medium text-gray-600 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+                  className="w-full mt-2 text-sm font-medium py-2 rounded-lg transition-colors"
+                  style={{ color: '#7aad8a', border: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   ソースを見る
                 </button>
@@ -469,19 +476,19 @@ export default function PostPageClient({
 
       {reportOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }} onClick={(e) => { if (e.target === e.currentTarget) setReportOpen(false); }}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+          <div className="rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden" style={{ backgroundColor: '#132a1a' }}>
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
-              <h2 className="text-sm font-bold text-gray-900">この投稿を通報する</h2>
-              <button onClick={() => setReportOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <h2 className="text-sm font-bold" style={{ color: '#e8f5ec' }}>この投稿を通報する</h2>
+              <button onClick={() => setReportOpen(false)} className="transition-colors" style={{ color: '#7aad8a' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
             </div>
-            <p className="text-xs text-gray-500 px-5 mb-4">通報の理由を選んでください</p>
+            <p className="text-xs px-5 mb-4" style={{ color: '#7aad8a' }}>通報の理由を選んでください</p>
             <div className="px-5 pb-5 space-y-2">
               {['スパム・宣伝', '不適切なコンテンツ', '著作権侵害', 'その他'].map((reason) => (
-                <button key={reason} onClick={() => handleReport(reason)} className="w-full text-left text-sm text-gray-700 px-4 py-2.5 rounded-lg border border-gray-200 hover:border-red-300 hover:bg-red-50 hover:text-red-600 transition-colors">
+                <button key={reason} onClick={() => handleReport(reason)} className="w-full text-left text-sm px-4 py-2.5 rounded-lg border hover:border-red-500 hover:bg-red-500/10 hover:text-red-400 transition-colors" style={{ color: '#e8f5ec', borderColor: 'rgba(255,255,255,0.08)' }}>
                   {reason}
                 </button>
               ))}

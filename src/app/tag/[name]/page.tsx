@@ -113,24 +113,24 @@ export default function TagPage({ params }: { params: Promise<{ name: string }> 
   }, [hasMore, loadingMore, loading]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
       <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/feed" className="text-gray-400 hover:text-gray-600 transition-colors">
+          <Link href="/feed" className="transition-colors" style={{ color: '#7aad8a' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
             </svg>
           </Link>
           <div className="flex items-center gap-2">
             <span
-              className="px-3 py-1 rounded-full text-sm font-medium text-white"
-              style={{ backgroundColor: '#00782F' }}
+              className="px-3 py-1 rounded-full text-sm font-medium"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               #{tagName}
             </span>
             {!loading && (
-              <span className="text-sm text-gray-400">{posts.length}件{hasMore ? '以上' : ''}</span>
+              <span className="text-sm" style={{ color: '#7aad8a' }}>{posts.length}件{hasMore ? '以上' : ''}</span>
             )}
           </div>
         </div>
@@ -138,22 +138,22 @@ export default function TagPage({ params }: { params: Promise<{ name: string }> 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-                <div className="h-36 bg-gray-200" />
+              <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="h-36" style={{ backgroundColor: '#1a3a22' }} />
                 <div className="p-4 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  <div className="h-4 rounded w-3/4" style={{ backgroundColor: '#1a3a22' }} />
+                  <div className="h-3 rounded w-1/2" style={{ backgroundColor: '#132a1a' }} />
                 </div>
               </div>
             ))}
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-sm text-gray-500 mb-4">「{tagName}」の投稿はまだありません</p>
+            <p className="text-sm mb-4" style={{ color: '#7aad8a' }}>「{tagName}」の投稿はまだありません</p>
             <Link
               href="/post/new"
-              className="inline-block text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#00782F' }}
+              className="inline-block text-sm font-medium px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               最初の投稿者になる
             </Link>
@@ -168,7 +168,8 @@ export default function TagPage({ params }: { params: Promise<{ name: string }> 
                 <Link
                   key={post.id}
                   href={`/post/${post.id}`}
-                  className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                  className="rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                  style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   <div className={`h-36 bg-gradient-to-br ${gradientFor(post.id)} relative`}>
                     {firstTag && (
@@ -180,18 +181,18 @@ export default function TagPage({ params }: { params: Promise<{ name: string }> 
                     )}
                   </div>
                   <div className="p-4">
-                    <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#00782F] transition-colors leading-snug">
+                    <h2 className="text-sm font-semibold line-clamp-2 mb-2 transition-colors leading-snug" style={{ color: '#e8f5ec' }}>
                       {post.title}
                     </h2>
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: '#00782F' }}>
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0" style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}>
                         {initial}
                       </div>
-                      <span className="text-xs text-gray-500 truncate">{authorName}</span>
-                      <span className="text-xs text-gray-300">·</span>
-                      <span className="text-xs text-gray-400">{formatDate(post.created_at)}</span>
+                      <span className="text-xs truncate" style={{ color: '#7aad8a' }}>{authorName}</span>
+                      <span className="text-xs" style={{ color: '#7aad8a' }}>·</span>
+                      <span className="text-xs" style={{ color: '#7aad8a' }}>{formatDate(post.created_at)}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-400">
+                    <div className="flex items-center gap-3 text-xs" style={{ color: '#7aad8a' }}>
                       <span className="flex items-center gap-1">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -215,13 +216,13 @@ export default function TagPage({ params }: { params: Promise<{ name: string }> 
         {/* Sentinel + loading more indicator */}
         <div ref={sentinelRef} className="py-6 flex justify-center">
           {loadingMore && (
-            <div className="flex items-center gap-2 text-xs text-gray-400">
-              <div className="w-4 h-4 border-2 border-gray-200 border-t-[#00782F] rounded-full animate-spin" />
+            <div className="flex items-center gap-2 text-xs" style={{ color: '#7aad8a' }}>
+              <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: 'rgba(255,255,255,0.08)', borderTopColor: '#4ade80' }} />
               読み込み中...
             </div>
           )}
           {!hasMore && posts.length > 0 && (
-            <p className="text-xs text-gray-400">すべての投稿を表示しました</p>
+            <p className="text-xs" style={{ color: '#7aad8a' }}>すべての投稿を表示しました</p>
           )}
         </div>
       </main>

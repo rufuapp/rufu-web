@@ -209,30 +209,31 @@ function NewPostForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
         <div className="max-w-lg mx-auto px-4 py-24 text-center">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: '#e8f3ec' }}
+            style={{ backgroundColor: 'rgba(74,222,128,0.1)' }}
           >
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00782F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">投稿が完了しました</h1>
-          <p className="text-gray-500 text-sm mb-8">「{title}」を公開しました。</p>
+          <h1 className="text-2xl font-bold mb-2" style={{ color: '#e8f5ec' }}>投稿が完了しました</h1>
+          <p className="text-sm mb-8" style={{ color: '#7aad8a' }}>「{title}」を公開しました。</p>
           <div className="flex gap-3 justify-center">
             <Link
               href={newPostId ? `/post/${newPostId}` : '/feed'}
-              className="px-5 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              className="px-5 py-2 rounded-full text-sm font-medium transition-colors"
+              style={{ border: '1px solid rgba(255,255,255,0.08)', color: '#7aad8a' }}
             >
               投稿を見る
             </Link>
             <button
               onClick={() => { setSubmitted(false); setTitle(''); setHtml(''); setPreviewHtml(PLACEHOLDER_HTML); setTags([]); setFileName(''); setNewPostId(''); }}
-              className="px-5 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: '#00782F' }}
+              className="px-5 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               続けて投稿する
             </button>
@@ -243,18 +244,18 @@ function NewPostForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Page header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
+          <Link href="/" className="transition-colors" style={{ color: '#7aad8a' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
             </svg>
           </Link>
-          <h1 className="text-lg font-bold text-gray-900">新規投稿</h1>
+          <h1 className="text-lg font-bold" style={{ color: '#e8f5ec' }}>新規投稿</h1>
         </div>
 
         <div className="flex gap-6 items-start">
@@ -263,16 +264,16 @@ function NewPostForm() {
 
             {/* Remix attribution badge */}
             {remixSource && (
-              <div className="flex items-center gap-3 bg-[#e8f3ec] border border-[#00782F]/20 rounded-xl px-4 py-3">
-                <div className="flex-shrink-0" style={{ color: '#00782F' }}>
+              <div className="flex items-center gap-3 rounded-xl px-4 py-3" style={{ backgroundColor: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)' }}>
+                <div className="flex-shrink-0" style={{ color: '#4ade80' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="18" r="3" /><circle cx="6" cy="6" r="3" /><circle cx="18" cy="6" r="3" />
                     <path d="M6 9v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9" /><line x1="12" y1="12" x2="12" y2="15" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-[#00782F]">リミックス元</p>
-                  <Link href={`/post/${remixSource.id}`} className="text-xs text-gray-600 hover:underline truncate block">
+                  <p className="text-xs font-semibold" style={{ color: '#4ade80' }}>リミックス元</p>
+                  <Link href={`/post/${remixSource.id}`} className="text-xs hover:underline truncate block" style={{ color: '#7aad8a' }}>
                     {remixSource.title} — by {remixSource.author.name}
                   </Link>
                 </div>
@@ -291,7 +292,7 @@ function NewPostForm() {
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="例: anon_creator"
                   maxLength={30}
-                  className="w-full text-sm border border-amber-200 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30 focus:border-amber-400 transition bg-white"
+                  className="w-full text-sm rounded-lg px-3 py-2.5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30 focus:border-amber-400 transition bg-white border border-amber-200 text-gray-900"
                 />
                 <p className="text-xs text-amber-700/80 mt-2">
                   未ログインでは1日3件まで投稿できます。
@@ -311,8 +312,8 @@ function NewPostForm() {
             )}
 
             {/* Title */}
-            <section className="bg-white rounded-xl border border-gray-200 p-5">
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <section className="rounded-xl p-5" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#7aad8a' }}>
                 タイトル <span className="text-red-400">*</span>
               </label>
               <input
@@ -321,24 +322,28 @@ function NewPostForm() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="例: Q4 売上ダッシュボード"
                 maxLength={100}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
+                className="w-full text-sm rounded-lg px-3 py-2.5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4ade80]/30 focus:border-[#4ade80] transition"
+                style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
               />
-              <p className="text-xs text-gray-400 mt-1.5 text-right">{title.length}/100</p>
+              <p className="text-xs mt-1.5 text-right" style={{ color: '#7aad8a' }}>{title.length}/100</p>
             </section>
 
             {/* HTML input */}
-            <section className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <section className="rounded-xl overflow-hidden" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
               {/* Mode tabs */}
-              <div className="flex border-b border-gray-100">
+              <div className="flex" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 {(['paste', 'upload'] as InputMode[]).map((mode) => (
                   <button
                     key={mode}
                     onClick={() => setInputMode(mode)}
                     className={`flex-1 py-3 text-sm font-medium transition-colors ${
                       inputMode === mode
-                        ? 'text-[#00782F] border-b-2 border-[#00782F] -mb-px'
-                        : 'text-gray-500 hover:text-gray-700'
+                        ? '-mb-px'
+                        : ''
                     }`}
+                    style={inputMode === mode
+                      ? { color: '#4ade80', borderBottom: '2px solid #4ade80' }
+                      : { color: '#7aad8a' }}
                   >
                     {mode === 'paste' ? 'HTMLを貼り付け' : 'ファイルをアップロード'}
                   </button>
@@ -346,7 +351,7 @@ function NewPostForm() {
               </div>
 
               <div className="p-5">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#7aad8a' }}>
                   HTMLコンテンツ <span className="text-red-400">*</span>
                 </label>
 
@@ -356,12 +361,14 @@ function NewPostForm() {
                     onChange={(e) => handleHtmlChange(e.target.value)}
                     placeholder={'<!DOCTYPE html>\n<html>\n  ...\n</html>'}
                     spellCheck={false}
-                    className="w-full h-56 text-xs font-mono border border-gray-200 rounded-lg px-3 py-2.5 text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition resize-none bg-gray-50"
+                    className="w-full h-56 text-xs font-mono rounded-lg px-3 py-2.5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4ade80]/30 focus:border-[#4ade80] transition resize-none"
+                    style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
                   />
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="h-56 border-2 border-dashed border-gray-200 rounded-lg flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#00782F] hover:bg-[#00782F]/5 transition-colors"
+                    className="h-56 border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-3 cursor-pointer transition-colors"
+                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
                   >
                     <input
                       ref={fileInputRef}
@@ -372,23 +379,23 @@ function NewPostForm() {
                     />
                     {fileName ? (
                       <>
-                        <div className="w-10 h-10 rounded-full bg-[#e8f3ec] flex items-center justify-center">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00782F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(74,222,128,0.1)' }}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </div>
-                        <p className="text-sm font-medium text-gray-700">{fileName}</p>
-                        <p className="text-xs text-gray-400">クリックして別のファイルを選択</p>
+                        <p className="text-sm font-medium" style={{ color: '#e8f5ec' }}>{fileName}</p>
+                        <p className="text-xs" style={{ color: '#7aad8a' }}>クリックして別のファイルを選択</p>
                       </>
                     ) : (
                       <>
-                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#132a1a' }}>
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
                           </svg>
                         </div>
-                        <p className="text-sm text-gray-500">クリックしてHTMLファイルを選択</p>
-                        <p className="text-xs text-gray-400">.html / .htm</p>
+                        <p className="text-sm" style={{ color: '#7aad8a' }}>クリックしてHTMLファイルを選択</p>
+                        <p className="text-xs" style={{ color: '#7aad8a' }}>.html / .htm</p>
                       </>
                     )}
                   </div>
@@ -397,10 +404,10 @@ function NewPostForm() {
             </section>
 
             {/* Tags */}
-            <section className="bg-white rounded-xl border border-gray-200 p-5">
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <section className="rounded-xl p-5" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#7aad8a' }}>
                 タグ <span className="text-red-400">*</span>
-                <span className="ml-2 font-normal text-gray-400 normal-case tracking-normal">最大5件</span>
+                <span className="ml-2 font-normal normal-case tracking-normal" style={{ color: '#7aad8a' }}>最大5件</span>
               </label>
 
               {/* Selected tags */}
@@ -408,8 +415,8 @@ function NewPostForm() {
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-white"
-                    style={{ backgroundColor: '#00782F' }}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium"
+                    style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
                   >
                     {tag}
                     <button onClick={() => removeTag(tag)} className="opacity-70 hover:opacity-100 ml-0.5">
@@ -426,7 +433,8 @@ function NewPostForm() {
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleTagKeyDown}
                     placeholder="タグを入力してEnter"
-                    className="text-xs border-0 outline-none text-gray-700 placeholder-gray-400 min-w-32"
+                    className="text-xs border-0 outline-none placeholder-gray-500 min-w-32"
+                    style={{ backgroundColor: 'transparent', color: '#e8f5ec' }}
                   />
                 )}
               </div>
@@ -438,7 +446,8 @@ function NewPostForm() {
                     key={tag}
                     onClick={() => addTag(tag)}
                     disabled={tags.length >= 5}
-                    className="px-2.5 py-1 rounded-full text-xs border border-gray-200 text-gray-500 hover:border-[#00782F] hover:text-[#00782F] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-2.5 py-1 rounded-full text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ border: '1px solid rgba(255,255,255,0.08)', color: '#7aad8a' }}
                   >
                     + {tag}
                   </button>
@@ -447,8 +456,8 @@ function NewPostForm() {
             </section>
 
             {/* Visibility */}
-            <section className="bg-white rounded-xl border border-gray-200 p-5">
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+            <section className="rounded-xl p-5" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#7aad8a' }}>
                 公開設定
               </label>
               <div className="flex gap-3">
@@ -456,16 +465,15 @@ function NewPostForm() {
                   <button
                     key={opt.value}
                     onClick={() => setVisibility(opt.value)}
-                    className={`flex-1 py-2.5 px-3 rounded-lg border text-left transition-colors ${
-                      visibility === opt.value
-                        ? 'border-[#00782F] bg-[#e8f3ec]'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className="flex-1 py-2.5 px-3 rounded-lg text-left transition-colors"
+                    style={visibility === opt.value
+                      ? { border: '1px solid #4ade80', backgroundColor: 'rgba(74,222,128,0.1)' }
+                      : { border: '1px solid rgba(255,255,255,0.08)' }}
                   >
-                    <p className={`text-sm font-semibold ${visibility === opt.value ? 'text-[#00782F]' : 'text-gray-700'}`}>
+                    <p className="text-sm font-semibold" style={{ color: visibility === opt.value ? '#4ade80' : '#e8f5ec' }}>
                       {opt.label}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">{opt.desc}</p>
+                    <p className="text-xs mt-0.5" style={{ color: '#7aad8a' }}>{opt.desc}</p>
                   </button>
                 ))}
               </div>
@@ -478,15 +486,16 @@ function NewPostForm() {
             <div className="flex gap-3">
               <Link
                 href="/"
-                className="flex-1 py-2.5 text-sm font-medium text-center text-gray-600 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2.5 text-sm font-medium text-center rounded-full transition-colors"
+                style={{ color: '#7aad8a', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 キャンセル
               </Link>
               <button
                 onClick={handleSubmit}
                 disabled={!canSubmit || submitting}
-                className="flex-1 py-2.5 text-sm font-medium text-white rounded-full transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
-                style={{ backgroundColor: '#00782F' }}
+                className="flex-1 py-2.5 text-sm font-medium rounded-full transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90"
+                style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
               >
                 {submitting ? '投稿中...' : '投稿する'}
               </button>
@@ -495,15 +504,15 @@ function NewPostForm() {
 
           {/* Right: Live preview */}
           <div className="w-[420px] flex-shrink-0 hidden lg:block sticky top-20">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+            <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#7aad8a' }}>
               プレビュー
             </p>
-            <div className="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-gray-100 bg-gray-50">
+            <div className="rounded-xl overflow-hidden shadow-sm" style={{ border: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#132a1a' }}>
+              <div className="flex items-center gap-1.5 px-4 py-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#0c1f12' }}>
                 <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
                 <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                <span className="ml-3 text-xs text-gray-400 font-mono truncate max-w-48">
+                <span className="ml-3 text-xs font-mono truncate max-w-48" style={{ color: '#7aad8a' }}>
                   {title || 'preview'}
                 </span>
               </div>
@@ -517,10 +526,10 @@ function NewPostForm() {
             </div>
             {!canSubmit && (
               <ul className="mt-3 space-y-1">
-                {isGuest && !nickname.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-300" />ニックネームを入力してください</li>}
-                {!title.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />タイトルを入力してください</li>}
-                {!html.trim() && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />HTMLを追加してください</li>}
-                {tags.length === 0 && <li className="text-xs text-gray-400 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-300" />タグを1つ以上追加してください</li>}
+                {isGuest && !nickname.trim() && <li className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><span className="w-1.5 h-1.5 rounded-full bg-amber-300" />ニックネームを入力してください</li>}
+                {!title.trim() && <li className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />タイトルを入力してください</li>}
+                {!html.trim() && <li className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />HTMLを追加してください</li>}
+                {tags.length === 0 && <li className="text-xs flex items-center gap-1.5" style={{ color: '#7aad8a' }}><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />タグを1つ以上追加してください</li>}
               </ul>
             )}
           </div>
@@ -532,7 +541,7 @@ function NewPostForm() {
 
 export default function NewPostPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50"><div className="p-8 text-center text-sm text-gray-400">読み込み中...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}><div className="p-8 text-center text-sm" style={{ color: '#7aad8a' }}>読み込み中...</div></div>}>
       <NewPostForm />
     </Suspense>
   );

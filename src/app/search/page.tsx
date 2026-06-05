@@ -111,7 +111,8 @@ function SearchResults() {
       <div className="mb-6">
         <div className="relative max-w-xl">
           <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 -translate-y-1/2"
+            style={{ color: '#7aad8a' }}
             width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           >
@@ -122,12 +123,18 @@ function SearchResults() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="タイトル・タグ・作者で検索..."
-            className="w-full pl-11 pr-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] bg-white transition"
+            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 transition"
+            style={{
+              backgroundColor: '#132a1a',
+              border: '1px solid rgba(255,255,255,0.08)',
+              color: '#e8f5ec',
+            }}
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+              style={{ color: '#7aad8a' }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -142,11 +149,10 @@ function SearchResults() {
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setActiveTag('')}
-            className={`px-3 py-1 rounded-full text-sm transition-colors ${
-              !activeTag
-                ? 'bg-[#00782F] text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
-            }`}
+            className="px-3 py-1 rounded-full text-sm transition-colors"
+            style={!activeTag
+              ? { backgroundColor: '#4ade80', color: '#0c1f12' }
+              : { backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#7aad8a' }}
           >
             すべて
           </button>
@@ -154,11 +160,10 @@ function SearchResults() {
             <button
               key={tag}
               onClick={() => setActiveTag(activeTag === tag ? '' : tag)}
-              className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                activeTag === tag
-                  ? 'bg-[#00782F] text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
-              }`}
+              className="px-3 py-1 rounded-full text-sm transition-colors"
+              style={activeTag === tag
+                ? { backgroundColor: '#4ade80', color: '#0c1f12' }
+                : { backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#7aad8a' }}
             >
               {tag}
             </button>
@@ -167,7 +172,12 @@ function SearchResults() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as 'trend' | 'new')}
-          className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 bg-white focus:outline-none focus:border-[#00782F] transition"
+          className="text-sm rounded-lg px-3 py-1.5 focus:outline-none transition"
+          style={{
+            backgroundColor: '#132a1a',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: '#7aad8a',
+          }}
         >
           <option value="trend">人気順</option>
           <option value="new">新着順</option>
@@ -176,7 +186,7 @@ function SearchResults() {
 
       {/* Result count */}
       {!loading && (
-        <p className="text-xs text-gray-400 mb-4">
+        <p className="text-xs mb-4" style={{ color: '#7aad8a' }}>
           {query || activeTag ? <>{results.length}件ヒット</> : <>全{results.length}件</>}
         </p>
       )}
@@ -185,11 +195,11 @@ function SearchResults() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-              <div className="h-36 bg-gray-200" />
+            <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="h-36" style={{ backgroundColor: '#1a3a22' }} />
               <div className="p-4 space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-3 bg-gray-100 rounded w-1/2" />
+                <div className="h-4 rounded w-3/4" style={{ backgroundColor: '#1a3a22' }} />
+                <div className="h-3 rounded w-1/2" style={{ backgroundColor: '#132a1a' }} />
               </div>
             </div>
           ))}
@@ -202,18 +212,18 @@ function SearchResults() {
         </div>
       ) : (
         <div className="text-center py-24">
-          <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#132a1a' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7aad8a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </div>
           {query ? (
             <>
-              <p className="text-sm font-medium text-gray-700 mb-1">「{query}」の検索結果はありません</p>
-              <p className="text-xs text-gray-400">別のキーワードやタグで試してみてください</p>
+              <p className="text-sm font-medium mb-1" style={{ color: '#e8f5ec' }}>「{query}」の検索結果はありません</p>
+              <p className="text-xs" style={{ color: '#7aad8a' }}>別のキーワードやタグで試してみてください</p>
             </>
           ) : (
-            <p className="text-sm text-gray-400">まだ投稿がありません</p>
+            <p className="text-sm" style={{ color: '#7aad8a' }}>まだ投稿がありません</p>
           )}
         </div>
       )}
@@ -229,7 +239,8 @@ function SearchCard({ post, query }: { post: DbPost; query: string }) {
   return (
     <Link
       href={`/post/${post.id}`}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group"
+      className="rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
+      style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}
     >
       <div className={`h-36 bg-gradient-to-br ${gradientFor(post.id)} relative`}>
         {firstTag && (
@@ -241,23 +252,23 @@ function SearchCard({ post, query }: { post: DbPost; query: string }) {
         )}
       </div>
       <div className="p-4">
-        <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-[#00782F] transition-colors leading-snug">
+        <h2 className="text-sm font-semibold line-clamp-2 mb-2 transition-colors leading-snug" style={{ color: '#e8f5ec' }}>
           {highlight(post.title, query)}
         </h2>
         <div className="flex items-center gap-2 mb-3">
           <div
-            className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
-            style={{ backgroundColor: '#00782F' }}
+            className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0"
+            style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
           >
             {initial}
           </div>
-          <span className="text-xs text-gray-500">{highlight(authorName, query)}</span>
-          <span className="text-xs text-gray-300">·</span>
-          <span className="text-xs text-gray-400">{formatDate(post.created_at)}</span>
+          <span className="text-xs" style={{ color: '#7aad8a' }}>{highlight(authorName, query)}</span>
+          <span className="text-xs" style={{ color: '#7aad8a' }}>·</span>
+          <span className="text-xs" style={{ color: '#7aad8a' }}>{formatDate(post.created_at)}</span>
         </div>
         <div className="flex flex-wrap gap-1">
           {post.post_tags.map((t) => (
-            <span key={t.tag} className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+            <span key={t.tag} className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(74,222,128,0.1)', color: '#7aad8a' }}>
               {highlight(t.tag, query)}
             </span>
           ))}
@@ -269,9 +280,9 @@ function SearchCard({ post, query }: { post: DbPost; query: string }) {
 
 export default function SearchPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
-      <Suspense fallback={<div className="p-8 text-center text-sm text-gray-400">読み込み中...</div>}>
+      <Suspense fallback={<div className="p-8 text-center text-sm" style={{ color: '#7aad8a' }}>読み込み中...</div>}>
         <SearchResults />
       </Suspense>
     </div>

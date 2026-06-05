@@ -68,33 +68,33 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
         <div className="max-w-lg mx-auto px-4 py-16 animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/3" />
-          <div className="h-10 bg-gray-200 rounded" />
-          <div className="h-24 bg-gray-200 rounded" />
+          <div className="h-6 rounded w-1/3" style={{ backgroundColor: '#132a1a' }} />
+          <div className="h-10 rounded" style={{ backgroundColor: '#132a1a' }} />
+          <div className="h-24 rounded" style={{ backgroundColor: '#132a1a' }} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
       <main className="max-w-lg mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-6">
-          <Link href={`/user/${name}`} className="text-gray-400 hover:text-gray-600 transition-colors">
+          <Link href={`/user/${name}`} className="transition-colors" style={{ color: '#7aad8a' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
             </svg>
           </Link>
-          <h1 className="text-lg font-bold text-gray-900">プロフィールを編集</h1>
+          <h1 className="text-lg font-bold" style={{ color: '#e8f5ec' }}>プロフィールを編集</h1>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
+        <div className="rounded-2xl p-6 space-y-5" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#7aad8a' }}>
               表示名 <span className="text-red-400">*</span>
             </label>
             <input
@@ -102,13 +102,14 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               maxLength={50}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition"
+              className="w-full text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#4ade80]/30 focus:border-[#4ade80] transition"
+              style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
             />
-            <p className="text-xs text-gray-400 mt-1 text-right">{displayName.length}/50</p>
+            <p className="text-xs mt-1 text-right" style={{ color: '#7aad8a' }}>{displayName.length}/50</p>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: '#7aad8a' }}>
               自己紹介
             </label>
             <textarea
@@ -117,9 +118,10 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
               maxLength={200}
               rows={4}
               placeholder="あなたについて教えてください"
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00782F]/30 focus:border-[#00782F] transition resize-none"
+              className="w-full text-sm rounded-lg px-3 py-2.5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4ade80]/30 focus:border-[#4ade80] transition resize-none"
+              style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
             />
-            <p className="text-xs text-gray-400 mt-1 text-right">{bio.length}/200</p>
+            <p className="text-xs mt-1 text-right" style={{ color: '#7aad8a' }}>{bio.length}/200</p>
           </div>
 
           {error && (
@@ -129,15 +131,16 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
           <div className="flex gap-3 pt-1">
             <Link
               href={`/user/${name}`}
-              className="flex-1 py-2.5 text-sm font-medium text-center text-gray-600 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+              className="flex-1 py-2.5 text-sm font-medium text-center rounded-full transition-colors"
+              style={{ color: '#7aad8a', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               キャンセル
             </Link>
             <button
               onClick={handleSave}
               disabled={saving || !displayName.trim()}
-              className="flex-1 py-2.5 text-sm font-medium text-white rounded-full transition-opacity disabled:opacity-40 hover:opacity-90"
-              style={{ backgroundColor: '#00782F' }}
+              className="flex-1 py-2.5 text-sm font-medium rounded-full transition-opacity disabled:opacity-40 hover:opacity-90"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               {saving ? '保存中...' : '保存する'}
             </button>
@@ -145,12 +148,12 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
         </div>
 
         {/* 危険ゾーン */}
-        <div className="mt-6 bg-white rounded-2xl border border-red-100 p-6">
-          <h2 className="text-sm font-semibold text-red-600 mb-1">危険ゾーン</h2>
-          <p className="text-xs text-gray-500 mb-4">アカウントを削除すると、投稿・コメント・いいねを含む全てのデータが完全に削除されます。この操作は取り消せません。</p>
+        <div className="mt-6 rounded-2xl border border-red-900/40 p-6" style={{ backgroundColor: '#132a1a' }}>
+          <h2 className="text-sm font-semibold text-red-500 mb-1">危険ゾーン</h2>
+          <p className="text-xs mb-4" style={{ color: '#7aad8a' }}>アカウントを削除すると、投稿・コメント・いいねを含む全てのデータが完全に削除されます。この操作は取り消せません。</p>
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="text-sm font-medium text-red-500 border border-red-200 rounded-full px-4 py-2 hover:bg-red-50 transition-colors"
+            className="text-sm font-medium text-red-400 border border-red-900/40 rounded-full px-4 py-2 hover:bg-red-500/10 transition-colors"
           >
             アカウントを削除する
           </button>
@@ -160,23 +163,25 @@ export default function EditProfilePage({ params }: { params: Promise<{ name: st
       {/* 退会確認モーダル */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-            <h2 className="text-base font-bold text-gray-900 mb-2">本当に退会しますか？</h2>
-            <p className="text-xs text-gray-500 mb-4">
-              全ての投稿・コメント・データが削除されます。確認のため <span className="font-semibold text-gray-700">「退会する」</span> と入力してください。
+          <div className="rounded-2xl p-6 w-full max-w-sm shadow-xl" style={{ backgroundColor: '#132a1a' }}>
+            <h2 className="text-base font-bold mb-2" style={{ color: '#e8f5ec' }}>本当に退会しますか？</h2>
+            <p className="text-xs mb-4" style={{ color: '#7aad8a' }}>
+              全ての投稿・コメント・データが削除されます。確認のため <span className="font-semibold" style={{ color: '#e8f5ec' }}>「退会する」</span> と入力してください。
             </p>
             <input
               type="text"
               value={deleteConfirm}
               onChange={(e) => setDeleteConfirm(e.target.value)}
               placeholder="退会する"
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400 transition mb-4"
+              className="w-full text-sm rounded-lg px-3 py-2.5 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-400/30 focus:border-red-400 transition mb-4"
+              style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#e8f5ec' }}
             />
             <div className="flex gap-3">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteConfirm(''); }}
                 disabled={deleting}
-                className="flex-1 py-2.5 text-sm font-medium text-gray-600 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+                className="flex-1 py-2.5 text-sm font-medium rounded-full transition-colors"
+                style={{ color: '#7aad8a', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 キャンセル
               </button>

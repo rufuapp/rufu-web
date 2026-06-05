@@ -199,21 +199,24 @@ export default function FeedPage() {
     : fetchedPosts.filter((p) => p.post_tags.some((t) => t.tag === activeTag));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
         {/* Tabs */}
-        <div className="flex gap-1 border-b border-gray-200 mb-5">
+        <div className="flex gap-1 border-b mb-5" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => { setActiveTag('すべて'); setActiveTab(tab); }}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 activeTab === tab
-                  ? 'border-[#00782F] text-[#00782F]'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? ''
+                  : 'border-transparent hover:border-gray-300'
               }`}
+              style={activeTab === tab
+                ? { borderColor: '#4ade80', color: '#4ade80' }
+                : { color: '#7aad8a' }}
             >
               {tab}
             </button>
@@ -227,11 +230,10 @@ export default function FeedPage() {
               <button
                 key={tag}
                 onClick={() => setActiveTag(tag)}
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                  activeTag === tag
-                    ? 'bg-[#00782F] text-white'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
-                }`}
+                className="px-3 py-1 rounded-full text-sm transition-colors"
+                style={activeTag === tag
+                  ? { backgroundColor: '#4ade80', color: '#0c1f12' }
+                  : { backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)', color: '#7aad8a' }}
               >
                 {tag}
               </button>
@@ -243,19 +245,19 @@ export default function FeedPage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-                <div className="h-40 bg-gray-200" />
+              <div key={i} className="rounded-xl overflow-hidden animate-pulse" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="h-40" style={{ backgroundColor: '#1a3a22' }} />
                 <div className="p-4 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  <div className="h-4 rounded w-3/4" style={{ backgroundColor: '#1a3a22' }} />
+                  <div className="h-3 rounded w-1/2" style={{ backgroundColor: '#132a1a' }} />
                 </div>
               </div>
             ))}
           </div>
         ) : activeTab === 'フォロー中' && !isRealUser ? (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20" style={{ color: '#7aad8a' }}>
             <p className="text-sm mb-4">フォロー中の投稿を見るにはログインが必要です</p>
-            <p className="text-xs text-gray-300">ユーザーページからフォローすると、その方の投稿がここに表示されます</p>
+            <p className="text-xs" style={{ color: '#7aad8a' }}>ユーザーページからフォローすると、その方の投稿がここに表示されます</p>
           </div>
         ) : displayPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -270,7 +272,7 @@ export default function FeedPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20" style={{ color: '#7aad8a' }}>
             <p className="text-sm">
               {activeTab === 'フォロー中'
                 ? 'フォロー中のユーザーの投稿がここに表示されます'
@@ -281,8 +283,8 @@ export default function FeedPage() {
             {activeTab !== 'フォロー中' && (
               <Link
                 href="/post/new"
-                className="inline-block mt-4 text-sm font-medium text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: '#00782F' }}
+                className="inline-block mt-4 text-sm font-medium px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
               >
                 投稿する
               </Link>
@@ -293,13 +295,13 @@ export default function FeedPage() {
         {/* Sentinel — infinite scroll trigger */}
         <div ref={sentinelRef} className="py-6 flex justify-center">
           {loadingMore && (
-            <div className="flex items-center gap-2 text-xs text-gray-400">
-              <div className="w-4 h-4 border-2 border-gray-200 border-t-[#00782F] rounded-full animate-spin" />
+            <div className="flex items-center gap-2 text-xs" style={{ color: '#7aad8a' }}>
+              <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: 'rgba(255,255,255,0.08)', borderTopColor: '#4ade80' }} />
               読み込み中...
             </div>
           )}
           {!loading && !loadingMore && !hasMore && fetchedPosts.length > 0 && (
-            <p className="text-xs text-gray-400">すべての投稿を表示しました</p>
+            <p className="text-xs" style={{ color: '#7aad8a' }}>すべての投稿を表示しました</p>
           )}
         </div>
       </main>
@@ -345,7 +347,7 @@ function PostCard({
   const firstTag = post.post_tags[0]?.tag;
 
   return (
-    <article className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+    <article className="rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
       <Link href={`/post/${post.id}`} className="block">
         <div ref={containerRef} className="relative overflow-hidden h-44">
           <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
@@ -377,24 +379,24 @@ function PostCard({
         </div>
 
         <div className="px-4 pt-3 pb-2">
-          <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-2.5 group-hover:text-[#00782F] transition-colors leading-snug">
+          <h2 className="text-sm font-semibold line-clamp-2 mb-2.5 transition-colors leading-snug" style={{ color: '#e8f5ec' }}>
             {post.title}
           </h2>
           <div className="flex items-center gap-2">
             <div
-              className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
-              style={{ backgroundColor: '#00782F' }}
+              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0"
+              style={{ backgroundColor: '#4ade80', color: '#0c1f12' }}
             >
               {initial}
             </div>
-            <span className="text-xs text-gray-500 truncate">{authorName}</span>
-            <span className="text-xs text-gray-300 flex-shrink-0">·</span>
-            <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(post.created_at)}</span>
+            <span className="text-xs truncate" style={{ color: '#7aad8a' }}>{authorName}</span>
+            <span className="text-xs flex-shrink-0" style={{ color: '#7aad8a' }}>·</span>
+            <span className="text-xs flex-shrink-0" style={{ color: '#7aad8a' }}>{formatDate(post.created_at)}</span>
           </div>
         </div>
       </Link>
 
-      <div className="flex items-center gap-3 px-4 pt-2 pb-3 border-t border-gray-50">
+      <div className="flex items-center gap-3 px-4 pt-2 pb-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
         <button
           onClick={async () => {
             const newLiked = !liked;
@@ -408,9 +410,8 @@ function PostCard({
               : await supabase.from('likes').delete().match({ user_id: uid, post_id: post.id });
             if (error) { setLocalLiked(!newLiked); setLikeCount((c) => newLiked ? c - 1 : c + 1); }
           }}
-          className={`flex items-center gap-1 text-xs transition-colors ${
-            liked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'
-          }`}
+          className="flex items-center gap-1 text-xs transition-colors"
+          style={{ color: liked ? '#4ade80' : '#7aad8a' }}
         >
           <HeartIcon filled={liked} />
           {likeCount}
@@ -428,14 +429,13 @@ function PostCard({
               : await supabase.from('bookmarks').delete().match({ user_id: uid, post_id: post.id });
             if (error) { setLocalBookmarked(!newBookmarked); setBookmarkCount((c) => newBookmarked ? c - 1 : c + 1); }
           }}
-          className={`flex items-center gap-1 text-xs transition-colors ${
-            bookmarked ? 'text-[#00782F]' : 'text-gray-400 hover:text-gray-600'
-          }`}
+          className="flex items-center gap-1 text-xs transition-colors"
+          style={{ color: bookmarked ? '#4ade80' : '#7aad8a' }}
         >
           <BookmarkIcon filled={bookmarked} />
           {bookmarkCount}
         </button>
-        <span className="flex items-center gap-1 text-xs text-gray-400 ml-auto">
+        <span className="flex items-center gap-1 text-xs ml-auto" style={{ color: '#7aad8a' }}>
           <EyeIcon />
           {post.views_count.toLocaleString()}
         </span>

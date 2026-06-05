@@ -29,7 +29,7 @@ function formatDate(iso: string) {
 function NotificationIcon({ type }: { type: Notification['type'] }) {
   if (type === 'like') {
     return (
-      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 flex-shrink-0">
+      <span className="flex items-center justify-center w-8 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(239,68,68,0.15)', color: '#f87171' }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
         </svg>
@@ -38,7 +38,7 @@ function NotificationIcon({ type }: { type: Notification['type'] }) {
   }
   if (type === 'comment') {
     return (
-      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex-shrink-0">
+      <span className="flex items-center justify-center w-8 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(59,130,246,0.15)', color: '#60a5fa' }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
@@ -46,7 +46,7 @@ function NotificationIcon({ type }: { type: Notification['type'] }) {
     );
   }
   return (
-    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-50 text-[#00782F] flex-shrink-0">
+    <span className="flex items-center justify-center w-8 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(74,222,128,0.1)', color: '#4ade80' }}>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
@@ -103,16 +103,16 @@ export default function NotificationsPage() {
 
   if (notifications === null) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
         <Header />
         <main className="max-w-2xl mx-auto px-4 py-8">
           <div className="animate-pulse space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0" />
+              <div key={i} className="rounded-xl p-4 flex gap-3" style={{ backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="w-8 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: '#132a1a' }} />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-2/3" />
-                  <div className="h-3 bg-gray-100 rounded w-1/3" />
+                  <div className="h-4 rounded w-2/3" style={{ backgroundColor: '#132a1a' }} />
+                  <div className="h-3 rounded w-1/3" style={{ backgroundColor: '#132a1a' }} />
                 </div>
               </div>
             ))}
@@ -125,17 +125,17 @@ export default function NotificationsPage() {
   const isLoggedIn = currentUserId !== null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#0c1f12' }}>
       <Header />
       <main className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-lg font-bold text-gray-900 mb-5">通知</h1>
+        <h1 className="text-lg font-bold mb-5" style={{ color: '#e8f5ec' }}>通知</h1>
 
         {!isLoggedIn ? (
-          <div className="text-center py-20 text-gray-400 text-sm">
+          <div className="text-center py-20 text-sm" style={{ color: '#7aad8a' }}>
             ログインすると通知を確認できます
           </div>
         ) : notifications.length === 0 ? (
-          <div className="text-center py-20 text-gray-400 text-sm">
+          <div className="text-center py-20 text-sm" style={{ color: '#7aad8a' }}>
             まだ通知はありません
           </div>
         ) : (
@@ -144,28 +144,28 @@ export default function NotificationsPage() {
               <li key={n.id}>
                 <Link
                   href={notificationHref(n)}
-                  className={`flex items-start gap-3 p-4 rounded-xl border transition-colors hover:bg-gray-50 ${
-                    n.read
-                      ? 'bg-white border-gray-200'
-                      : 'bg-white border-[#00782F]/30 shadow-sm'
-                  }`}
+                  className="flex items-start gap-3 p-4 rounded-xl transition-colors hover:opacity-80"
+                  style={n.read
+                    ? { backgroundColor: '#132a1a', border: '1px solid rgba(255,255,255,0.08)' }
+                    : { backgroundColor: '#132a1a', border: '1px solid rgba(74,222,128,0.3)', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }
+                  }
                 >
                   {!n.read && (
-                    <span className="absolute mt-1.5 ml-[-8px] w-2 h-2 rounded-full bg-[#00782F]" />
+                    <span className="absolute mt-1.5 ml-[-8px] w-2 h-2 rounded-full" style={{ backgroundColor: '#4ade80' }} />
                   )}
                   <NotificationIcon type={n.type} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-800">{notificationText(n)}</p>
+                    <p className="text-sm" style={{ color: '#e8f5ec' }}>{notificationText(n)}</p>
                     {n.type !== 'follow' && n.post?.title && (
-                      <p className="text-xs text-gray-400 mt-0.5 truncate">「{n.post.title}」</p>
+                      <p className="text-xs mt-0.5 truncate" style={{ color: '#7aad8a' }}>「{n.post.title}」</p>
                     )}
                     {n.type === 'comment' && n.comment?.body && (
-                      <p className="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1 line-clamp-2 border border-gray-100">
+                      <p className="text-xs mt-1 rounded px-2 py-1 line-clamp-2" style={{ color: '#7aad8a', backgroundColor: 'rgba(74,222,128,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
                         {n.comment.body}
                       </p>
                     )}
                   </div>
-                  <span className="text-xs text-gray-400 flex-shrink-0 mt-0.5">{formatDate(n.created_at)}</span>
+                  <span className="text-xs flex-shrink-0 mt-0.5" style={{ color: '#7aad8a' }}>{formatDate(n.created_at)}</span>
                 </Link>
               </li>
             ))}
