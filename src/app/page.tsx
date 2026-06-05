@@ -112,31 +112,35 @@ export default async function LandingPage() {
 
   const gallery = (galleryPosts ?? []) as unknown as GalleryPost[];
 
-  // 深緑ブランドカラー
-  const G = '#1a5c2a';
-  const GL = '#f0f7f2'; // 薄い緑の背景
+  // カラーパレット（深緑ダーク）
+  const BG   = '#0c1f12';  // 背景: 深い森の緑
+  const SURF = '#132a1a';  // カード・セクション面
+  const BOR  = 'rgba(255,255,255,0.08)'; // ボーダー
+  const ACC  = '#4ade80';  // アクセント: 明るいグリーン
+  const TXT  = '#e8f5ec';  // 主テキスト
+  const TXTS = '#7aad8a';  // サブテキスト
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen" style={{ backgroundColor: BG, color: TXT }}>
 
-      {/* Nav — Zenn風: シンプル・フラット */}
-      <nav className="sticky top-0 z-10 bg-white border-b border-gray-100">
+      {/* Nav */}
+      <nav className="sticky top-0 z-10 backdrop-blur-md" style={{ backgroundColor: 'rgba(12,31,18,0.9)', borderBottom: `1px solid ${BOR}` }}>
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <span className="text-lg font-bold tracking-tight" style={{ color: G }}>rufu</span>
-            <span className="text-xs text-gray-400 tracking-wider">流布</span>
+            <span className="text-lg font-bold tracking-tight" style={{ color: ACC }}>rufu</span>
+            <span className="text-xs tracking-wider" style={{ color: TXTS }}>流布</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/feed" className="text-sm text-gray-500 hover:text-gray-800 transition-colors hidden sm:block">
+            <Link href="/feed" className="text-sm transition-colors hidden sm:block" style={{ color: TXTS }}>
               フィード
             </Link>
-            <Link href="/ranking" className="text-sm text-gray-500 hover:text-gray-800 transition-colors hidden sm:block">
+            <Link href="/ranking" className="text-sm transition-colors hidden sm:block" style={{ color: TXTS }}>
               ランキング
             </Link>
             <Link
               href="/post/new"
-              className="text-sm font-medium text-white px-4 py-1.5 rounded transition-opacity hover:opacity-85"
-              style={{ backgroundColor: G }}
+              className="text-sm font-semibold px-4 py-1.5 rounded transition-opacity hover:opacity-80"
+              style={{ backgroundColor: ACC, color: BG }}
             >
               投稿する
             </Link>
@@ -144,30 +148,31 @@ export default async function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero — Zenn風: 余白大きめ・テキスト中心 */}
+      {/* Hero */}
       <section className="max-w-5xl mx-auto px-4 pt-20 pb-16 text-center">
-        <p className="text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: G }}>
+        <p className="text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: ACC }}>
           AI-Generated HTML Platform
         </p>
-        <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight mb-6 text-gray-900">
+        <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight mb-6" style={{ color: TXT }}>
           AIが作ったHTMLを、<br />
-          <span style={{ color: G }}>世界に流布</span>しよう
+          <span style={{ color: ACC }}>世界に流布</span>しよう
         </h1>
-        <p className="text-base sm:text-lg text-gray-500 max-w-lg mx-auto mb-10 leading-relaxed">
+        <p className="text-base sm:text-lg max-w-lg mx-auto mb-10 leading-relaxed" style={{ color: TXTS }}>
           ClaudeやChatGPTが生成したHTMLを投稿・発見・共有するコミュニティ。
           スライド・ダッシュボード・ビジュアライゼーション——あらゆるHTMLに居場所を。
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/post/new"
-            className="w-full sm:w-auto text-sm font-semibold text-white px-7 py-2.5 rounded transition-opacity hover:opacity-85"
-            style={{ backgroundColor: G }}
+            className="w-full sm:w-auto text-sm font-semibold px-7 py-2.5 rounded transition-opacity hover:opacity-80"
+            style={{ backgroundColor: ACC, color: BG }}
           >
             無料で投稿する →
           </Link>
           <Link
             href="/feed"
-            className="w-full sm:w-auto text-sm text-gray-600 hover:text-gray-900 px-7 py-2.5 rounded border border-gray-200 hover:border-gray-300 transition-colors"
+            className="w-full sm:w-auto text-sm px-7 py-2.5 rounded transition-colors"
+            style={{ border: `1px solid ${BOR}`, color: TXTS }}
           >
             フィードを見る
           </Link>
@@ -191,12 +196,12 @@ export default async function LandingPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 border border-dashed border-gray-200 rounded-xl">
-            <p className="text-sm text-gray-400 mb-4">まだ投稿がありません。最初の投稿者になりましょう！</p>
+          <div className="text-center py-16 rounded-xl" style={{ border: `1px dashed ${BOR}` }}>
+            <p className="text-sm mb-4" style={{ color: TXTS }}>まだ投稿がありません。最初の投稿者になりましょう！</p>
             <Link
               href="/post/new"
-              className="text-sm font-semibold text-white px-6 py-2.5 rounded transition-opacity hover:opacity-85"
-              style={{ backgroundColor: G }}
+              className="text-sm font-semibold px-6 py-2.5 rounded transition-opacity hover:opacity-80"
+              style={{ backgroundColor: ACC, color: BG }}
             >
               最初に投稿する →
             </Link>
@@ -204,53 +209,53 @@ export default async function LandingPage() {
         )}
       </section>
 
-      {/* Stats — シンプルな数値行 */}
-      <section style={{ backgroundColor: GL, borderTop: `1px solid #d4e8da`, borderBottom: `1px solid #d4e8da` }}>
+      {/* Stats */}
+      <section style={{ backgroundColor: SURF, borderTop: `1px solid ${BOR}`, borderBottom: `1px solid ${BOR}` }}>
         <div className="max-w-5xl mx-auto px-4 py-10 flex flex-wrap justify-center gap-x-16 gap-y-6">
           {STATS.map((s) => (
             <div key={s.label} className="text-center min-w-[90px]">
-              <p className="text-3xl font-extrabold" style={{ color: G }}>{s.value}</p>
-              <p className="text-xs text-gray-500 mt-1">{s.label}</p>
+              <p className="text-3xl font-extrabold" style={{ color: ACC }}>{s.value}</p>
+              <p className="text-xs mt-1" style={{ color: TXTS }}>{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Features — Zenn風: 横並び・アイコン小さめ */}
+      {/* Features */}
       <section className="max-w-5xl mx-auto px-4 py-20">
-        <h2 className="text-xl font-bold text-gray-900 mb-10 pb-3 border-b border-gray-100">
+        <h2 className="text-xl font-bold mb-10 pb-3" style={{ color: TXT, borderBottom: `1px solid ${BOR}` }}>
           rufuでできること
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {FEATURES.map((f) => (
             <div key={f.title}>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-                style={{ backgroundColor: GL, color: G }}>
+                style={{ backgroundColor: SURF, color: ACC, border: `1px solid ${BOR}` }}>
                 {f.icon}
               </div>
-              <h3 className="text-sm font-bold text-gray-900 mb-1.5">{f.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              <h3 className="text-sm font-bold mb-1.5" style={{ color: TXT }}>{f.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: TXTS }}>{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* How it works */}
-      <section style={{ backgroundColor: GL, borderTop: `1px solid #d4e8da`, borderBottom: `1px solid #d4e8da` }} className="py-20">
+      <section style={{ backgroundColor: SURF, borderTop: `1px solid ${BOR}`, borderBottom: `1px solid ${BOR}` }} className="py-20">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-10 pb-3 border-b border-green-100">
+          <h2 className="text-xl font-bold mb-10 pb-3" style={{ color: TXT, borderBottom: `1px solid ${BOR}` }}>
             使い方
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {STEPS.map((step, i) => (
               <div key={step.num} className="flex gap-4">
-                <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white mt-0.5"
-                  style={{ backgroundColor: G }}>
+                <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mt-0.5"
+                  style={{ backgroundColor: ACC, color: BG }}>
                   {i + 1}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900 mb-1">{step.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                  <h3 className="text-sm font-bold mb-1" style={{ color: TXT }}>{step.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: TXTS }}>{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -260,35 +265,35 @@ export default async function LandingPage() {
 
       {/* CTA */}
       <section className="max-w-5xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
+        <h2 className="text-2xl sm:text-3xl font-extrabold mb-4" style={{ color: TXT }}>
           あなたのHTMLを、世界に流布しよう
         </h2>
-        <p className="text-gray-500 text-sm mb-8">
+        <p className="text-sm mb-8" style={{ color: TXTS }}>
           今すぐ無料で参加して、AIコミュニティの一員になりましょう。
         </p>
         <Link
           href="/post/new"
-          className="inline-block font-semibold text-white px-8 py-3 rounded transition-opacity hover:opacity-85 text-sm"
-          style={{ backgroundColor: G }}
+          className="inline-block font-semibold px-8 py-3 rounded transition-opacity hover:opacity-80 text-sm"
+          style={{ backgroundColor: ACC, color: BG }}
         >
           投稿してみる →
         </Link>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 py-8">
+      <footer style={{ borderTop: `1px solid ${BOR}` }} className="py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm font-bold" style={{ color: G }}>rufu</span>
-            <span className="text-xs text-gray-300">流布</span>
+            <span className="text-sm font-bold" style={{ color: ACC }}>rufu</span>
+            <span className="text-xs" style={{ color: TXTS }}>流布</span>
           </div>
-          <div className="flex items-center gap-5 text-xs text-gray-400">
-            <Link href="/feed" className="hover:text-gray-700 transition-colors">フィード</Link>
-            <Link href="/ranking" className="hover:text-gray-700 transition-colors">ランキング</Link>
-            <Link href="/search" className="hover:text-gray-700 transition-colors">検索</Link>
-            <Link href="/post/new" className="hover:text-gray-700 transition-colors">投稿する</Link>
+          <div className="flex items-center gap-5 text-xs" style={{ color: TXTS }}>
+            <Link href="/feed" className="hover:text-white transition-colors">フィード</Link>
+            <Link href="/ranking" className="hover:text-white transition-colors">ランキング</Link>
+            <Link href="/search" className="hover:text-white transition-colors">検索</Link>
+            <Link href="/post/new" className="hover:text-white transition-colors">投稿する</Link>
           </div>
-          <p className="text-xs text-gray-300">© 2026 rufu</p>
+          <p className="text-xs" style={{ color: TXTS }}>© 2026 rufu</p>
         </div>
       </footer>
     </div>
