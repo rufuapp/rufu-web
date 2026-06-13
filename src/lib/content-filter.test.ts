@@ -121,7 +121,7 @@ describe('checkContent — 既存フィルター（アダルト・フィッシ�
     ng('<script>new XMLHttpRequest()</script>', '外部');
   });
 
-  it('rufu.dev へのfetchは通過', () => {
-    ok("<script>fetch('https://rufu.dev/api/likes', { method: 'POST' })</script>");
+  it('rufu.app へのfetchは通過', () => {
+    ok("<script>fetch('https://rufu.app/api/likes', { method: 'POST' })</script>");
   });
 });

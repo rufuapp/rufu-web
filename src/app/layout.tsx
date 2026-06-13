@@ -43,9 +43,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="w-full bg-amber-50 border-b border-amber-200 text-center py-1.5 px-4 text-xs text-amber-700">
-          🚧 このサイトは現在開発中です。コンテンツはすべてサンプルデータです。
-        </div>
         {children}
       </body>
     </html>

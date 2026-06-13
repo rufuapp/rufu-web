@@ -43,7 +43,7 @@ const NG_PATTERNS: Array<{ pattern: RegExp; reason: string }> = [
     reason: '不審なスクリプトが含まれています',
   },
   {
-    pattern: /fetch\s*\(\s*['"]https?:\/\/(?!rufu\.dev)/,
+    pattern: /fetch\s*\(\s*['"]https?:\/\/(?!rufu\.app)/,
     reason: '外部へのデータ送信スクリプトは投稿できません',
   },
   {
