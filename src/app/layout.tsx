@@ -12,23 +12,27 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_TITLE = 'rufu 資格ドリル — Databricks・Claude の資格対策問題';
+const SITE_DESC = 'Databricks 認定資格の対策問題と Claude の実践スキル検定を、登録なしで解けるドリルサイト。練習・模試・苦手克服モードと学習記録つき。すべて解説付きのオリジナル問題です。';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rufu.app'),
   title: {
-    default: 'rufu — AI生成HTMLの共有プラットフォーム',
-    template: '%s | rufu',
+    default: SITE_TITLE,
+    template: '%s | rufu 資格ドリル',
   },
-  description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。スライド、ダッシュボード、ビジュアライゼーションをワンクリックで公開。',
+  description: SITE_DESC,
   openGraph: {
     type: 'website',
-    siteName: 'rufu',
-    title: 'rufu — AI生成HTMLの共有プラットフォーム',
-    description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。',
+    siteName: 'rufu 資格ドリル',
+    title: SITE_TITLE,
+    description: SITE_DESC,
     locale: 'ja_JP',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'rufu — AI生成HTMLの共有プラットフォーム',
-    description: 'ClaudeやChatGPTが生成したHTMLコンテンツを投稿・発見・共有できるコミュニティ。',
+    title: SITE_TITLE,
+    description: SITE_DESC,
   },
 };
 
