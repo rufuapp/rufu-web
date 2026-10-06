@@ -3,10 +3,17 @@
 :root {
   --bg:   #0c1f12;
   --surf: #132a1a;
+  --surf2: #1a3523;
   --bor:  rgba(255,255,255,0.08);
+  --bor2: rgba(255,255,255,0.16);
   --acc:  #4ade80;
   --txt:  #e8f5ec;
   --txts: #7aad8a;
+  --ok:   #4ade80;
+  --ng:   #f87171;
+  --warn: #fbbf24;
+  --dbx:  #ff7a59;
+  --cld:  #e3a072;
 }
 
 @theme inline {
@@ -19,7 +26,7 @@
 body {
   background-color: var(--bg);
   color: var(--txt);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
 }
 
 /* ユーティリティ */
@@ -34,3 +41,22 @@ body {
 }
 .theme-input::placeholder { color: var(--txts); }
 .theme-input:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 2px rgba(74,222,128,0.15); }
+
+/* ドリル */
+.drill-grid-bg {
+  background-image:
+    linear-gradient(rgba(74,222,128,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,222,128,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+}
+
+@keyframes drill-pop {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.drill-pop { animation: drill-pop 180ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drill-pop { animation: none; }
+}
