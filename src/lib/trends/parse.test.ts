@@ -47,8 +47,7 @@ describe('公式発表の読み取り', () => {
 });
 
 describe('日付の扱い', () => {
-  // fetch.ts は next の fetch を使うので、日付の関数だけを読む
-  const { todayInTokyo, countSince } = jest.requireActual('./fetch') as typeof import('./fetch');
+  const { todayInTokyo, countSince } = jest.requireActual('./sources') as typeof import('./sources');
 
   it('日本時間の今日を返す（UTC では前日の夜でも、日本では翌日）', () => {
     expect(todayInTokyo(new Date('2026-10-06T16:00:00Z'))).toBe('2026-10-07');

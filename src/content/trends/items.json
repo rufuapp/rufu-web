@@ -1,0 +1,642 @@
+[
+  {
+    "source": "anthropic-news",
+    "title": "Expanding the Cyber Verification Program",
+    "url": "https://www.anthropic.com/news/cyber-verification-program",
+    "date": "2026-10-06",
+    "titleJa": "Cyber Verification Program の拡大",
+    "summaryJa": "Anthropic は、セキュリティ専門家向けの Cyber Verification Program（CVP）を拡張し、Defense Access、Red Team Access、Specialized Access の 3 つのアクセスティアを導入しました。各ティアは検証要件とセキュリティ管理が異なり、組織の防御的サイバーセキュリティ作業に応じて Claude Opus 5.5、Claude Sonnet 5.5、Claude Mythos 5.1 などの最新モデルにアクセスできます。防御チームが脆弱性を発見・修正するための先進的なサイバー機能が提供されます。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Claude now works with Google Docs, Sheets, and Slides",
+    "url": "https://claude.com/resources/articles/claude-now-works-in-google-docs-sheets-and-slides",
+    "date": "2026-10-06",
+    "titleJa": "Claude が Google Docs、Sheets、Slides に対応",
+    "summaryJa": "Claude が Google Workspace 統合により、Google Docs、Sheets、Slides で直接利用できるようになりました。新しいアドオンとコネクタ（ベータ版）により、ユーザーはアプリを切り替えずに Claude を使用でき、ドキュメント編集、スプレッドシート操作、スライド作成を実行できます。Enterprise プランではコンプライアンス API や顧客管理暗号化キーなどの企業管理機能も利用可能です。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "How Comcast and Booz Allen use Claude Mythos to find exploit chains and secure their codebases",
+    "url": "https://claude.com/resources/articles/how-comcast-booz-allen-use-claude-mythos-to-secure-their-codebases",
+    "date": "2026-10-06",
+    "titleJa": "Comcast と Booz Allen が Claude Mythos を使用してエクスプロイトチェーンを発見しコードベースを保護",
+    "summaryJa": "Comcast と Booz Allen は Project Glasswing 経由で Claude Mythos モデルを使用し、従来のスキャナーでは見落としていた脆弱性とエクスプロイトチェーン（複数の小さな脆弱性を組み合わせた攻撃経路）を発見・検証・修正しました。Comcast は 170 万行を超えるコード中で認証回避の可能性がある重大な脆弱性を特定し、Booz Allen はコード、設定、権限、デプロイメント設定にまたがる複雑な弱点の連鎖を追跡することに成功しました。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "We’re expanding the Claude Startups program to help founders build",
+    "url": "https://claude.com/resources/articles/were-expanding-the-claude-startups-program-to-help-founders-build",
+    "date": "2026-10-06",
+    "titleJa": "Claude Startups プログラムの拡大でスタートアップの成長を支援",
+    "summaryJa": "Anthropic は Claude Startups プログラムを拡張し、起業家向けに 1 年間の Claude Team プランの無料利用、1,000 ドルの API クレジット、パートナー企業からのツール割引（最大 45,000 ドル相当）、Anthropic の Applied AI チームによるオフィスアワーなどの支援を提供します。このプログラムは過去 5 年以内に設立されたか過去 2 年以内に資金を調達したスタートアップを対象としており、Claude 上に構築する企業の成功を支援することを目的としています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "The lakehouse is a better data warehouse: 2026 benchmarks and proof",
+    "url": "https://www.databricks.com/blog/lakehouse-better-data-warehouse-2026-benchmarks-and-proof",
+    "date": "2026-10-06",
+    "titleJa": "Lakehouse はより優れたデータウェアハウス：2026 年のベンチマークと証明",
+    "summaryJa": "Databricks Lakehouse は 2022 年以降 77% 改善し、Lumen Technologies など顧客企業は Lakehouse への移行後に 90% のクエリパフォーマンス向上を報告しています。Lakehouse への移行により、組織は 25～60% のコスト削減と 80～90% 高速化された分析を実現しました。従来のデータウェアハウスは SQL クエリのみに対応していましたが、Lakehouse は AI、ストリーミング、非構造化データ、オープンフォーマットの移植性を 1 つのガバナンス済みプラットフォームで提供します。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "Scaling and Operating a Large dbt Project on Databricks: IFCO's Data Team on Performance, Visibility, and Debugging",
+    "url": "https://www.databricks.com/blog/scaling-and-operating-large-dbt-project-databricks-ifcos-data-team-performance-visibility-and-debugging",
+    "date": "2026-10-06",
+    "titleJa": "Databricks 上での大規模 dbt プロジェクトのスケーリングと運用：IFCO のデータチームのパフォーマンス、可視性、デバッグ",
+    "summaryJa": "IFCO は Databricks 上の dbt インクリメンタルモデルを液体クラスタリング、マージ戦略、動的ファイルプルーニングで最適化し、コアジョブの実行時間を 60% 以上削減し、夜間の完全リフレッシュを廃止しました。実行されたクエリプランから遅いモデルを診断し、その診断を自動スキルとして全モデルに適用しています。dbt プロジェクトをオープンソースの databricks-dbt-factory でモデルごとに 1 つのタスクとして実行し、モデル単位の可視性と個別の再実行を実現しました。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "Meta’s ads MCP server comes to Databricks: Put your customer intelligence to work in advertising campaigns",
+    "url": "https://www.databricks.com/blog/meta-ads-mcp-databricks",
+    "date": "2026-10-06",
+    "titleJa": "Meta の ads MCP サーバーが Databricks に対応：顧客インテリジェンスを広告キャンペーンに活用",
+    "summaryJa": "Meta の ads MCP サーバーが Databricks Marketplace で利用可能になり、マーケターは自然言語で Meta キャンペーンパフォーマンスと Databricks のガバナンス対象ビジネスデータを Genie One で統合的に分析できるようになりました。顧客チャーンスコア、LTV スコア、属性データなどの企業データに基づいて、キャンペーン作成・予算調整・オーディエンス管理・クリエイティブ管理などの 25 以上のツール操作が可能です。Unity Catalog と Unity Gateway により、Meta 接続へのアクセス管理とツール呼び出しのガバナンスが実現されます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Metric view window measures are generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#metric-view-window-measures-are-generally-available",
+    "date": "2026-10-06",
+    "titleJa": "Metric view ウィンドウメジャーが一般提供開始",
+    "summaryJa": "2026 年 10 月 6 日に、Metric view のウィンドウメジャーが一般提供されました。ウィンドウメジャーは移動平均、期間比較、累計合計などのローリングウィンドウ、累積、準加算集計を定義します。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Zhipu AI GLM 5.2 is now a legacy model",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#zhipu-ai-glm-52-is-now-a-legacy-model",
+    "date": "2026-10-06",
+    "titleJa": "Zhipu AI GLM 5.2 がレガシーモデルになりました",
+    "summaryJa": "Zhipu AI GLM 5.2 はレガシーモデルに指定されました。Databricks は GLM 5.3 または GLM 5.3 Flash への移行を推奨しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie Code CLI is in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#genie-code-cli-is-in-beta",
+    "date": "2026-10-06",
+    "titleJa": "Genie Code CLI がベータ版になりました",
+    "summaryJa": "Genie Code CLI はターミナルで実行される Databricks 向けのコーディングエージェントで、ベータ版が提供開始されました。Databricks CLI を使用してデータを発見し、パイプライン、モデル、アプリなどの資産を構築・デプロイできます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "DeepSeek V4 Flash (0731) is scheduled for retirement",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#deepseek-v4-flash-0731-is-scheduled-for-retirement",
+    "date": "2026-10-06",
+    "titleJa": "DeepSeek V4 Flash (0731) の廃止予定",
+    "summaryJa": "DeepSeek V4 Flash (0731) は 2026 年 11 月 5 日に廃止される予定です。推奨される代替モデルは DeepSeek V4.1 Flash です。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "How Cresta turned CX expertise into an agent builder on the Claude Agent SDK",
+    "url": "https://claude.com/resources/articles/how-cresta-turned-cx-expertise-into-an-agent-builder-on-the-claude-agent-sdk",
+    "date": "2026-10-05",
+    "titleJa": "Cresta が Claude Agent SDK でカスタマーサービス専門知識をエージェントビルダーに活かした方法",
+    "summaryJa": "Cresta は Claude Agent SDK 上で Conductor という自然言語エージェントビルダーを開発しました。チームが複雑なビジネスコンテキストを本番対応のエージェントに変えられるようにしており、初期導入時間を約半減させたと報告されています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "NEAREST BY Join: Scaling Vector Search in Databricks Runtime",
+    "url": "https://www.databricks.com/blog/nearest-join-scaling-vector-search-databricks-runtime",
+    "date": "2026-10-05",
+    "titleJa": "NEAREST BY Join: Databricks Runtime でのベクトル検索のスケーリング",
+    "summaryJa": "NEAREST BY は SQL バッチベクトル検索のための新しいジョイン機能で、複数行のクエリに対して最も近い行をベクトル類似度で検索します。Photon での最適化により高速化され、IVF ベクトルインデックスは液晶クラスタ化された Delta テーブルとして Lakehouse に統合されます。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "Unlocking Data Portability: Preventing Catalog Lock-in with REGISTER and UNREGISTER APIs",
+    "url": "https://www.databricks.com/blog/unlocking-data-portability-preventing-catalog-lock-register-and-unregister-apis",
+    "date": "2026-10-05",
+    "titleJa": "データ可搬性の実現: REGISTER と UNREGISTER API でカタログロック・インを防止",
+    "summaryJa": "REGISTER と UNREGISTER API により、テーブルをカタログ間で安全に移動できます。データをコピーせずにカタログ管理を手渡すことが可能で、UNREGISTER が元のカタログからの制御を明示的に解放することで split-brain シナリオの発生を防ぎます。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "How Genie Ontology powers product development at Databricks",
+    "url": "https://www.databricks.com/blog/how-genie-ontology-powers-product-development-databricks",
+    "date": "2026-10-05",
+    "titleJa": "Genie Ontology が Databricks での製品開発をどう強化するか",
+    "summaryJa": "Genie Ontology は、ビジネス定義、ルール、信頼できるデータソースなどの機関の知識を Genie に提供し、ビジネスコンテキストを理解できるようにします。Databricks の製品チームはこれを使用して、採用データの分析、トレンド予測、エグゼクティブレビューの準備などを実行しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Databricks SQL version 2026.39 is rolling out in Current",
+    "url": "https://docs.databricks.com/aws/en/sql/release-notes/2026#databricks-sql-version-202639-is-rolling-out-in-current",
+    "date": "2026-10-05",
+    "titleJa": "Databricks SQL バージョン 2026.39 が Current チャネルでロールアウト中",
+    "summaryJa": "Databricks SQL バージョン 2026.39 が Current チャネルへのロールアウトを開始しました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Use multiple triggers for Lakeflow Jobs (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#use-multiple-triggers-for-lakeflow-jobs-beta",
+    "date": "2026-10-05",
+    "titleJa": "Lakeflow Jobs で複数のトリガーが利用可能に（ベータ版）",
+    "summaryJa": "Lakeflow Jobs は最大 5 つのトリガーを使用できるようになりました。トリガータイプを組み合わせたり、同じタイプの複数のトリガーを追加したり、各トリガーを独立して一時停止したりできます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Run Lakeflow pipelines as a group",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#run-lakeflow-pipelines-as-a-group",
+    "date": "2026-10-05",
+    "titleJa": "Lakeflow パイプラインをグループとして実行する",
+    "summaryJa": "パイプラインの実行アイデンティティをアカウントグループに設定できるようになりました。パイプライン更新はグループの権限で実行されるため、チームが 1 人のアカウントに依存せず自動化されたパイプラインを所有できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie Code scheduled tasks are now available by default for workspaces with the compliance security profile enabled",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#genie-code-scheduled-tasks-are-now-available-by-default-for-workspaces-with-the-compliance-security-profile-enabled",
+    "date": "2026-10-05",
+    "titleJa": "Genie Code スケジュール済みタスクがコンプライアンス セキュリティ プロフィルのワークスペースでデフォルト利用可能に",
+    "summaryJa": "コンプライアンス セキュリティ プロフィルが有効なワークスペースで、Genie Code スケジュール済みタスクがデフォルトで利用可能になりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Agent Bricks documentation for code-first agent development",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#agent-bricks-documentation-for-code-first-agent-development",
+    "date": "2026-10-05",
+    "titleJa": "Agent Bricks のコードファースト エージェント開発向けドキュメント",
+    "summaryJa": "Agent Bricks ドキュメントがコードでカスタムエージェントを構築、デプロイ、実行することに中心が置かれるようになりました。エージェント フレームワーク、エージェント サーバー、エージェント ランタイムの関係性や、DurableAgentServer と Agent Runtime の機能が説明されています。"
+  },
+  {
+    "source": "anthropic-news",
+    "title": "Anthropic invests $100 million to train 10,000 engineers and tackle the enterprise AI talent gap",
+    "url": "https://www.anthropic.com/news/claude-frontier-academy",
+    "date": "2026-10-02",
+    "titleJa": "Anthropic が 1 億ドルを投資し、1 万人のエンジニアを育成して enterprise AI 人材不足に対応",
+    "summaryJa": "Anthropic は Claude Frontier Academy を立ち上げ、1 億ドルの投資で 2027 年末までに 1 万人のフロンティア デプロイ エンジニアの育成を目指しています。Accenture、Bain、Capgemini など大手企業がこのプログラムの最初のコホートに参加しています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "In Capital Markets, the Buy Side Runs on NAV. Finance Protects the Fee.",
+    "url": "https://www.databricks.com/blog/capital-markets-buy-side-runs-nav-finance-protects-fee",
+    "date": "2026-10-02",
+    "titleJa": "キャピタルマーケッツ：買い手側は NAV で動作、ファイナンス チームが手数料を守る",
+    "summaryJa": "Databricks Genie One はアセット マネジメント ファイナンス向けのデータ スマート AI コワーカーで、NAV 調整とファンド データ取り込みをバックエンド エージェントで処理します。実時間でトレース可能な NAV 数字、手数料マージン浸食への早期の可視性、すべての評価と手数料の監査対応証拠を提供します。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "How to choose your first Genie Agents for maximum impact",
+    "url": "https://www.databricks.com/blog/how-choose-your-first-genie-agents-maximum-impact",
+    "date": "2026-10-02",
+    "titleJa": "最大限のインパクトのために最初の Genie Agents を選ぶ方法",
+    "summaryJa": "最初に構築する Genie Agents が導入の成功を左右するため、適切なエージェントの選択が重要です。インパクト、需要、データ準備、スコープ、ガバナンスの 5 つの基準を使用して候補ワークフローをランク付けできます。実装例では「すぐに構築」「先に整形」「待機」のランク付けの実際の例が示されています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "Real-Time Retail Intelligence: Building E-Commerce Recommendations with Lakebase and AI Search on Databricks",
+    "url": "https://www.databricks.com/blog/real-time-retail-intelligence-building-e-commerce-recommendations-lakebase-and-ai-search",
+    "date": "2026-10-02",
+    "titleJa": "リアルタイム小売インテリジェンス：Databricks 上で Lakebase と AI Search を使用した e コマース推奨の構築",
+    "summaryJa": "Databricks 上で多段階の推奨とランキング エンジンを構築するための完全な参照アーキテクチャです。クリックストリーム取り込みからリアルタイム個人化配信まで、断片化された ML インフラストラクチャを単一の統一プラットフォームに置き換えます。AI Search で候補検索、Lakebase でオンライン機能提供、Model Serving で低レイテンシー推論を使用して、個人化されたプロダクト推奨を実現します。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "OpenJev (Qwen3.5 4B) is now available on Unity Gateway",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#openjev-qwen35-4b-is-now-available-on-unity-gateway",
+    "date": "2026-10-02",
+    "titleJa": "OpenJev (Qwen3.5 4B) が Unity Gateway で利用可能に",
+    "summaryJa": "OpenJev (Qwen3.5 4B) は Unity Gateway でペイパートークンモデルサービスとして利用可能になりました。TypeSafe System One API を使用して、イエス/ノー、選択、スコアリング質問の評価が可能で、構造化された回答と確率を取得できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "JDBC Unity Catalog connections are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#jdbc-unity-catalog-connections-are-now-generally-available",
+    "date": "2026-10-02",
+    "titleJa": "JDBC Unity Catalog 接続が一般利用可能に",
+    "summaryJa": "JDBC Unity Catalog 接続は、サーバーレスコンピュート、Databricks Runtime 19 以上、SQL Warehouse 2025.40 以上で一般利用可能になり、SSL 証明書のサポートが追加されました。OAuth M2M 認証はベータ版のままです。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Save reusable query templates in Google Sheets",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#save-reusable-query-templates-in-google-sheets",
+    "date": "2026-10-02",
+    "titleJa": "Google Sheets で再利用可能なクエリテンプレートを保存",
+    "summaryJa": "Databricks Connector for Google Sheets は、インポートを再利用可能なテンプレートとして保存できるようになり、チームメンバーが各自の Unity Catalog 権限で 1 ステップで実行できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Google Gemini 2.5 Pro is retired",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#google-gemini-25-pro-is-retired",
+    "date": "2026-10-02",
+    "titleJa": "Google Gemini 2.5 Pro が廃止に",
+    "summaryJa": "Google Gemini 2.5 Pro は利用できなくなりました。推奨される置き換えモデルは Gemini 3.1 Pro または Gemini 3.5 Flash です。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Google Gemini 2.5 Flash is retired",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#google-gemini-25-flash-is-retired",
+    "date": "2026-10-02",
+    "titleJa": "Google Gemini 2.5 Flash が廃止に",
+    "summaryJa": "Google Gemini 2.5 Flash は利用できなくなりました。推奨される置き換えモデルは Gemini 3.1 Pro または Gemini 3.5 Flash です。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Customer-managed keys for query history are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#customer-managed-keys-for-query-history-are-now-generally-available",
+    "date": "2026-10-02",
+    "titleJa": "クエリ履歴用の顧客管理キーが一般利用可能に",
+    "summaryJa": "システムカタログ上の顧客管理キーを使用して、クエリ履歴システムテーブル内の statement_text と error_message を暗号化できるようになりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Standard ai_extract now delivers higher-quality extraction",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#standard-ai_extract-now-delivers-higher-quality-extraction",
+    "date": "2026-10-02",
+    "titleJa": "標準 ai_extract がより高品質な抽出を実現",
+    "summaryJa": "ai_extract の標準（デフォルト）モードは新しいモデルチェックポイントを採用し、追加コストなしで2.3倍の高速化を実現しながら全体的な品質を向上させています。"
+  },
+  {
+    "source": "anthropic-news",
+    "title": "Barclays scales Claude to upgrade operations and improve client experience",
+    "url": "https://www.anthropic.com/news/barclays-scales-claude",
+    "date": "2026-10-01",
+    "titleJa": "Barclays が Claude をスケーリングして運用を強化し顧客体験を向上",
+    "summaryJa": "Barclays は Anthropic との戦略的協力を拡大し、Claude を全社的に導入してソフトウェア開発の加速とシステム近代化を推進しています。2026年末までに開発者の50%が Claude Code を採用し、2027年には大多数の利用を見込んでいます。既に Knowledge Assistant の導入により16,000名以上の同僚が利用でき、毎日100万件以上の検索処理で顧客サポートが高速化しています。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Customize Claude Code with mods",
+    "url": "https://claude.com/resources/articles/claude-code-mods",
+    "date": "2026-10-01",
+    "titleJa": "Claude Code を mods でカスタマイズする",
+    "summaryJa": "Anthropic は TypeScript で記述された関数「mods」を導入しました。開発者はプロンプトの書き換え、UI の追加、機能の置き換えなど、Claude Code の動作をカスタマイズできます。Mods は plugin として配布され、CLI とデスクトップアプリで利用可能です。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "How Genie One reshapes work for finance teams",
+    "url": "https://www.databricks.com/blog/how-genie-one-reshapes-work-finance-teams",
+    "date": "2026-10-01",
+    "titleJa": "Genie One が財務チームの業務を変える方法",
+    "summaryJa": "Databricks は財務専門家向けの AI コワーカーである Genie One を紹介しました。このツールはビジネスコンテキストに基づいており、財務チームがパフォーマンス分析、シナリオモデリング、分散調査、予測・報告の加速を行うのに役立ちます。データアクセスと使用全体にわたる一貫したガードレールにより、すべての対話が権限を認識し、監査可能で、組織の管理下に置かれます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "GitLab connector is available in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#gitlab-connector-is-available-in-beta",
+    "date": "2026-10-01",
+    "titleJa": "GitLab コネクタが Beta で利用可能",
+    "summaryJa": "Databricks は Lakeflow Connect で GitLab コネクタの Beta 版を公開しました。このコネクタを使用してリポジトリ、プロジェクト、グループ、CI/CD、セキュリティデータを GitLab から Databricks に取り込むことができます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Schedule automatic data refresh in the Databricks Excel Add-in (Public Preview)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#schedule-automatic-data-refresh-in-the-databricks-excel-add-in-public-preview",
+    "date": "2026-10-01",
+    "titleJa": "Databricks Excel Add-in で自動データ更新をスケジュール設定する",
+    "summaryJa": "Databricks Excel Add-in でデータの自動更新をスケジュール設定する機能がパブリックプレビューで提供開始されました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Cross-engine attribute-based access controls (ABAC) is now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#cross-engine-attribute-based-access-controls-abac-is-now-generally-available",
+    "date": "2026-10-01",
+    "titleJa": "クロスエンジン属性ベースアクセス制御（ABAC）が一般提供開始",
+    "summaryJa": "Databricks のクロスエンジン属性ベースアクセス制御（ABAC）が一般提供となりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie One enhancements",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#genie-one-enhancements",
+    "date": "2026-10-01",
+    "titleJa": "Genie One の機能強化",
+    "summaryJa": "Genie One にテキストファイルのアップロード、ストリーミングレスポンス、チャットのダウンロード機能が追加されました。ダッシュボードでは SQL データセットのマテリアライゼーション、複数テーブルの同時選択、Genie Code による編集機能など、複数の拡張が実装されています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Dashboard enhancements and bug fixes",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#dashboard-enhancements-and-bug-fixes",
+    "date": "2026-10-01",
+    "titleJa": "ダッシュボードの機能強化とバグ修正",
+    "summaryJa": "Databricks ダッシュボードに SQL データセットのマテリアライゼーション、複数テーブルの同時選択、ウィンドウメジャーの一般提供、Genie Code による編集機能の拡張などが追加されました。また、検索インデックス、PDF 出力、埋め込みダッシュボードのフィルタ表示など、複数のバグ修正と改善も実装されました。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Claude for Government is now generally available",
+    "url": "https://claude.com/resources/articles/claude-for-government-is-now-generally-available",
+    "date": "2026-09-30",
+    "titleJa": "Claude for Government が一般提供開始",
+    "summaryJa": "Anthropic は Claude for Government を正式にリリースし、連邦・州政府機関が FedRAMP High 認定環境を通じて Claude の機能を利用できるようになりました。このプラットフォームは商用版と同等の機能を提供しながらコンプライアンス要件を満たし、Claude Code CLI と Claude for Microsoft 365 も早期アクセスで利用可能になります。政府機関向けの管理機能、監査ログ、使用量追跡、部門別の支出管理など、公共部門特有の要件に対応した機能が搭載されています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Salesforce Data 360 file sharing will soon be available by default for workspaces with the compliance security profile enabled",
+    "url": "https://docs.databricks.com/aws/en/release-notes/whats-coming#salesforce-data-360-file-sharing-will-soon-be-available-by-default-for-workspaces-with-the-compliance-security-profile-enabled",
+    "date": "2026-09-30",
+    "titleJa": "Salesforce Data 360 ファイル共有のデフォルト提供開始予定",
+    "summaryJa": "Salesforce Data 360 ファイル共有コネクタは、コンプライアンスセキュリティプロファイルが有効なワークスペースでデフォルトで利用可能になる予定です。Lakehouse Federation を使用することで、データを Databricks にコピーすることなく Salesforce Data 360 のデータを直接クエリできます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Table update triggers on OpenSharing objects and system tables are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#table-update-triggers-on-opensharing-objects-and-system-tables-are-now-generally-available",
+    "date": "2026-09-30",
+    "titleJa": "OpenSharing オブジェクトとシステムテーブルのテーブル更新トリガーが一般提供開始",
+    "summaryJa": "Lakeflow Jobs のテーブル更新トリガーが OpenSharing オブジェクトとシステムテーブルの監視に対応しました。また、Excel と Google Sheets への書き戻しがワークスペース管理者による有効化が必須となり、SQL クエリタグ機能も一般提供開始となります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Control spreadsheet writeback with a workspace admin setting",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#control-spreadsheet-writeback-with-a-workspace-admin-setting",
+    "date": "2026-09-30",
+    "titleJa": "ワークスペース管理者設定によるスプレッドシート書き戻し制御",
+    "summaryJa": "Excel と Google Sheets への書き戻し機能がワークスペース管理者による明示的な有効化を必須とするセキュリティ設定で制御されるようになりました。これにより、スプレッドシート連携機能の使用をより厳密に管理できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Query tags for SQL warehouses are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#query-tags-for-sql-warehouses-are-now-generally-available",
+    "date": "2026-09-30",
+    "titleJa": "SQL ウェアハウス用クエリタグが一般提供開始",
+    "summaryJa": "SQL クエリタグ機能が一般提供となり、Databricks SQL ウェアハウスと Lakehouse//RT コンピュートの SQL ワークロードにカスタムキー・バリュータグを適用できるようになりました。これらのタグはグループ化、フィルタリング、コスト配分に使用でき、system.query.history と Databricks UI のクエリ履歴ページに表示されます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Supported Postgres extensions updated to new versions",
+    "url": "https://docs.databricks.com/aws/en/release-notes/lakebase#supported-postgres-extensions-updated-to-new-versions",
+    "date": "2026-09-30",
+    "titleJa": "サポート対象の PostgreSQL 拡張が新バージョンにアップデート",
+    "summaryJa": "Lakebase の PostgreSQL 拡張が新バージョンで利用可能になり、PostGIS、HLL など主要な拡張が最新版にアップグレードされました。また Lakebase Search にはテキストトークナイザー機能が追加され、キーワード検索をカスタマイズできます。Lakebase Search は一般提供開始となり、ベクトル検索と全文検索を単一のデータベースで実行できます。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "How Anthropic's sales team rebuilt inbound with Claude Managed Agents",
+    "url": "https://claude.com/resources/articles/how-anthropics-sales-team-rebuilt-inbound-with-claude-managed-agents",
+    "date": "2026-09-30",
+    "titleJa": "Anthropic の営業チームが Claude Managed Agents でインバウンド営業を再構築",
+    "summaryJa": "Anthropic は Claude Managed Agents を使用して、顧客からの問い合わせに自動応答する購買エージェントを構築しました。このエージェントは毎日数千の会話を処理し、料金プランに関する質問に答え、顧客をチェックアウトに導きます。以前の形式と比べて、エスカレートされたリードはオポチュニティに転換する率が 2 倍以上となり、クローズまでの期間は約 5 日短縮されました。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Agents you can coach: how Asana builds human-agent teams with Claude",
+    "url": "https://claude.com/resources/articles/agents-you-can-coach-how-asana-builds-human-agent-teams-with-claude",
+    "date": "2026-09-29",
+    "titleJa": "トレーニング可能なエージェント：Asana が Claude でヒューマン・エージェントチームを構築",
+    "summaryJa": "Asana は Claude を活用してワークグラフモデル内で AI エージェントを運用し、定義されたロール、共有メモリ、透明性のあるワークフローを通じてヒューマン・エージェントチームを構築しています。各エージェントには特定のロールと権限が割り当てられ、管理者がメモリをトレーニング・管理することで、チーム全体で効率的に作業を進められます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Databricks JDBC Driver (Simba) 2.8.4 is available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#databricks-jdbc-driver-simba-284-is-available",
+    "date": "2026-09-29",
+    "titleJa": "Databricks JDBC Driver (Simba) 2.8.4 が利用可能",
+    "summaryJa": "Simba JDBC Driver (Legacy) 2.8.4 が Java 25 サポートとライブラリ（libthrift、httpclient5 など）のアップグレードを加えてリリースされました。JDBC ドライバアーカイブから All JDBC Driver Versions (Simba) でダウンロード可能です。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "OpenAI GPT-6.1 Sol is now available on Unity Gateway",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#openai-gpt-61-sol-is-now-available-on-unity-gateway",
+    "date": "2026-09-29",
+    "titleJa": "Unity Gateway で OpenAI GPT-6.1 Sol が利用可能に",
+    "summaryJa": "OpenAI GPT-6.1 Sol が Databricks の Unity Gateway で利用可能になりました。Foundation Model APIs を通じてこのモデルにアクセスでき、ユーザーは適用される法規への準拠を確認する責任があります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Horizontal scaling for Databricks Apps is now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#horizontal-scaling-for-databricks-apps-is-now-generally-available",
+    "date": "2026-09-29",
+    "titleJa": "Databricks Apps の水平スケーリングが一般提供開始",
+    "summaryJa": "Databricks Apps の水平スケーリング機能が一般提供されました。単一のアプリケーション URL の背後で複数インスタンスを実行でき、ゼロダウンタイムデプロイメントと高可用性を実現できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Agent Bricks CLI is in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#agent-bricks-cli-is-in-beta",
+    "date": "2026-09-29",
+    "titleJa": "Agent Bricks CLI がベータ提供開始",
+    "summaryJa": "Agent Bricks CLI（databricks-agentbricks）がベータ段階で利用可能になりました。このコマンドラインツールにより、カスタムコードエージェントを簡単に Databricks で構築・デプロイできます。メモリ管理や MLflow トレーシングなどの機能が組み込まれています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "ABAC on views is in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#abac-on-views-is-in-beta",
+    "date": "2026-09-29",
+    "titleJa": "ビュー向けの属性ベースアクセス制御（ABAC）がベータ提供開始",
+    "summaryJa": "Unity Catalog の属性ベースアクセス制御（ABAC）がビューに対応しました。ビューを通じて公開されるセンシティブデータへのアクセスを、行フィルタリングと列マスキングで制御できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "OpenAI GPT-6.1 Sol is now available on Unity Gateway",
+    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#openai-gpt-61-sol-is-now-available-on-unity-gateway",
+    "date": "2026-09-29",
+    "titleJa": "Unity Gateway で OpenAI GPT-6.1 Sol が利用可能に",
+    "summaryJa": "OpenAI GPT-6.1 Sol が Databricks の Unity Gateway で利用可能になりました。Foundation Model APIs を通じてアクセスでき、ユーザーは適用される法規への準拠を確認する責任があります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie One memory is now generally available",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#genie-one-memory-is-now-generally-available",
+    "date": "2026-09-29",
+    "titleJa": "Genie One のメモリ機能が一般提供開始",
+    "summaryJa": "Genie One のメモリ機能が一般提供されました。ユーザーの好みや報告規約などを保存し、後の会話で活用できます。メモリはユーザープライベートで、他のユーザーとは共有されません。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Claude Sonnet 5.5",
+    "url": "https://www.anthropic.com/claude-sonnet-5-5",
+    "date": "2026-09-28",
+    "titleJa": "Claude Sonnet 5.5 の発表",
+    "summaryJa": "Anthropic は Claude 5.5 ファミリーの第 2 モデルである Claude Sonnet 5.5 を発表しました。Claude Sonnet 5 と比べ 30% 以上高速で、多くのタスクで最大 30% 低コストです。日常的なタスク、バグ修正、ドキュメント作成などに特化した補完的なモデルとして設計されています。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Automating eval design and hillclimbing with Claude",
+    "url": "https://claude.dev/blog/automating-eval-design-and-hillclimbing/",
+    "date": "2026-09-28",
+    "titleJa": "Claude を使った評価設計とヒルクライミングの自動化",
+    "summaryJa": "Claude Code の claude-api スキルに、評価設計とヒルクライミング機能が追加されました。build-eval コマンドで評価をコードベース内に構築し、hillclimb でアプリケーションのパフォーマンスを段階的に改善できます。良い評価設計の原則も示されています。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Building with Claude Sonnet 5.5",
+    "url": "https://claude.dev/blog/building-with-claude-sonnet-5-5/",
+    "date": "2026-09-28",
+    "titleJa": "Claude Sonnet 5.5 を使った開発",
+    "summaryJa": "Claude Sonnet 5.5 は Claude 5.5 ファミリーの 2 番目のモデルで、Sonnet 5 よりも 30% 高速で、より効率的です。トークン当たりの価格は変わりませんが、Sonnet 5.5 は通常同じ作業に必要なトークン数が大幅に減るため、ほとんどの作業で最大 30% のコスト削減が実現します。バグ修正や機能の迅速な反復などのスコープが明確な日常的なコーディングタスクに適しており、複雑な判断が必要な長期的な作業には Opus 5.5 の使用が推奨されます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Databricks SQL version 2026.39 is now available in Preview",
+    "url": "https://docs.databricks.com/aws/en/sql/release-notes/2026#databricks-sql-version-202639-is-now-available-in-preview",
+    "date": "2026-09-28",
+    "titleJa": "Databricks SQL バージョン 2026.39 がプレビューで利用可能に",
+    "summaryJa": "Databricks SQL バージョン 2026.39 が 9 月 28 日にプレビューチャネルで利用可能になりました。このバージョンでは、truncate 関数で丸めずに指定したスケールに数値を切り詰めることができるようになり、trim_array 関数で配列の末尾から指定した数の要素を削除できるようになります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Databricks SQL version 2026.38 is rolling out in Current",
+    "url": "https://docs.databricks.com/aws/en/sql/release-notes/2026#databricks-sql-version-202638-is-rolling-out-in-current",
+    "date": "2026-09-28",
+    "titleJa": "Databricks SQL バージョン 2026.38 が Current チャネルでロールアウト開始",
+    "summaryJa": "Databricks SQL バージョン 2026.38 が 9 月 28 日に Current チャネルへのロールアウトを開始しました。このバージョンでは、truncate 関数でスケール指定による数値の切り詰めと、trim_array 関数による配列要素の削除が可能になります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Workday Activity Logging connector (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#workday-activity-logging-connector-beta",
+    "date": "2026-09-28",
+    "titleJa": "Workday Activity Logging コネクター（ベータ版）",
+    "summaryJa": "Workday Activity Logging コネクターが 9 月 28 日に Databricks Lakeflow Connect でベータ版として利用可能になりました。このコネクターは Workday のユーザーアクティビティログイベントを Databricks に増分取り込みでき、OAuth リフレッシュトークンを使用して認証します。ワークスペース管理者は Previews ページからこの機能へのアクセスを制御できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Okta System Logs connector is available in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#okta-system-logs-connector-is-available-in-beta",
+    "date": "2026-09-28",
+    "titleJa": "Okta System Logs コネクターがベータ版で利用可能に",
+    "summaryJa": "Okta System Logs コネクターが 9 月 28 日に Databricks Lakeflow Connect でベータ版として利用可能になりました。このコネクターは Okta System Log から監査およびセキュリティイベントを Databricks に増分取り込みでき、SSWS API トークン認証を使用し、宣言型自動化バンドルと API ベースのパイプライン作成に対応しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Microsoft 365 Unified Audit Logs connector is available in Beta",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#microsoft-365-unified-audit-logs-connector-is-available-in-beta",
+    "date": "2026-09-28",
+    "titleJa": "Microsoft 365 Unified Audit Logs コネクターがベータ版で利用可能に",
+    "summaryJa": "Microsoft 365 Unified Audit Logs コネクターが 9 月 28 日に Databricks Lakeflow Connect でベータ版として利用可能になりました。このコネクターは Microsoft Entra ID、Exchange、SharePoint など複数の Microsoft 365 ワークロードから統合監査イベントを Databricks に取り込むことができ、OAuth マシン間認証を使用して増分取り込みに対応しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Thinking Machine Labs Inkling is scheduled for retirement",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#thinking-machine-labs-inkling-is-scheduled-for-retirement",
+    "date": "2026-09-28",
+    "titleJa": "Thinking Machine Labs Inkling の廃止予定",
+    "summaryJa": "Thinking Machine Labs Inkling は 2026 年 10 月 30 日に廃止される予定です。GLM 5.3 と Kimi K3 がその代替モデルとして推奨されており、ユーザーはマイグレーション手順を確認できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "xAI Grok 4.7 is now available on Unity Gateway",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#xai-grok-47-is-now-available-on-unity-gateway",
+    "date": "2026-09-28",
+    "titleJa": "xAI Grok 4.7 が Unity Gateway で利用可能に",
+    "summaryJa": "xAI Grok 4.7 が 9 月 28 日に Unity Gateway で利用可能になりました。このモデルは Foundation Model APIs を使用してアクセスでき、ユーザーは適用される利用規約への準拠を確保する責任があります。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "CrowdStrike Falcon Event Stream connector (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#crowdstrike-falcon-event-stream-connector-beta",
+    "date": "2026-09-28",
+    "titleJa": "Lakeflow Connect に CrowdStrike Falcon Event Stream コネクタが登場（ベータ版）",
+    "summaryJa": "Databricks は Lakeflow Connect で CrowdStrike Falcon Event Stream コネクタをベータ版として提供開始しました。このコネクタにより、CrowdStrike Falcon のイベントストリームデータを Databricks に取り込むことができます。OAuth 2.0 による認証に対応しており、ワークスペース管理者がアクセスを制御できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Akamai WAF connector (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#akamai-waf-connector-beta",
+    "date": "2026-09-28",
+    "titleJa": "Lakeflow Connect に Akamai WAF コネクタが登場（ベータ版）",
+    "summaryJa": "Databricks は Lakeflow Connect で Akamai WAF コネクタをベータ版として提供開始しました。このコネクタにより、Akamai からのウェブアプリケーションファイアウォール（WAF）セキュリティイベントを Databricks に取り込むことができます。Akamai EdgeGrid API 認証に対応しており、ワークスペース管理者がアクセスを制御できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "1Password Event Logs connector (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#1password-event-logs-connector-beta",
+    "date": "2026-09-28",
+    "titleJa": "Lakeflow Connect に 1Password Event Logs コネクタが登場（ベータ版）",
+    "summaryJa": "Databricks は Lakeflow Connect で 1Password Event Logs コネクタをベータ版として提供開始しました。このコネクタにより、監査イベント、アイテム使用状況、サインイン試行などの 1Password イベントを Databricks に取り込むことができます。Events Reporting ベアラートークンを使用した認証に対応しており、ワークスペース管理者がアクセスを制御できます。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Lakebase Search adds a configurable text tokenizer for keyword search",
+    "url": "https://docs.databricks.com/aws/en/release-notes/lakebase#lakebase-search-adds-a-configurable-text-tokenizer-for-keyword-search",
+    "date": "2026-09-28",
+    "titleJa": "Lakebase Search にカスタマイズ可能なテキストトークナイザーが登場",
+    "summaryJa": "Databricks は Lakebase Search に新しい lakebase_tokenizer 拡張機能を提供し、テキスト検索のトークン化をカスタマイズできるようになりました。正規化、ストップワード・シノニム管理、ステミングなど、検索精度に関わる制御が可能です。この機能により、ユーザーのデータ読み方に合わせたキーワード検索が実現します。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "xAI Grok 4.7 is now available on Unity Gateway",
+    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#xai-grok-47-is-now-available-on-unity-gateway",
+    "date": "2026-09-28",
+    "titleJa": "xAI Grok 4.7 が Unity Gateway で利用可能に",
+    "summaryJa": "xAI の最新モデル Grok 4.7 が Unity Gateway で利用可能になりました。Foundation Model API を通じてアクセスでき、使用量に応じた従量課金制となっています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Usage tracking adds session metadata and token details (Public Preview)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#usage-tracking-adds-session-metadata-and-token-details-public-preview",
+    "date": "2026-09-27",
+    "titleJa": "利用状況トラッキングにセッションメタデータとトークン詳細情報が追加（パブリックプレビュー）",
+    "summaryJa": "Unity Gateway の system.ai_gateway.usage システムテーブルが、コーディングエージェントのセッションメタデータと呼び出し元情報を記録するようになりました。プロンプトキャッシュに書き込まれたトークンやファイル・ウェブ検索数など、新しいトークン詳細フィールドが追加されています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Usage tracking adds session metadata and token details (Public Preview)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#usage-tracking-adds-session-metadata-and-token-details-public-preview",
+    "date": "2026-09-27",
+    "titleJa": "利用状況トラッキングにセッションメタデータとトークン詳細情報が追加（パブリックプレビュー）",
+    "summaryJa": "Unity Gateway の system.ai_gateway.usage システムテーブルが、コーディングエージェントのセッションメタデータと呼び出し元情報を記録するようになりました。プロンプトキャッシュに書き込まれたトークンやファイル・ウェブ検索数など、新しいトークン詳細フィールドが追加されています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Tags for dashboards, notebooks, Databricks apps, and Genie Agents are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#tags-for-dashboards-notebooks-databricks-apps-and-genie-agents-are-now-generally-available",
+    "date": "2026-09-25",
+    "titleJa": "ダッシュボード、ノートブック、Databricks Apps、Genie Agents 向けタグが一般利用可能に",
+    "summaryJa": "Databricks は、ダッシュボード、ノートブック、Databricks Apps、Genie Agents に対するタグ機能が一般利用可能になったことを発表しました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Deleting a Unity Catalog pipeline now retains tables by default",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#deleting-a-unity-catalog-pipeline-now-retains-tables-by-default",
+    "date": "2026-09-25",
+    "titleJa": "Unity Catalog パイプラインの削除時、テーブルが既定で保持されるようになった",
+    "summaryJa": "Unity Catalog パイプラインの削除時に、テーブルがデフォルトで保持されるようになりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "The Genie One MCP server is now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#the-genie-one-mcp-server-is-now-generally-available",
+    "date": "2026-09-25",
+    "titleJa": "Genie One MCP サーバーが一般利用可能になった",
+    "summaryJa": "Genie One MCP サーバーが一般利用可能になりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie Code can now build intelligent document processing pipelines",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#genie-code-can-now-build-intelligent-document-processing-pipelines",
+    "date": "2026-09-25",
+    "titleJa": "Genie Code がインテリジェントなドキュメント処理パイプラインを構築できるようになった",
+    "summaryJa": "Genie Code がインテリジェントなドキュメント処理パイプラインの構築に対応しました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Sharing metric views with OpenSharing is now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#sharing-metric-views-with-opensharing-is-now-generally-available",
+    "date": "2026-09-24",
+    "titleJa": "OpenSharing でのメトリックビューの共有が一般利用可能になった",
+    "summaryJa": "OpenSharing を使用したメトリックビューの共有が一般利用可能になりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "ai_search can search Lakebase synced tables (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#ai_search-can-search-lakebase-synced-tables-beta",
+    "date": "2026-09-24",
+    "titleJa": "ai_search が Lakebase 同期テーブルの検索に対応（ベータ版）",
+    "summaryJa": "ai_search が Lakebase 同期テーブルの検索に対応するようになりました（ベータ版）。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie Agents enhancements",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#genie-agents-enhancements",
+    "date": "2026-09-24",
+    "titleJa": "Genie Agents の機能拡張",
+    "summaryJa": "Genie Agents ではモニタリングテーブルに表示する列を選択できるようになりました。また、ボリュームファイルから取得したコンテンツを使用する場合に、引用がページレベルで指定可能になりました（ベータ版）。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Service principal Genie usage is billed at standard pricing",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#service-principal-genie-usage-is-billed-at-standard-pricing",
+    "date": "2026-09-24",
+    "titleJa": "サービスプリンシパルの Genie 利用が標準料金で請求されるようになった",
+    "summaryJa": "サービスプリンシパルによる Genie の使用が、標準的な従量課金制で請求されるようになりました。個人ユーザーに適用される無料月次利用分はサービスプリンシパルには適用されません。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Genie One enhancements",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#genie-one-enhancements-1",
+    "date": "2026-09-24",
+    "titleJa": "Genie One の機能拡張",
+    "summaryJa": "Genie One では、テキストファイルのアップロード、リアルタイムストリーミング応答、チャットのダウンロード機能が追加されました。さらに、チャットのピン留め、10 MB 以上のファイルアップロード対応、自動ツールアクション承認も実装されています。"
+  }
+]

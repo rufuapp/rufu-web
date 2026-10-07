@@ -15,7 +15,7 @@ import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { QuestionSetTable } from '@/components/quiz/QuestionSetTable';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
-import { TREND_SOURCES, countSince, fetchTrends } from '@/lib/trends/fetch';
+import { TRENDS, countSince, todayInTokyo } from '@/lib/trends/sources';
 import type { TrackId } from '@/lib/quiz/types';
 
 const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
@@ -29,14 +29,12 @@ const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
   },
 };
 
-// 公式の発表は1時間ごとに取り直す（TRENDS_REVALIDATE と同じ値。ルートの設定は定数で書く必要がある）
-export const revalidate = 3600;
-
 const TOP_TREND_COUNT = 12;
 
-export default async function TopPage() {
+export default function TopPage() {
   const ids = questionIdsBySet();
-  const { items: trends, failed, today } = await fetchTrends();
+  const trends = TRENDS;
+  const today = todayInTokyo();
 
   // 序文の目次（章の並びと同じ順。最新の動向が主で、資格と問題集はそれに付随する）
   const CHAPTERS = [
@@ -81,7 +79,7 @@ export default async function TopPage() {
             追いかけて、学んで、確かめる。
           </h1>
           <p className="mt-5">
-            FDE（Forward Deployed Engineer）は、お客さまの現場に入り込み、データ基盤や AI を使って実際の課題を解決するエンジニアです。本サイトでは、生成 AI の Claude と、データ基盤の Databricks の公式発表を1時間ごとに集めて、新しい順にまとめています。あわせて、認定資格の解説と、解説付きのオリジナル問題集で、基礎を身につけられます。登録は要りません。
+            FDE（Forward Deployed Engineer）は、お客さまの現場に入り込み、データ基盤や AI を使って実際の課題を解決するエンジニアです。本サイトでは、生成 AI の Claude と、データ基盤の Databricks の公式発表を毎日集めて、日本語の見出しと短いまとめを付けています。あわせて、認定資格の解説と、解説付きのオリジナル問題集で、基礎を身につけられます。登録は要りません。
           </p>
         </div>
         <nav aria-labelledby="toc-title" className="box self-start p-5 sm:p-6">
@@ -110,14 +108,9 @@ export default async function TopPage() {
       <section id="trends" className="scroll-mt-6 py-10">
         <SectionTitle num="第一章" title="最新の動向" en="Latest updates" />
         <p className="mb-6">
-          Anthropic と Databricks の公式サイトから、発表を1時間ごとに集めています。見出しは原文のままで、リンク先は公式の記事です。
+          Anthropic と Databricks の公式サイトから、発表を毎日集めています。日本語の見出しとまとめは、本文をもとに AI（Claude）が作ったものです。正確な内容は、リンク先の公式の記事で確かめてください。
         </p>
         <TrendList items={trends.slice(0, TOP_TREND_COUNT)} />
-        {failed.length > 0 && trends.length > 0 && (
-          <p className="mt-3 text-sm text-muted">
-            ※ {failed.map((id) => TREND_SOURCES[id].name).join('・')}は、いま取得できていません。
-          </p>
-        )}
         <p className="mt-4 text-right">
           <Link href="/trends" className="link">
             情報源ごとの一覧を見る →

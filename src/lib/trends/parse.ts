@@ -10,6 +10,12 @@ export type TrendItem = {
   date: string;
 };
 
+/** サイトに載せる記事（日次バッチで日本語の見出しとまとめを付けたもの） */
+export type TrendEntry = TrendItem & {
+  titleJa: string;
+  summaryJa: string;
+};
+
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
 
 export function decodeEntities(s: string): string {
