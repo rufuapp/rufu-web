@@ -166,6 +166,195 @@ export const BASICS_TOPICS: BasicsTopic[] = [
     ],
   },
 
+  {
+    id: 'claude-tool-design',
+    group: 'claude',
+    title: 'ツールの設計',
+    summary: '何をツールにし、どう説明し、どこまで任せるか。エージェントの出来を左右する設計の考え方。',
+    intro: ['Claude にお客さまのシステムを使わせるときは、ツール（関数）を定義して渡します。ツールの切り方と説明の書き方で、正確さも安全性も大きく変わります。'],
+    sections: [
+      {
+        heading: 'ツールの仕組み',
+        body: [
+          'ツールは名前（name）・説明（description）・入力の形（input_schema）で定義します。Claude はツールを使うと判断すると tool_use を返すので、アプリ側でツールを実行し、結果を tool_result として返します。',
+        ],
+      },
+      {
+        heading: '何をツールにするか',
+        body: [
+          'お客さまの業務の単位で切ると、Claude が選びやすくなります。「API を1つずつ全部ツールにする」より、「顧客情報を調べる」「注文を作る」のように、業務の言葉で分けます。',
+          '読み取りと書き込みは別のツールに分けます。読み取りは自由に、書き込みは確認付きに、のように扱いを変えられます。',
+        ],
+      },
+      {
+        heading: '説明は具体的に書く',
+        body: ['description には、何をするツールか、いつ使うか、いつ使わないか、入力の注意点を書きます。Claude はこの説明だけを手がかりにツールを選びます。'],
+      },
+      {
+        heading: '結果は信頼できないデータとして扱う',
+        body: ['Web ページやメールなど、外部から来た文章をツールの結果として渡すと、そこに紛れた指示（プロンプトインジェクション）に従ってしまうおそれがあります。重要な操作の前には、人の確認や、決まった条件のチェックを挟みます。'],
+      },
+    ],
+    checklist: ['ツールを業務の言葉で切ったか', '読み取りと書き込みを分けたか', '説明に「いつ使うか・使わないか」を書いたか', '書き込みの前に確認を挟んだか'],
+    resources: [{ title: 'ツールの使い方（Tool use）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/overview`, kind: '公式ドキュメント' }],
+  },
+  {
+    id: 'claude-mcp-in-practice',
+    group: 'claude',
+    title: 'MCP を現場で使う',
+    summary: '社内システムを MCP サーバーにして、Claude や Claude Code から使えるようにする。',
+    intro: ['MCP（Model Context Protocol）は、AI アプリと外部のツールやデータをつなぐための共通の約束事です。一度 MCP サーバーを作れば、MCP に対応したいろいろな AI アプリから使えます。'],
+    sections: [
+      {
+        heading: 'ホスト・クライアント・サーバー',
+        body: ['Claude Code などの AI アプリ（ホスト）は、つなぐ MCP サーバーごとにクライアントを作ります。サーバーは、Tools（実行できる操作）、Resources（読むデータ）、Prompts（使い回すテンプレート）を公開します。'],
+      },
+      {
+        heading: 'つなぎ方は2通り',
+        body: [
+          '手元のパソコンで動かすサーバーは標準入出力（stdio）で、社内やクラウドで動かすサーバーは Streamable HTTP でつなぎます。お客さまのチームで共有するなら、HTTP のサーバーを1か所に置き、認証を付けるのが一般的です。',
+        ],
+      },
+      {
+        heading: 'Claude Code での共有のしかた',
+        body: ['Claude Code では、MCP サーバーの設定を local（自分だけ・このプロジェクト）、project（.mcp.json に保存してチームで共有）、user（自分のすべてのプロジェクト）から選べます。チームで使うサーバーは project にしてリポジトリに入れると、全員が同じ設定で使えます。'],
+      },
+      {
+        heading: '最新の仕様の変化',
+        body: ['2026-07-28 版の仕様では、すべてのリクエストがバージョンなどの情報を持つステートレスな設計になりました。サーバーを作るときは、使う SDK が対応している仕様の版を確かめます。'],
+      },
+    ],
+    checklist: ['手元用（stdio）か共有用（HTTP）かを決めたか', '共有するサーバーに認証を付けたか', 'チームの設定を .mcp.json で共有するか決めたか'],
+    resources: [
+      { title: 'MCP の仕様', url: 'https://modelcontextprotocol.io/specification/latest', kind: '仕様' },
+      { title: 'Claude Code で MCP を使う', url: 'https://code.claude.com/docs/en/mcp', kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'claude-code-for-teams',
+    group: 'claude',
+    title: 'Claude Code をチームに導入する',
+    summary: 'CLAUDE.md・権限・フック・Skill・サブエージェントで、チームで安全に使える形を作る。',
+    intro: ['Claude Code を個人で使うのとチームで使うのとでは、準備が違います。全員が同じ前提で、決まった範囲で動かせるようにします。'],
+    sections: [
+      {
+        heading: 'CLAUDE.md でプロジェクトの前提を共有する',
+        body: ['リポジトリに CLAUDE.md を置き、ビルドやテストのコマンド、コードの書き方の決まり、触ってはいけない場所などを書きます。Claude Code は毎回これを読んでから作業します。'],
+      },
+      {
+        heading: '権限は settings.json で強制する',
+        body: ['実行してよいコマンドや、読んではいけないファイルは、settings.json の permissions で決めます。プロジェクトの .claude/settings.json に書いてリポジトリに入れると、チーム全員に同じ制限がかかります。'],
+      },
+      {
+        heading: 'フックで決まった処理を必ず走らせる',
+        body: ['ファイルを編集したら整形ツールを走らせる、危険なコマンドの前に止める、といった処理はフックで自動化します。PreToolUse のフックが終了コード 2 で終わると、そのツールの実行を止められます。'],
+      },
+      {
+        heading: 'Skill とサブエージェントで仕事を任せる',
+        body: ['繰り返す手順は Skill（.claude/skills/）に、調査やレビューのような独立した仕事はサブエージェント（.claude/agents/）にまとめます。CI では claude -p（非対話モード）や GitHub Actions との連携で動かせます。'],
+      },
+    ],
+    checklist: ['CLAUDE.md にコマンドと決まりを書いたか', '禁止したい操作を permissions で止めたか', '整形やテストをフックで自動化したか', 'チームの Skill とサブエージェントをリポジトリで共有したか'],
+    resources: [
+      { title: '設定ファイル（Settings）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
+      { title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' },
+      { title: 'サブエージェント', url: 'https://code.claude.com/docs/en/sub-agents', kind: '公式ドキュメント' },
+      { title: 'Claude Code GitHub Actions', url: 'https://code.claude.com/docs/en/github-actions', kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'claude-cost-optimization',
+    group: 'claude',
+    title: 'コストと速さの最適化',
+    summary: 'プロンプトキャッシュ・Batch・モデルの使い分け・effort で、品質を保ったまま費用と待ち時間を下げる。',
+    intro: ['本番で使い始めると、費用と応答の速さが問題になります。品質を測りながら、次の手を順に試します。'],
+    sections: [
+      {
+        heading: 'プロンプトキャッシュ',
+        body: [
+          '長いシステムプロンプトや資料など、毎回同じ前半部分を送る場合に効きます。キャッシュの持続は 5 分（既定）か 1 時間で、キャッシュからの読み込みは通常の入力の料金の約 1 割で済みます（Opus 5.5 は 5%）。',
+          'キャッシュは前半部分が一致しないと効かないので、変わらない部分を先頭に、変わる部分を後ろに置きます。',
+        ],
+      },
+      {
+        heading: 'Message Batches API',
+        body: ['すぐに結果がいらない大量の処理は、Batch でまとめて送ると料金が半額になります。夜間の一括処理や、評価用のデータの採点などに向きます。'],
+      },
+      {
+        heading: 'モデルと effort の使い分け',
+        body: [
+          '簡単な分類や抽出は Haiku 4.5 のような速くて安いモデルで足りることが多くあります。難しい部分だけを高性能なモデルに回す構成も有効です。',
+          '考える深さは effort で調整できます。effort を下げると、速く安くなる代わりに、難しい問題での精度が下がることがあります。',
+        ],
+      },
+      {
+        heading: '送る前に数える',
+        body: ['トークン数を数える API（count_tokens）は無料です。送る前に入力の大きさを確かめ、費用の見積もりや、上限を超えないかの確認に使えます。'],
+      },
+    ],
+    checklist: ['変わらない前半部分にキャッシュを使ったか', '急がない処理を Batch にしたか', '安いモデルで足りる部分を見つけたか', '変更のたびに品質を評価したか'],
+    resources: [
+      { title: 'プロンプトキャッシュ', url: `${CLAUDE_DOCS}/build-with-claude/prompt-caching`, kind: '公式ドキュメント' },
+      { title: 'Batch 処理', url: `${CLAUDE_DOCS}/build-with-claude/batch-processing`, kind: '公式ドキュメント' },
+      { title: 'effort', url: `${CLAUDE_DOCS}/build-with-claude/effort`, kind: '公式ドキュメント' },
+      { title: 'トークン数を数える', url: `${CLAUDE_DOCS}/build-with-claude/token-counting`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'claude-evals',
+    group: 'claude',
+    title: '評価の作り方',
+    summary: '「良くなったか」を感覚ではなく数字で判断するための、評価用データと採点の作り方。',
+    intro: ['生成 AI の仕組みは、プロンプトやモデルを少し変えるだけで結果が変わります。評価の仕組みがないと、改善したのか悪化したのか分かりません。'],
+    sections: [
+      {
+        heading: '成功の基準を先に決める',
+        body: ['「正しく分類できる割合が 9 割以上」「回答に必ず出典が付く」のように、測れる基準を決めます。お客さまと合意しておくと、PoC の判断もしやすくなります。'],
+      },
+      {
+        heading: '評価用のデータを作る',
+        body: ['実際の業務に近い入力と、期待する答えを組にして集めます。よくある例だけでなく、まれで境界的な例（エッジケース）や、断るべき依頼も入れます。'],
+      },
+      {
+        heading: '採点のしかたは3種類',
+        body: [
+          'コードで判定する（完全一致・形式のチェックなど）は速くて確実です。言い回しの自由な答えは、採点の基準表（ルーブリック）を渡して、別のモデルに採点させる方法もあります。最終的な品質の確認や、採点の妥当性の確認には、人による評価を組み合わせます。',
+        ],
+      },
+      {
+        heading: '変更のたびに回す',
+        body: ['プロンプトやモデルを変えるたびに評価を回し、以前より悪くなっていないか（回帰）を確かめます。CI に組み込むと、確認の漏れを防げます。'],
+      },
+    ],
+    checklist: ['測れる成功の基準があるか', 'エッジケースを含む評価用データがあるか', '採点のしかたを決めたか', '変更のたびに評価を回す仕組みがあるか'],
+    resources: [{ title: '成功の基準と評価の作り方', url: `${CLAUDE_DOCS}/test-and-evaluate/develop-tests`, kind: '公式ドキュメント' }],
+  },
+  {
+    id: 'claude-agent-design',
+    group: 'claude',
+    title: 'エージェントの設計',
+    summary: '決まった流れ（ワークフロー）と、自分で考えて動くエージェントの使い分け。',
+    intro: ['「エージェントを作りたい」という相談でも、実際には決まった流れの自動化で足りることがよくあります。Anthropic も、まず単純な仕組みから始め、必要なときだけ複雑にすることをすすめています。'],
+    sections: [
+      {
+        heading: 'ワークフローの型',
+        body: ['処理を順につなぐ（プロンプトの連結）、入力で振り分ける（ルーティング）、並行して処理する、取りまとめ役が仕事を割り振る、作った結果を別の役が評価して直す、といった型があります。流れが決まっている業務なら、まずこれらで組みます。'],
+      },
+      {
+        heading: 'エージェントが向く場面',
+        body: ['手順を前もって決められず、状況を見ながら次の手を選ぶ必要がある場面に向きます。そのぶん費用と時間がかかり、結果もぶれやすいので、権限の絞り込みと人の確認がいっそう大切になります。'],
+      },
+      {
+        heading: '作るための道具',
+        body: ['Claude Agent SDK を使うと、Claude Code と同じ仕組み（ツールの実行、文脈の管理、サブエージェントなど）を、自分のアプリに組み込めます。'],
+      },
+    ],
+    checklist: ['ワークフローで足りないかを先に検討したか', 'エージェントに与える権限を絞ったか', '人が確認する段階を設けたか', '費用と時間の上限を決めたか'],
+    resources: [
+      { title: 'Building Effective AI Agents（Anthropic）', url: 'https://www.anthropic.com/engineering/building-effective-agents', kind: '公式サイト' },
+      { title: 'Agent SDK の概要', url: `${CLAUDE_DOCS}/agent-sdk/overview`, kind: '公式ドキュメント' },
+    ],
+  },
   // ───────── Databricks ─────────
   {
     id: 'databricks-architecture',
@@ -257,6 +446,186 @@ export const BASICS_TOPICS: BasicsTopic[] = [
     resources: [{ title: 'Unity Catalog とは', url: `${DBX_DOCS}/data-governance/unity-catalog/`, kind: '公式ドキュメント' }],
   },
 
+  {
+    id: 'databricks-permission-design',
+    group: 'databricks',
+    title: 'Unity Catalog の権限設計',
+    summary: 'カタログの分け方、グループへの付与、行・列の制御。後からやり直さないための設計。',
+    intro: ['権限の設計は、移行やデータ活用の最初に決めておくべきことです。後から直そうとすると、利用者への影響が大きくなります。'],
+    sections: [
+      {
+        heading: '3 階層と、必要な権限の組み合わせ',
+        body: ['データは「カタログ.スキーマ.テーブル」の3階層で管理します。テーブルを読むには、テーブルの SELECT に加えて、親のカタログの USE CATALOG と、スキーマの USE SCHEMA が必要です。'],
+      },
+      {
+        heading: 'カタログの分け方',
+        body: ['開発・検証・本番の環境ごと、または事業部ごとにカタログを分けると、権限をまとめて管理できます。カタログやスキーマに付けた権限は、その中のテーブル（後から作るものも含む）に引き継がれます。'],
+      },
+      {
+        heading: '権限はグループに付ける',
+        body: ['個人ではなくグループに付けると、人の異動や退職のたびに権限を付け直さずに済みます。本番のジョブは、個人ではなくサービスプリンシパルで動かします。'],
+      },
+      {
+        heading: '行と列の制御',
+        body: ['同じテーブルでも、部署によって見せる行を変えたり、個人情報の列を伏せたりできます（行フィルター・列マスク）。属性にもとづく制御（ABAC）も一般提供されています。'],
+      },
+    ],
+    checklist: ['環境や事業部ごとのカタログの分け方を決めたか', '権限をグループに付けたか', '本番のジョブをサービスプリンシパルで動かすか', '個人情報の列の扱いを決めたか'],
+    resources: [
+      { title: '権限の管理（Manage privileges）', url: `${DBX_DOCS}/data-governance/unity-catalog/manage-privileges/`, kind: '公式ドキュメント' },
+      { title: '行フィルターと列マスク', url: `${DBX_DOCS}/tables/row-and-column-filters`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'databricks-lakeflow',
+    group: 'databricks',
+    title: 'Lakeflow でデータパイプラインを作る',
+    summary: '取り込み（Lakeflow Connect）・変換（Lakeflow パイプライン）・実行の管理（Lakeflow Jobs）の役割分担。',
+    intro: ['Databricks のデータの流れは、Lakeflow という名前の3つの機能で組み立てます。どれを何に使うかが分かると、設計の会話がしやすくなります。'],
+    sections: [
+      {
+        heading: '取り込む: Lakeflow Connect',
+        body: ['業務システムや SaaS、データベースからデータを取り込むための、用意された接続（コネクタ）です。自分で取り込みの処理を書かずに済みます。'],
+      },
+      {
+        heading: '変換する: Lakeflow パイプライン',
+        body: [
+          'Spark Declarative Pipelines（旧 Delta Live Tables）にもとづく、宣言的なパイプラインです。「どんなテーブルを作りたいか」を書くと、処理の順番や増分の更新は Databricks が管理します。',
+          'エクスペクテーション（期待する条件）を書くと、条件に合わないデータを記録したり、取り除いたりできます。',
+        ],
+      },
+      {
+        heading: '実行を管理する: Lakeflow Jobs',
+        body: ['ノートブック・パイプライン・SQL などのタスクを、依存関係を付けて順番に実行し、スケジュールや失敗時の再実行を管理します。'],
+      },
+      {
+        heading: 'メダリオンアーキテクチャ',
+        body: ['取り込んだままの Bronze、整えた Silver、業務で使う形に集計した Gold、の3段に分けるのが定番の設計です。どの段で何を保証するかを決めておくと、品質の問題を追いやすくなります。'],
+      },
+    ],
+    checklist: ['取り込み・変換・実行の役割を分けたか', 'Bronze・Silver・Gold の役割を決めたか', 'データの品質の条件（エクスペクテーション）を書いたか', '失敗時の通知と再実行を設定したか'],
+    resources: [
+      { title: 'Lakeflow Connect', url: `${DBX_DOCS}/ingestion/lakeflow-connect/`, kind: '公式ドキュメント' },
+      { title: 'Lakeflow パイプライン', url: `${DBX_DOCS}/ldp/`, kind: '公式ドキュメント' },
+      { title: 'Lakeflow Jobs', url: `${DBX_DOCS}/jobs/`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'databricks-delta-operations',
+    group: 'databricks',
+    title: 'Delta Lake の運用',
+    summary: '履歴とタイムトラベル、MERGE、小さなファイルの整理、liquid clustering と予測的最適化。',
+    intro: ['Databricks のテーブルは、標準で Delta Lake の形式で保存されます。本番で使い続けるには、性能と費用を保つための運用の知識が要ります。'],
+    sections: [
+      {
+        heading: '履歴とタイムトラベル',
+        body: ['変更はすべて履歴（トランザクションログ）に残るので、過去の版を読んだり、誤った更新から元に戻したりできます。DESCRIBE HISTORY で、だれがいつ何をしたかを確かめられます。'],
+      },
+      {
+        heading: 'MERGE で差分を反映する',
+        body: ['MERGE INTO を使うと、新しいデータと既存のテーブルを突き合わせて、更新・追加・削除をまとめて行えます。業務システムの変更を取り込むときの基本の操作です。'],
+      },
+      {
+        heading: '小さなファイルと不要なファイル',
+        body: ['取り込みを繰り返すと小さなファイルが増え、読み込みが遅くなります。OPTIMIZE でまとめ、VACUUM で不要になった古いファイルを削除します（既定では 7 日より古いもの）。'],
+      },
+      {
+        heading: 'liquid clustering と予測的最適化',
+        body: ['liquid clustering は、よく絞り込みに使う列でデータを並べ、読み込みを速くする仕組みで、後から並べる列を変えられます。予測的最適化を有効にすると、OPTIMIZE や VACUUM を Databricks が自動で行います。'],
+      },
+    ],
+    checklist: ['誤更新から戻す手順（タイムトラベル）を確かめたか', '小さなファイルの整理を自動化したか', 'よく絞り込む列で liquid clustering を検討したか'],
+    resources: [
+      { title: 'テーブルの履歴', url: `${DBX_DOCS}/delta/history`, kind: '公式ドキュメント' },
+      { title: 'liquid clustering', url: `${DBX_DOCS}/delta/clustering`, kind: '公式ドキュメント' },
+      { title: '予測的最適化', url: `${DBX_DOCS}/optimizations/predictive-optimization`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'databricks-sql-and-bi',
+    group: 'databricks',
+    title: 'Databricks SQL と AI/BI',
+    summary: 'SQL ウェアハウス、ダッシュボード、自然言語で質問できる Genie。分析する人に届ける部分。',
+    intro: ['データ基盤の価値は、分析する人や業務の担当者に届いて初めて生まれます。Databricks SQL と AI/BI は、その「届ける」部分を受け持ちます。'],
+    sections: [
+      {
+        heading: 'SQL ウェアハウス',
+        body: ['SQL を実行するためのコンピュートです。サーバーレス・Pro・Classic の種類があり、サーバーレスはすぐに起動し、使わないときは自動で止まります。ai_query など一部の機能は Classic では使えません。'],
+      },
+      {
+        heading: 'ダッシュボード',
+        body: ['SQL の結果をグラフや表にまとめ、関係者に共有します。Unity Catalog の権限が効くので、見せてよいデータだけが表示されます。'],
+      },
+      {
+        heading: 'Genie',
+        body: ['業務の担当者が、自然言語でデータに質問できる仕組みです。使えるテーブル・用語の意味・よく使う問い合わせの例を登録しておくと、答えの精度が上がります。'],
+      },
+    ],
+    checklist: ['用途に合う SQL ウェアハウスの種類を選んだか', 'ダッシュボードの共有範囲を権限で管理したか', 'Genie に用語の意味と問い合わせの例を登録したか'],
+    resources: [
+      { title: 'SQL ウェアハウス', url: `${DBX_DOCS}/compute/sql-warehouse/`, kind: '公式ドキュメント' },
+      { title: 'ダッシュボード', url: `${DBX_DOCS}/dashboards/`, kind: '公式ドキュメント' },
+      { title: 'Genie', url: `${DBX_DOCS}/genie/`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'databricks-genai-apps',
+    group: 'databricks',
+    title: '生成 AI アプリを作る',
+    summary: 'Model Serving・AI Search・Agent Bricks・MLflow・Unity Gateway で、データの上に生成 AI を組み立てる。',
+    intro: ['Databricks では、データの管理と同じ場所で生成 AI のアプリを作れます。部品の役割を押さえておくと、Claude と組み合わせた提案がしやすくなります。'],
+    sections: [
+      {
+        heading: 'モデルを呼ぶ: Model Serving と Unity Gateway',
+        body: ['基盤モデル（Claude を含む）や自分のモデルを、エンドポイントとして呼び出せます。Unity Gateway（旧 AI Gateway）で、利用の制限、使用量の監視、入出力の記録などをまとめて管理します。'],
+      },
+      {
+        heading: '探す: AI Search',
+        body: ['AI Search（旧 Vector Search）は、文書を意味で検索する仕組みで、RAG の検索部分を受け持ちます。元のテーブルと自動で同期させられます。'],
+      },
+      {
+        heading: '組み立てる: Agent Bricks',
+        body: ['よくある用途のエージェントを、自分のデータに合わせて作り、改善するための仕組みです。コードで細かく作る方法も用意されています。'],
+      },
+      {
+        heading: '測る: MLflow',
+        body: ['エージェントの動きをトレースとして記録し、どこで間違えたかを調べられます。評価用のデータで品質を測り、変更の前後を比べます。'],
+      },
+    ],
+    checklist: ['モデルの呼び出しを Unity Gateway で管理したか', '検索の元データと同期させたか', 'トレースと評価で品質を測る仕組みがあるか'],
+    resources: [
+      { title: 'Databricks で使えるモデル', url: `${DBX_DOCS}/machine-learning/model-serving/foundation-model-overview`, kind: '公式ドキュメント' },
+      { title: 'AI Search', url: `${DBX_DOCS}/vector-search/vector-search`, kind: '公式ドキュメント' },
+      { title: 'Agent Bricks', url: `${DBX_DOCS}/generative-ai/agent-bricks/`, kind: '公式ドキュメント' },
+      { title: 'エージェントの観測と品質（MLflow）', url: `${DBX_DOCS}/mlflow3/genai/`, kind: '公式ドキュメント' },
+    ],
+  },
+  {
+    id: 'databricks-dev-workflow',
+    group: 'databricks',
+    title: '開発の進め方（Git・Bundles・環境の分け方）',
+    summary: 'ノートブックを Git で管理し、Declarative Automation Bundles で開発から本番まで同じ定義で動かす。',
+    intro: ['PoC ではノートブックを直接書き換えても困りませんが、本番ではそうはいきません。コードを管理し、同じ手順で環境に出せる形にします。'],
+    sections: [
+      {
+        heading: 'Git folders でコードを管理する',
+        body: ['ワークスペースの Git folders を使うと、ノートブックやファイルを Git のリポジトリとして扱えます。変更の履歴が残り、レビューもできるようになります。'],
+      },
+      {
+        heading: 'Declarative Automation Bundles で定義する',
+        body: ['ジョブやパイプラインなどの設定を、コードと一緒にファイルで定義する仕組みです。開発・本番などの環境（ターゲット）ごとの違いだけを書き分け、同じ定義から各環境に出せます。'],
+      },
+      {
+        heading: '環境の分け方',
+        body: ['開発と本番で、カタログ（または、ワークスペース）を分けます。本番への反映は人の手ではなく CI/CD から行い、本番のジョブはサービスプリンシパルで動かします。'],
+      },
+    ],
+    checklist: ['コードを Git で管理しているか', 'ジョブやパイプラインを Bundles で定義したか', '開発と本番の環境を分けたか', '本番への反映を CI/CD にしたか'],
+    resources: [
+      { title: 'Git folders', url: `${DBX_DOCS}/repos/`, kind: '公式ドキュメント' },
+      { title: 'Declarative Automation Bundles', url: `${DBX_DOCS}/dev-tools/bundles/`, kind: '公式ドキュメント' },
+    ],
+  },
   // ───────── FDE の進め方 ─────────
   {
     id: 'claude-on-databricks',

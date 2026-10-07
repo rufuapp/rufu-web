@@ -5,6 +5,7 @@ import { QUESTION_SETS } from '@/content/question-sets';
 import { QUESTIONS } from '@/content/questions';
 import { STUDY_TOPICS } from '@/content/study-topics';
 import { BASICS_GROUPS, BASICS_TOPICS, basicsForGroup } from '@/content/basics';
+import { HANDSON_GUIDES } from '@/content/handson';
 import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
@@ -52,8 +53,15 @@ export default function TopPage() {
       body: 'FDE として Claude と Databricks を提案・導入するための基礎を確かめます。',
     },
     {
-      href: '#exam',
+      href: '#handson',
       num: '第四章',
+      title: 'やってみた',
+      count: `${HANDSON_GUIDES.length} 本`,
+      body: '手順に沿って手を動かし、Claude と Databricks を実際に確かめます。',
+    },
+    {
+      href: '#exam',
+      num: '第五章',
       title: '資格対策',
       count: `${CERTIFICATIONS.length} 資格・${QUESTIONS.length} 問`,
       body: '資格の解説・学習ガイド・問題集で、資格の取得を目指します。',
@@ -164,9 +172,31 @@ export default function TopPage() {
         </p>
       </section>
 
-      {/* 第四章 資格対策 */}
+      {/* 第四章 やってみた */}
+      <section id="handson" className="scroll-mt-16 py-10">
+        <SectionTitle num="第四章" title="やってみた" en="Hands-on" />
+        <p className="mb-6">読むだけでなく、手を動かして確かめるための手順集です。本サイトで実際に動かして確かめたものには「動作確認済み」と付けています。</p>
+        <ul className="grid gap-4 sm:grid-cols-2">
+          {HANDSON_GUIDES.map((h) => (
+            <li key={h.id} className="box p-5">
+              <p className="flex flex-wrap items-center gap-2 text-xs">
+                <span className={`tag ${h.verified.status === 'tested' ? 'text-ok' : 'text-muted'}`}>{h.verified.status === 'tested' ? '動作確認済み' : '未検証'}</span>
+                <span className="text-muted">
+                  {h.track === 'claude' ? 'Claude' : 'Databricks'}・約 {h.minutes} 分
+                </span>
+              </p>
+              <Link href={`/handson/${h.id}`} className="link mt-2 inline-block font-bold">
+                {h.title}
+              </Link>
+              <span className="mt-1 block text-sm leading-relaxed text-muted">{h.summary}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* 第五章 資格対策 */}
       <section id="exam" className="scroll-mt-16 py-10">
-        <SectionTitle num="第四章" title="資格対策" en="Certifications" />
+        <SectionTitle num="第五章" title="資格対策" en="Certifications" />
         <p className="mb-6">Databricks と Claude の認定資格の解説、資格の出題範囲にもとづく学習ガイド、解説付きのオリジナル問題集をまとめています。</p>
         <ul className="grid gap-4 sm:grid-cols-3">
           {EXAM_PARTS.map((part) => (
