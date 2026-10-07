@@ -1,7 +1,6 @@
 #!/bin/sh
-# いまのブランチを検証環境（Vercel の Preview）にデプロイし、検証用のアドレス www.rufu.dev をそこに向ける。
+# いまのブランチを検証環境（Vercel の Preview）にデプロイし、検証用のアドレス rufu.dev・www.rufu.dev をそこに向ける。
 # Preview は Vercel のログイン保護があるため、チームのメンバーしか見られない。
-# rufu.dev は Vercel のドメイン設定で www.rufu.dev に転送されている。
 #
 #   sh scripts/staging-deploy.sh
 #
@@ -10,11 +9,13 @@
 set -eu
 cd "$(dirname "$0")/../.."
 
-STAGING_DOMAIN=www.rufu.dev
+STAGING_DOMAINS="rufu.dev www.rufu.dev"
 
 vercel pull --yes --environment=preview
 vercel build
 URL=$(vercel deploy --prebuilt --archive=tgz)
 echo "検証環境にデプロイしました: $URL"
-vercel alias set "$URL" "$STAGING_DOMAIN"
-echo "https://$STAGING_DOMAIN を、このデプロイに向けました（Vercel にログインして開いてください）"
+for d in $STAGING_DOMAINS; do
+  vercel alias set "$URL" "$d"
+done
+echo "検証用のアドレス（$STAGING_DOMAINS）を、このデプロイに向けました（Vercel にログインして開いてください）"
