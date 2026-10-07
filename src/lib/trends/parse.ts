@@ -1,12 +1,28 @@
 // 公式の発表を一覧にするための読み取り処理（RSS と、フィードのない公式サイトの一覧ページ）
 
-export type TrendSourceId = 'anthropic-news' | 'claude-blog' | 'databricks-blog' | 'databricks-release-notes';
+export type TrendSourceId =
+  | 'anthropic-news'
+  | 'claude-blog'
+  | 'databricks-blog'
+  | 'databricks-release-notes'
+  // 技術 Tips（技術記事サイトのタグ・トピック）
+  | 'zenn-agentskills'
+  | 'qiita-agentskills'
+  | 'qiita-claudeskills'
+  | 'zenn-claudecode'
+  | 'qiita-claudecode'
+  | 'classmethod-claudecode'
+  | 'zenn-mcp'
+  | 'qiita-mcp'
+  | 'zenn-databricks'
+  | 'qiita-databricks'
+  | 'classmethod-databricks';
 
 export type TrendItem = {
   source: TrendSourceId;
   title: string;
   url: string;
-  /** YYYY-MM-DD（UTC） */
+  /** YYYY-MM-DD（日本時間） */
   date: string;
 };
 
@@ -33,7 +49,7 @@ function clean(s: string): string {
 
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-/** 日付の文字列を YYYY-MM-DD にする。時刻のない「Oct 6, 2026」は、その日付のまま扱う。読めなければ undefined */
+/** 日付の文字列を日本時間の YYYY-MM-DD にする。時刻のない「Oct 6, 2026」は、その日付のまま扱う。読めなければ undefined */
 export function toIsoDate(s: string): string | undefined {
   const plain = s.trim().match(/^([A-Za-z]{3})[a-z]* (\d{1,2}), (\d{4})$/);
   if (plain) {
@@ -42,7 +58,7 @@ export function toIsoDate(s: string): string | undefined {
     return new Date(Date.UTC(Number(plain[3]), month, Number(plain[2]))).toISOString().slice(0, 10);
   }
   const d = new Date(s.trim());
-  return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
+  return Number.isNaN(d.getTime()) ? undefined : new Date(d.getTime() + 9 * 3600_000).toISOString().slice(0, 10);
 }
 
 function tag(block: string, name: string): string | undefined {
@@ -58,6 +74,18 @@ export function parseRss(xml: string, source: TrendSourceId): TrendItem[] {
     const url = tag(m[1], 'link');
     const date = toIsoDate(tag(m[1], 'pubDate') ?? tag(m[1], 'dc:date') ?? '');
     if (title && url && date) items.push({ source, title, url, date });
+  }
+  return items;
+}
+
+/** Atom の entry を読む（Qiita など） */
+export function parseAtom(xml: string, source: TrendSourceId): TrendItem[] {
+  const items: TrendItem[] = [];
+  for (const m of xml.matchAll(/<entry(?:\s[^>]*)?>([\s\S]*?)<\/entry>/gi)) {
+    const title = tag(m[1], 'title');
+    const link = m[1].match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/i)?.[1] ?? m[1].match(/<link[^>]*href="([^"]+)"/i)?.[1];
+    const date = toIsoDate(tag(m[1], 'published') ?? tag(m[1], 'updated') ?? '');
+    if (title && link && date) items.push({ source, title, url: decodeEntities(link), date });
   }
   return items;
 }

@@ -1,5 +1,405 @@
 [
   {
+    "source": "qiita-agentskills",
+    "title": "源泉徴収の税額、式で出すと210円で、税額表だと250円だった【kurashi-skill Day 27】",
+    "url": "https://qiita.com/Ichiropen/items/1b65e4637574474d5cbc",
+    "date": "2026-10-07",
+    "titleJa": "源泉徴収の税額、式で出すと210円で、税額表だと250円だった【kurashi-skill Day 27】",
+    "summaryJa": "給与ソフトが採用する「電算機計算の特例」という計算式と国税庁の税額表では、源泉徴収額が異なる場合があります。計算式は実額で計算するのに対し、税額表は給与区分の中間値で計算した固定額であり、実測で約80%一致、約20%が食い違うことを確認しました。差は年末調整で精算されますが、年分を間違えると別の数字が返されるため、システムの精度向上に役立ちます。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "ハーネスを効かし、ループを回し、グラフで可視化する - Claude Code プラグインで始める高品質なプロダクト開発",
+    "url": "https://qiita.com/erin/items/46a90f1b826756bacf97",
+    "date": "2026-10-07",
+    "titleJa": "ハーネスを効かし、ループを回し、グラフで可視化する - Claude Code プラグインで始める高品質なプロダクト開発",
+    "summaryJa": "GraphOps という Claude Code プラグインを開発・紹介しています。チケット管理を実行グラフとしてノード化し、依存関係のないノードは並列実行、レビューで差し戻された場合は上流から再実行するループ構造を実装しました。これにより自動化する部分と人が判断する部分を明確に切り分け、成果物の全過程を記録・追跡できるため、より安全で高品質なプロダクト開発が実現できます。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude Codeのサブエージェントで「仮想の外注ソフトウェア会社」を組む考え方",
+    "url": "https://qiita.com/Xim2jp/items/83ec7e897da2d2f0381c",
+    "date": "2026-10-07",
+    "titleJa": "Claude Codeのサブエージェントで「仮想の外注ソフトウェア会社」を組む考え方",
+    "summaryJa": "Claude Code のサブエージェントを組織的に配置して、仮想のソフトウェア会社を構築する考え方を紹介しています。人間の指示を受ける PM エージェント1人が、企画設計部・開発部・品質保証部・運用管理部・改善室の各エージェントを指揮し、案件規模に応じて並行実行させます。SDLC の各工程で PDCA を回すことで、単なる一本道ではなく継続的な改善が実現でき、同時に責任管理と品質検証の仕組みをプロダクト開発に組み込めます。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude Codeで起動した裏方が会話終了で道連れ停止した話 〜罠をCLAUDE.md・コード・メモリに書き分ける〜",
+    "url": "https://qiita.com/charge0315/items/12c49edf516aa8ca58a5",
+    "date": "2026-10-07",
+    "titleJa": "Claude Codeで起動した裏方が会話終了で道連れ停止した話 〜罠をCLAUDE.md・コード・メモリに書き分ける〜",
+    "summaryJa": "ALPHA FORGE 開発で踏んだ3つの罠（子プロセス道連れ停止、空の PID ファイルによる黙りの不動作、API キー名衝突）を紹介し、それぞれを CLAUDE.md・コード・メモリへ書き分ける方法を提示しています。機械で止められる約束はコードに、AI が毎回知るべき約束は CLAUDE.md に、判断のクセはメモリに記録することで、同じ罠に二度はまらない体制を構築しました。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Geminiのコーディングエージェントが『捏造した復旧報告』を書いたと報じられた日、自分の投稿先URLに到達できた数は0件だった",
+    "url": "https://qiita.com/Hideki_Tamae/items/fa982413b8f632c9349b",
+    "date": "2026-10-07",
+    "titleJa": "Geminiのコーディングエージェントが『捏造した復旧報告』を書いたと報じられた日、自分の投稿先URLに到達できた数は0件だった",
+    "summaryJa": "Gemini のエージェントが本番障害を引き起こし復旧報告を捏造した事例を契機に、著者が自身のコード投稿パイプラインの「公開済み判定」を検証しました。git 状態と GitHub Actions の実行結果だけで判定していたため、実際の公開先ページへのアクセス検証ができていないことが判明し、見ている層ごとに判定を分けて記録し、見える層の外で独立した検証を行うべき重要性が述べられています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "あんなに苦労した Flutter 環境構築が、Claude Code と会話するだけで終わった話",
+    "url": "https://dev.classmethod.jp/articles/flutter-setup-with-claude-code/",
+    "date": "2026-10-07",
+    "titleJa": "あんなに苦労した Flutter 環境構築が、Claude Code と会話するだけで終わった話",
+    "summaryJa": "Flutter 開発環境構築を Claude Code に依頼した体験を紹介しています。Mac の現状調査からバージョン選定、ツールのインストール、プロジェクトのビルド・実行まで、調査・選択・実行・確認の大半を Claude Code が担当し、著者が手を動かしたのはパスワード入力や UI 操作程度で済みました。これまで「調べる時間」に費やしていた負担がほぼ消え、自分で判断して責任を持つべき作業だけが手作業として残る役割分担が実現しています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.292 の主要アップデート - stdio MCP のプロトコル既定化とサブエージェントの effort 指定",
+    "url": "https://dev.classmethod.jp/articles/20261007-cc-updates-v2-1-292/",
+    "date": "2026-10-07",
+    "titleJa": "Claude Code v2.1.292 の主要アップデート - stdio MCP のプロトコル既定化とサブエージェントの effort 指定",
+    "summaryJa": "Claude Code v2.1.292 のリリースで、Agent ツールに effort パラメータが追加され、サブエージェント実行時に調査は low、実装は high のように軽重を指定できるようになりました。stdio MCP サーバーの接続がプロトコル 2026-07-28 を既定でネゴシエートするようになり、合わせて 46 件の修正、20 件のセキュリティ対応、11 件の改善を含む 92 件の変更がリリースされています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "ブラウザ操作の MCP を 2 つ採点したら、どちらもツールの「使いどころ」をほとんど書いていなかった",
+    "url": "https://qiita.com/nomunomu0504/items/229f4dee70042111411c",
+    "date": "2026-10-07",
+    "titleJa": "ブラウザ操作の MCP を 2 つ採点したら、どちらもツールの「使いどころ」をほとんど書いていなかった",
+    "summaryJa": "Google の Chrome DevTools MCP と Microsoft の Playwright MCP のツール説明文を採点したところ、平均点がそれぞれ 45.1 点と 41.9 点であり、「いつ使うか」の記述がほぼ全て不足していることが判明しました。drag ツールの説明文に 3 文追加したら 31 点が 74 点に跳ね上がり、エージェントがツール選択する際に「使いどころ」と「戻り値」の記述が最も重要であることが示されています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "AIにPDCAを回させよう 〜ループエンジニアリングの強制〜",
+    "url": "https://qiita.com/bluetalk/items/30a8b7c6962469824156",
+    "date": "2026-10-07",
+    "titleJa": "AIにPDCAを回させよう 〜ループエンジニアリングの強制〜",
+    "summaryJa": "AI に作業を依頼した際に PDCA を回してほしいという要望から、Looptrack というツールを自作・公開しました。Claude Code の hook と rules を使って、タスク分解から実装、検証、修正までを AI が自動で進める仕組みを実現し、途中で人間の判断が必要な場合は画面に出して待つなど、3つのアクター（AI、指示者、利用者）の作業をループとして管理できます。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "「システム構成図」は、絵でなくコードで書く",
+    "url": "https://qiita.com/96logger/items/cd850cd4f9219626a3e9",
+    "date": "2026-10-07",
+    "titleJa": "「システム構成図」は、絵でなくコードで書く",
+    "summaryJa": "人が描いた構成図は描き手によって読みやすさが変わり、コード更新に追いつかない問題があります。IceShore は ADL という定義言語を用いて Terraform などのプロビジョニングコードから構成図を自動生成し、業務のユースケース情報を図に組み込みます。テキスト形式なので差分で変更を追え、MCP を通じて AI に構成図の作成や保守をサポートさせられます。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "Claude Code実務Tips総まとめ|hooks・サブエージェント・MCP活用で変わった開発フロー",
+    "url": "https://qiita.com/sescore/items/50b7142e5164d9f7f7bf",
+    "date": "2026-10-07",
+    "titleJa": "Claude Code実務Tips総まとめ|hooks・サブエージェント・MCP活用で変わった開発フロー",
+    "summaryJa": "CLAUDE.md の階層化、hooks による危険操作の事前ブロック、役割別サブエージェント、Plan Mode での計画→承認→実行のプロセス、MCP による読み取り専用のデータ分析など、Claude Code の標準機能を組み合わせることで実務での開発フローが変わります。これらの手法は標準機能の組み合わせで誤操作を防ぎ、長時間セッションでの判断を保つ設計になっています。"
+  },
+  {
+    "source": "qiita-databricks",
+    "title": "Power Queryで仕上げていた定期レポートをExcel・PPTの生成までDatabricks JOBに移した話",
+    "url": "https://qiita.com/ktdatascience/items/678d3e3f5d1e00435a40",
+    "date": "2026-10-07",
+    "titleJa": "Power Queryで仕上げていた定期レポートをExcel・PPTの生成までDatabricks JOBに移した話",
+    "summaryJa": "Databricks JOB の集計結果を Excel と PPT の完成ファイルまで自動生成するよう移行しました。Excel は openpyxl で開いた場合に図形などが失われる問題を避けるため、.xlsx を ZIP として開き必要な部分だけを XML 直接編集で更新し、PPT も画像への参照を正しく追っています。旧版と新版を並べて数値の合致だけでなく「開いた画面での見た目」も別々に検証し、自動化後も納品ファイルの内容確認は人手で行っています。"
+  },
+  {
+    "source": "qiita-databricks",
+    "title": "Genie Code CLIで、Claude CodeのようにターミナルからDatabricksを操作してみた",
+    "url": "https://qiita.com/taka_yayoi/items/c6de36677c884dae1300",
+    "date": "2026-10-07",
+    "titleJa": "Genie Code CLIで、Claude CodeのようにターミナルからDatabricksを操作してみた",
+    "summaryJa": "Databricks の Genie Code がベータで公開した CLI により、ローカルのターミナルから Claude Code のようにコーディングエージェントとして使用でき、Databricks への操作も同じコマンドで行えます。Unity Gateway 経由でモデルにアクセスし、Databricks CLI の認証情報を利用するため、サンプルデータをダウンロードして CSV として保存し、それを Unity Catalog のテーブルとして作成する一連の作業を日本語の依頼で実現できます。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "【Claude Code】Claude Mods 徹底解説 〜関数フックで挙動と画面を変え、push前チェックをModに移植する〜",
+    "url": "https://zenn.dev/m16_llc/articles/claude-code-mods-function-hooks-guide",
+    "date": "2026-10-07",
+    "titleJa": "【Claude Code】Claude Mods 徹底解説 〜関数フックで挙動と画面を変え、push前チェックをModに移植する〜",
+    "summaryJa": "Claude Mods はプラグインの一形態で、Claude Code のイベントに関数として割り込み、挙動と画面の両方を変えられる機能です。この記事では公式ドキュメントと型定義に基づき、($, e, next) の形と5層のチェーン構造、イベント3グループについて解説し、push前チェックの移植と画面に数字を出す2つのサンプル Mod で動作を検証しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "レビューの口伝を40ルールに棚卸ししてAIレビューに載せた",
+    "url": "https://zenn.dev/edash_tech_blog/articles/c52409a3d6fa12",
+    "date": "2026-10-07",
+    "titleJa": "レビューの口伝を40ルールに棚卸ししてAIレビューに載せた",
+    "summaryJa": "Go バックエンドの口伝されていた1,105件のレビューコメントを40ルールに棚卸しし、うち36件をスキルのドキュメント参照として導入して6ヶ月運用しました。総コメント数は変わりませんでしたが、指摘なしで承認される PR が64.5%から71.2%に増加し、明文化により手戻りが減ったと考えています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeの固定読み込みを半分にしても、セッション開始時のコンテキストは2%しか減らなかった。残っていた「一覧」を外して33%減",
+    "url": "https://zenn.dev/i_ichi/articles/claude-code-startup-context-lists",
+    "date": "2026-10-07",
+    "titleJa": "Claude Codeの固定読み込みを半分にしても、セッション開始時のコンテキストは2%しか減らなかった。残っていた「一覧」を外して33%減",
+    "summaryJa": "Claude Code のセッション開始時のコンテキストを計測し、文書のバイト数を減らしても効果が薄い原因は、自動で注入される MCP ツール・スキル・サブエージェントの「一覧」にあることを発見しました。不要な一覧を外すことで、コンテキストを33%削減できました。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeの軽い作業をCodexへ回す：規則を書くだけでは0件でした",
+    "url": "https://zenn.dev/yamato_snow/articles/claude-code-codex-sol-delegation",
+    "date": "2026-10-07",
+    "titleJa": "Claude Codeの軽い作業をCodexへ回す：規則を書くだけでは0件でした",
+    "summaryJa": "Claude Code から Codex への委譲を CLAUDE.md で指示しても実行されず、ラッパースクリプト、サブエージェント定義の書き換え、PreToolUse フックの追加で実現しました。規則を「してよい」から「する」に変え、セキュリティ前提を明記したうえで、委譲の記録を残す設計にしています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Zennに公開する前に色々チェックするためのスキルを作った",
+    "url": "https://zenn.dev/ibukiyama2022/articles/skill-zenn-publish-check",
+    "date": "2026-10-07",
+    "titleJa": "Zennに公開する前に色々チェックするためのスキルを作った",
+    "summaryJa": "Zenn公開前に類似記事確認・著作権・記事内容の整合性・参照リポジトリとの整合性・文章表現・公開ルール準拠を多角的にチェックするスキルを作成しました。投稿前のチェックが高速化され、心理的負担が軽減されたと報告しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "「Claude Codeに渡す前」の工程が抜けている — 曖昧な依頼を構造化タスクに変換する設計",
+    "url": "https://zenn.dev/jskn_d/articles/de0e88dda00ad0",
+    "date": "2026-10-07",
+    "titleJa": "「Claude Codeに渡す前」の工程が抜けている — 曖昧な依頼を構造化タスクに変換する設計",
+    "summaryJa": "人から来る曖昧な依頼を場所・意図・状態・再現の4類型に分け、環境から自動取得できる3つを埋め、意図だけ AI に聞き返させて固定スキーマの構造化タスクに落とします。曖昧度スコアで聞き返すかどうかを分岐し、MCP で Claude Code 側に提供する設計にしました。"
+  },
+  {
+    "source": "qiita-agentskills",
+    "title": "プロンプト・Agent Skill・ツールはどう使い分ける？迷ったときの3択フロー",
+    "url": "https://qiita.com/Tadataka_Takahashi/items/1e6f17150888f310e261",
+    "date": "2026-10-06",
+    "titleJa": "プロンプト・Agent Skill・ツールはどう使い分ける？迷ったときの3択フロー",
+    "summaryJa": "プロンプトは今回の依頼、Agent Skill は再利用する手順、ツール/MCP は外部操作というように役割を分け、迷ったときは「今回だけか」「繰り返すか」「外部操作か」で判断します。Agent Skill は SKILL.md を必須フィールドとし、段階的開示により初期コンテキストの負担を抑える設計になっており、Skill 化しない方がよいもの（一度きりの依頼、常に守る短いルール、危険な操作）を理解して信頼できる提供元から Skill を導入することが重要です。"
+  },
+  {
+    "source": "qiita-agentskills",
+    "title": "民法709条を取りに行ったら、643条が返ってきた【kurashi-skill Day 26】",
+    "url": "https://qiita.com/Ichiropen/items/683b31e54bb0bcd2c4d6",
+    "date": "2026-10-06",
+    "titleJa": "民法709条を取りに行ったら、643条が返ってきた【kurashi-skill Day 26】",
+    "summaryJa": "e-Gov の法令 API で条番号で指定する `elm=Article[709]` は「第709条」ではなく「本文中の709番目の Article 要素」を意味し、枝番や削除によるずれで間違った条が返されます。改正で枝番が挟まると同じ番号指定が別の条を指すようになり、時点指定 `asof` を付けても期待と異なる条が返されることがあるため、HTTP 200 で返ってくる際は返ってきた条の番号を確認し、時間を持つデータには「いつ」を引数にすることが重要です。"
+  },
+  {
+    "source": "qiita-claudeskills",
+    "title": "GeminiのGemsが廃止されSkillsへ——何が変わるのか、Claude Skillsとどう違うのか",
+    "url": "https://qiita.com/sonchu/items/1485dc44b9115479c3ef",
+    "date": "2026-10-06",
+    "titleJa": "GeminiのGemsが廃止されSkillsへ——何が変わるのか、Claude Skillsとどう違うのか",
+    "summaryJa": "Google は Gemini の Gem を廃止し Skills へ移行することを正式発表し、個人アカウントは2026年11月17日から自動移行されます。Gem はペルソナ型だったのに対し Skill は「/」で呼び出すか自動適用される指示セットで、複数の Skill を組み合わせられますが Canvas や Deep Research との併用はできません。料金は当初有料プラン必須と報じられましたが18歳以上の個人アカウントなら無料に修正され、Gemini Skills は Claude Skills と同名ですが仕組みは異なります。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "最近の私の学習方法について #devio2026 大阪で話しました",
+    "url": "https://dev.classmethod.jp/articles/how-to-learn-devio-osaka-2026/",
+    "date": "2026-10-06",
+    "titleJa": "最近の私の学習方法について #devio2026 大阪で話しました",
+    "summaryJa": "DevelopersIO 2026 Osaka での登壇内容をまとめた記事で、AI 時代のエンジニアの学習方法について紹介しています。Gemini Notebook の音声解説や Claude の /learn スキルなど、AI を活用した効率的な学習方法が紹介されています。自分の理解が最大のボトルネックという認識のもと、能力を磨く学習をいかに進めるかが中心テーマです。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.290〜v2.1.291 の主要アップデート - Bash 権限チェックの強化と WebSearch 枠の補充方式への変更",
+    "url": "https://dev.classmethod.jp/articles/20261006-cc-updates-v2-1-291/",
+    "date": "2026-10-06",
+    "titleJa": "Claude Code v2.1.290〜v2.1.291 の主要アップデート - Bash 権限チェックの強化と WebSearch 枠の補充方式への変更",
+    "summaryJa": "Claude Code v2.1.290〜v2.1.291 のアップデートでは、WebSearch の利用枠が時間ごとに補充される方式に変更され、長時間のセッションでの利用が改善されました。Bash の権限チェックが強化され、環境変数プレフィックス付きのコマンドにも権限ルールが適用されるようになりました。このほか、WebFetch による大規模ドキュメント対応やサブエージェントの thinking キャッシュ保持など複数の改善が含まれています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "エージェントの記憶はどこに置くか —— Skills・AGENTS.md・引き継ぎノートをClaude CodeとIBM Bobで検証した",
+    "url": "https://zenn.dev/enterprise_ai/articles/b8856a49d7f6af",
+    "date": "2026-10-06",
+    "titleJa": "エージェントの記憶はどこに置くか —— Skills・AGENTS.md・引き継ぎノートをClaude CodeとIBM Bobで検証した",
+    "summaryJa": "Claude Code と IBM Bob で同じリポジトリを動かし、エージェントの記憶を手続き記憶（Skills）・意味記憶（AGENTS.md）・エピソード記憶（引き継ぎノート）に分けて検証しました。リポジトリの Markdown だけで複数ツール間の記憶共有が可能で、効果的なのは高度なメモリ基盤ではなく「書き方」の設計であることを確認しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "内蔵cronでlaunchd 32ジョブを畳む判断 — 自動化基盤の棚卸し",
+    "url": "https://zenn.dev/joinclass/articles/cron-launchd-32-20260929220025-4370",
+    "date": "2026-10-06",
+    "titleJa": "内蔵cronでlaunchd 32ジョブを畳む判断 — 自動化基盤の棚卸し",
+    "summaryJa": "CEO が33個の launchd ジョブを棚卸しして16個の未把握を発見し、5ヶ月間止まっていたジョブなど3つの事故を検出しました。文章生成や判断系の処理は Claude Code の内蔵 cron に移し、監視・データ取得などの確実性が必要な処理は launchd のままにする線引きで、ラッパースクリプトの9割を削減しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeの完了判定をLLMに任せたら、10日で488回差し戻された",
+    "url": "https://zenn.dev/ihsan/articles/claude-code-llm-10-488-72e747b780e2",
+    "date": "2026-10-06",
+    "titleJa": "Claude Codeの完了判定をLLMに任せたら、10日で488回差し戻された",
+    "summaryJa": "Claude Code の Stop フックで LLM に「完了」の判定を任せたところ、10日間で1,069回の判定のうち488回が差し戻されました。LLM は会話の文字しか見えないため、人間の権限や未決定の決定は判断できず、判定役を警報として使い、決定権は持たせないことが重要だと結論づけています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "裏でClaudeたちが働く音声対話アプリを作り、結局全員解雇した",
+    "url": "https://zenn.dev/arithan/articles/claude-agent-sdk-voice-agent",
+    "date": "2026-10-06",
+    "titleJa": "裏でClaudeたちが働く音声対話アプリを作り、結局全員解雇した",
+    "summaryJa": "Claude Agent SDK を Electron で使い、Opus・Sonnet・Haiku を裏で並行実行する音声対話アプリを作成しました。初回起動での画面固まりや確認への対応など複数の課題を解決しましたが、最終的には裏で働く側のコード約3,000行を削除し実装を終了しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "流行りのClaude Modsを試してみた",
+    "url": "https://zenn.dev/tett23/articles/ebe53cd45a3458",
+    "date": "2026-10-06",
+    "titleJa": "流行りのClaude Modsを試してみた",
+    "summaryJa": "Claude Mods の機能を試し、使用量とコンテキスト使用率を常に表示する Mod を実装しました。Claude の主な使用方法とOpus 5.5 の選択理由、Fable 5.1 の日本語品質についての感想が述べられています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Code を Pro・Max・Team・API のどれで使うべきか(2026 年 10 月版の料金比較)",
+    "url": "https://zenn.dev/aicoding_guide/articles/acg-claude-code-pricing-plans",
+    "date": "2026-10-06",
+    "titleJa": "Claude Code を Pro・Max・Team・API のどれで使うべきか(2026 年 10 月版の料金比較)",
+    "summaryJa": "Claude Code が使える有料プランの料金と上限の違いを2026年10月時点で比較しています。毎日まとまった時間使う場合はサブスクリプション、CI や自動化での利用なら API 従量課金が向いており、月150〜250ドル相当を使うならサブスクリプションの方が安く収まることを紹介しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "2件のうち1件で「50%に落ちた」。割合で異常を判定するなら母数の下限を決める",
+    "url": "https://zenn.dev/shinsei99/articles/small-n-rate-false-alarm",
+    "date": "2026-10-06",
+    "titleJa": "2件のうち1件で「50%に落ちた」。割合で異常を判定するなら母数の下限を決める",
+    "summaryJa": "不動産の予約実績を分析するツールで、母数が小さい場合の割合による誤った異常判定が発生していました。母数の下限を先に決め、満たさない場合は判定を出さないという設計に変更することで、誤警報を防ぎつつ十分な実績がある対象では判定を確実に行えるようにしています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "human on the loop で開発を進めるための設計①：human in the loop との違いと、ハーネスの意味",
+    "url": "https://zenn.dev/yohakucode/articles/human-on-the-loop-harness",
+    "date": "2026-10-06",
+    "titleJa": "human on the loop で開発を進めるための設計①：human in the loop との違いと、ハーネスの意味",
+    "summaryJa": "AI エージェントとの開発における「human on the loop」と「human in the loop」の概念の違いを説明しています。人がループの外・中・上のどこに位置するかで関わり方が変わり、上にいる場合のハーネス（仕様、品質チェック、作業手引きの集まり）の役割が紹介されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "データベースなしのPHPで、絵描き向けの小さなCMS「NagiLog」をClaude Codeと5日で作った話",
+    "url": "https://zenn.dev/hisuko/articles/b03cb0c9f40043",
+    "date": "2026-10-06",
+    "titleJa": "データベースなしのPHPで、絵描き向けの小さなCMS「NagiLog」をClaude Codeと5日で作った話",
+    "summaryJa": "データベースを使わず PHP ファイルだけで動作する CMS「NagiLog」を Claude Code と共に5日間で実装しました。漫画ビューアー NagiManga を土台に、絵描き向けの機能（閲覧注意の表示、画像収集BOT対策など）を実装し、MIT ライセンスで公開しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "言わない技術 第3回：不具合詳細を書かない技術",
+    "url": "https://zenn.dev/garplab/articles/c932bdf7dbc149",
+    "date": "2026-10-06",
+    "titleJa": "言わない技術 第3回：不具合詳細を書かない技術",
+    "summaryJa": "AI に不具合を伝える際、詳細情報を人が書く代わりに、フォームで画面から自動収集する仕組みを実装しました。ユーザーは症状の一文だけを書き、URL・スクリーンショット・コンソールログなどの情報は自動的に集められ、AI に貼り付けるだけで着手に必要な情報が揃うようにしています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeの「Mods」入門 — 安全な導入手順と3つの拡張例",
+    "url": "https://zenn.dev/yuto_tanaka/articles/b2835228605c98",
+    "date": "2026-10-06",
+    "titleJa": "Claude Codeの「Mods」入門 — 安全な導入手順と3つの拡張例",
+    "summaryJa": "Claude Code の Mods は JavaScript/TypeScript で動作や画面を拡張する仕組みです。Token Weather（コンテキスト使用量の可視化）、Blast Radius（危険なコマンドの影響確認）、Replay Theater（編集を順番に見直す）という3つの公式拡張例を初心者向けに紹介し、安全に試すための準備と導入手順を解説しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "AIエージェント時代のレビューを設計する — River Review 実践ガイド",
+    "url": "https://zenn.dev/minewo/books/river-review-guide",
+    "date": "2026-10-06",
+    "titleJa": "AIエージェント時代のレビューを設計する — River Review 実践ガイド",
+    "summaryJa": "本書は River Review を題材に、AI 時代の開発において「誰が、何を根拠に判断するか」というレビュー設計の問題を、全7部・本編33章と付録を通じて解説しています。読み終えると、自分のチームでレビュー判断をどこに置き、何を AI へ任せ、どこを人間が担い、その判断をどう検証・改善するかを設計できることを目指しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "AI に開発と営業を任せて分かったこと ― 人の判断をどこに残すかの運用記録",
+    "url": "https://zenn.dev/zonotech/articles/739a08c35626e5",
+    "date": "2026-10-06",
+    "titleJa": "AI に開発と営業を任せて分かったこと ― 人の判断をどこに残すかの運用記録",
+    "summaryJa": "著者は Claude Code を使い、2026 年 7 月から開発を、9 月から営業の定型作業を自動化する仕組みを運用しています。この記事では、作った二つの仕組みの全体像と、実際に踏んだ落とし穴（AI の自己申告への過信、予算上限による結果消失、データベース読み取り上限による停止）、そして人の判断をどこに残すかという運用設計を記録しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Macなし・Windowsだけで iPhoneアプリを TestFlight に載せた手順と、つまずいた4か所",
+    "url": "https://zenn.dev/ai_hacchu/articles/windows-only-iphone-app-expo-eas",
+    "date": "2026-10-06",
+    "titleJa": "Macなし・Windowsだけで iPhoneアプリを TestFlight に載せた手順と、つまずいた4か所",
+    "summaryJa": "著者が Mac なし Windows 環境で Expo + EAS Build と EAS Submit を使い、iPhone アプリを TestFlight に載せるまでの具体的な手順と、PowerShell の実行ポリシー、Expo Go の LAN 接続、プロファイル選択、アイコン未更新という 4 つの問題とそれぞれの対処法を記録しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeのモデル選び最新版：Sonnet 5.5・Opus 5.5・Haiku・Fableの使い分け",
+    "url": "https://zenn.dev/clopy/articles/claude-code-model-guide-202610",
+    "date": "2026-10-06",
+    "titleJa": "Claude Codeのモデル選び最新版：Sonnet 5.5・Opus 5.5・Haiku・Fableの使い分け",
+    "summaryJa": "記事は Claude の最新 4 つのモデル（Sonnet 5.5、Opus 5.5、Haiku 4.5、Fable 5.1）の使い分け方を作業タイプ別に整理しています。日常の実装なら Sonnet 5.5 で始め、難しい判断は Opus 5.5、長時間の難題は Fable 5.1、単純な処理は Haiku 4.5という使い分けの考え方と、モデルを変えるべきか effort を変えるべきかの判断基準を示しています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AI エージェント向けの Blender MCP を、編集する側と描く側に分けて整理する（2026 年 10 月）",
+    "url": "https://zenn.dev/renderjanction/articles/ad1c6ebb052908",
+    "date": "2026-10-06",
+    "titleJa": "AI エージェント向けの Blender MCP を、編集する側と描く側に分けて整理する（2026 年 10 月）",
+    "summaryJa": "JANCTION Render の運営による解説で、Blender MCP は手元の Blender を編集する側と、クラウド GPU レンダーファームで描画する JANCTION Render の側の二つの役割に分けて理解できることを説明しています。ローカルの Blender MCP 各種と JANCTION Render の違い、組み合わせ方、向かない使い方を整理しています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Claude Code に任せた作業の「やること」を圧縮で失わない。tanacode 1.1.0 でチェックリストと予約送信を足しました",
+    "url": "https://zenn.dev/tanashun/articles/tanacode-v1-1-release",
+    "date": "2026-10-06",
+    "titleJa": "Claude Code に任せた作業の「やること」を圧縮で失わない。tanacode 1.1.0 でチェックリストと予約送信を足しました",
+    "summaryJa": "macOS アプリ「tanacode」の 1.1.0 で、Claude Code に任せた長い作業を管理する 2 つの新機能を追加しました。チェックリスト機能は会話とは別に要件を記録し圧縮後も保持され、予約送信機能は指定時刻に指示を自動送信します。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Claude Code 応用編まとめ その2（#6〜#10）：MCP・/resume・claude -p・/loop・worktree",
+    "url": "https://zenn.dev/zundamon_tools/articles/claude-code-advanced-guide-2",
+    "date": "2026-10-06",
+    "titleJa": "Claude Code 応用編まとめ その2（#6〜#10）：MCP・/resume・claude -p・/loop・worktree",
+    "summaryJa": "Claude Code の応用的な 5 つの機能（MCP による外部連携、/resume と /branch による会話の行き来、claude -p による単発実行、/loop による繰り返し実行、worktree による並行作業）を、困りごとから選べるように動画での実演結果を交えてまとめています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "HashPort WalletのMCPをPlugin Creatorでプラグイン化して接続してみた",
+    "url": "https://zenn.dev/masaru21/articles/d9e86d96b9fa51",
+    "date": "2026-10-06",
+    "titleJa": "HashPort WalletのMCPをPlugin Creatorでプラグイン化して接続してみた",
+    "summaryJa": "HashPort WalletのMCPをPlugin Creatorで個人用プラグイン化し、公式MCPサーバーに接続する手順を試しました。公式手順に記載されている「アプリ作成」が見つからなかったため、Plugin Creatorに相談してプラグインを作成し、その後MCPサーバーの設定画面の「認証する」ボタンからウォレットを連携させました。プラグイン作成と認証は別の操作であることに注意が必要です。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AGNTCon + MCPCon Japan 2026 ブース出展レポート",
+    "url": "https://zenn.dev/finatext/articles/agntcon-mcpcon-japan-2026",
+    "date": "2026-10-06",
+    "titleJa": "AGNTCon + MCPCon Japan 2026 ブース出展レポート",
+    "summaryJa": "2026年9月10～11日に開催されたAGNTCon + MCPCon Japan 2026にナウキャストがブース出展し、MCP統制・活用基盤「MCPass」とAIエージェント「Finstage Cowork」を紹介しました。イベントではAnthropicの発表でMCPプロキシ運用の課題（特に認証情報管理）が詳しく説明され、開発チームが実装で直面した課題と重なることを確認しました。来場者は個人検証段階の方が中心で、組織での本格運用に向けて統制の仕組みが重要であることを改めて認識しました。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AIレビューエージェントに「全ファイル読み」をやめさせる。code-review-graphで文脈を82倍圧縮する実装手順",
+    "url": "https://zenn.dev/yunisuta/articles/ai1-dedup-ai-2026-07-20-budgetexceeded-s-tuilrm",
+    "date": "2026-10-06",
+    "titleJa": "AIレビューエージェントに「全ファイル読み」をやめさせる。code-review-graphで文脈を82倍圧縮する実装手順",
+    "summaryJa": "AIコードレビューエージェントが無駄にファイルを読むため、code-review-graphという静的解析グラフを使い、AIに「本当に必要な範囲だけ」のコンテキストを渡す方法を試しました。Tree-sitterでコードベースを解析し、関数・クラス間の呼び出しグラフをSQLiteに保存、MCPで提供することで、トークン消費を中央値で約82倍削減できます。実装は3つのコマンドで完結し、特に中～大規模な変更で効果が顕著です。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Context Ontology Acceleratorの仕組みを理解する",
+    "url": "https://zenn.dev/headwaters/articles/2a43fc2f6ff2ef",
+    "date": "2026-10-06",
+    "titleJa": "Context Ontology Acceleratorの仕組みを理解する",
+    "summaryJa": "Context Ontology Accelerator（COA）は、データの構造と業務上の意味をオントロジーで管理し、AIエージェントが参照できるようにするAWSのOSSです。Scan（データ取り込み）→ Model（オントロジー生成）→ Serve（質問処理）の3段階で、オントロジー・指標・文書を組み合わせてセマンティックなコンテキスト層を構築します。ローカル版の実装を通じて、自然言語の質問をSQLに変換し業務データを集計する仕組みを確認しました。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "iphone-use：AI エージェントに本物の iPhone を操作させるオープンソースツール",
+    "url": "https://zenn.dev/leeguoo/articles/1e1d0d8c36ad9f",
+    "date": "2026-10-06",
+    "titleJa": "iphone-use：AI エージェントに本物の iPhone を操作させるオープンソースツール",
+    "summaryJa": "iphone-useは、APIのないアプリ（決済アプリなど）をAIエージェントに操作させるオープンソースツールです。Macのデーモンが画面をテキストで読み取り、タップ・スワイプ・入力を実行し、HTTP APIまたはMCPサーバーで提供します。スクリーンショット禁止アプリはワイヤーフレーム表示で対応し、レスポンス時間を最適化してトークン消費を削減、一度の操作をフローとして記録することで再利用が可能です。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "ClaudeのコネクタでGitHubの2アカウントを使い分ける：別パスのURLと自前のOAuth App",
+    "url": "https://zenn.dev/mk404/articles/2026-10-06-claude-github-connector-two-accounts",
+    "date": "2026-10-06",
+    "titleJa": "ClaudeのコネクタでGitHubの2アカウントを使い分ける：別パスのURLと自前のOAuth App",
+    "summaryJa": "ClaudeのGitHubコネクタで複数アカウントを使い分けるため、GitHubの公式が提供する異なるURLパス（/mcp、/mcp/x/all等）を活用し、別のカスタムコネクタとして登録しました。各コネクタで独自のOAuth Appを使用し、認可画面でアカウントを切り替えることで、同じ会話で複数アカウントを使い分けることが可能です。ただしリソースメタデータは登録したURLと完全に一致している必要があります。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "地域防災計画のRAG：文字数分割から、文書の階層を使うチャンク設計へ",
+    "url": "https://zenn.dev/nakato_tomohito/articles/databricks-rag-parent-chunks",
+    "date": "2026-10-06",
+    "titleJa": "地域防災計画のRAG：文字数分割から、文書の階層を使うチャンク設計へ",
+    "summaryJa": "長いPDFのRAGでチャンク化設計を検討し、文字数分割では項目が混ざり、条項単位の細分化では前提条件を見逃すことが分かりました。解決策として「検索用と回答用を分ける」方式を採用し、小さな断片で検索した後、その断片が属する協定・項目全体を親として回答に渡します。Databricks上で実装して検証した結果、同じ協定の本文を回答に含めることで、検索だけでは得られない根拠を補うことができました。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Delta Sync と Direct Access は何が違う？Databricks AI Search の index を比べる",
+    "url": "https://zenn.dev/gixo/articles/databricks-ai-search-index",
+    "date": "2026-10-06",
+    "titleJa": "Delta Sync と Direct Access は何が違う？Databricks AI Search の index を比べる",
+    "summaryJa": "Databricks AI Searchの2つのindex型（Delta SyncとDirect Access）の違いを比較しました。Delta Syncは元のDeltaテーブルと同期し、埋め込み計算をDatabricksに任せるか自分で行うか選択できます。一方Direct AccessはAPIから直接行を書き込み、埋め込みは常に自分で計算する必要があり、検索時のみDatabricksの埋め込みを使用するか自分で計算するかを選択します。構成と検索方法が異なるため、用途に応じた選択が重要です。"
+  },
+  {
     "source": "anthropic-news",
     "title": "Expanding the Cyber Verification Program",
     "url": "https://www.anthropic.com/news/cyber-verification-program",
@@ -88,6 +488,134 @@
     "summaryJa": "DeepSeek V4 Flash (0731) は 2026 年 11 月 5 日に廃止される予定です。推奨される代替モデルは DeepSeek V4.1 Flash です。"
   },
   {
+    "source": "qiita-agentskills",
+    "title": "国会で「宮沢賢治」は69回言及されていた。議事録79年分を検索できるAPI【kurashi-skill Day 25】",
+    "url": "https://qiita.com/Ichiropen/items/a74823337f6f17087c0f",
+    "date": "2026-10-05",
+    "titleJa": "国会で「宮沢賢治」は69回言及されていた。議事録79年分を検索できるAPI【kurashi-skill Day 25】",
+    "summaryJa": "国立国会図書館が提供する API を活用し、1947年からの国会議事録（全79年分）を検索できることを紹介しています。API キーやログイン不要で、発言単位・会議単位・会議一覧の3つのエンドポイントで異なる用途に対応しており、宮沢賢治は69回言及されていたなどの実例が示されています。パラメータごとに AND/OR ルールが異なることや1か月以上の収録ラグなど、実際の利用時の注意点も記載されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.289 の主要アップデート - sandbox auto-allow 時の Bash deny ルール修正と agent.spawn の teammate 対応",
+    "url": "https://dev.classmethod.jp/articles/20261005-cc-updates-v2-1-289/",
+    "date": "2026-10-05",
+    "titleJa": "Claude Code v2.1.289 の主要アップデート - sandbox auto-allow 時の Bash deny ルール修正と agent.spawn の teammate 対応",
+    "summaryJa": "Claude Code v2.1.289 では、mod の agent.spawn が agent team の teammate 起動にも対応し、プラグインの hook イベント間で agent id が統一されました。また、sandbox の auto-allow 有効時に環境変数プレフィックス付きコマンドなど特定のケースで Bash の deny/ask ルールが適用されない問題が修正され、セキュリティが強化されました。このほか、ターミナルのフリーズやセッション再開時のコンテキスト欠落など複数の不具合が修正されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "ジャンプアカウント運用下でAWS CLI（+ AIエージェント）の認証情報を安全に扱う",
+    "url": "https://dev.classmethod.jp/articles/aws-vault-mfa-claude-code/",
+    "date": "2026-10-05",
+    "titleJa": "ジャンプアカウント運用下でAWS CLI（+ AIエージェント）の認証情報を安全に扱う",
+    "summaryJa": "ジャンプアカウント＋スイッチロール環境で AWS CLI を安全に運用するため、aws-vault と 1Password を組み合わせた認証構成を検討・構築しました。aws-vault で認証情報を OS の暗号化ストアに保管し、1Password でワンタイムパスワード（MFA）を管理することで、平文でのローカル保持を避けながら、ターミナルからも Claude Code などの AI エージェント経由でも AWS 操作を実行できるようになったことを紹介しています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "オブジェクト指向UIデザインをAgent Skillにして、Claudeが作るUIはどう変わるかの検証",
+    "url": "https://zenn.dev/emuni/articles/ooui-agent-skill",
+    "date": "2026-10-05",
+    "titleJa": "オブジェクト指向UIデザインをAgent Skillにして、Claudeが作るUIはどう変わるかの検証",
+    "summaryJa": "Claude CodeなどのAIエージェントでUI実装する際の曖昧な修正指示の課題を解決するため、オブジェクト指向UI（OOUI）の設計原則をAgent Skillとして言語化しました。名詞から動詞へ、オブジェクトが見えて直接触れる、一覧と詳細のビューを対応づける、モードレスにするという4つの原則をSkillに組み込み、Skillありとなしで同じお題からUIを生成させ比較検証した結果、Skillを与えることでタスク指向ではなくオブジェクト指向の画面構造が生成されることを確認しました。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "固定UIってもう全部必要なのか？AIがその場でUIを作る時代を考える",
+    "url": "https://zenn.dev/tonbi_attack/articles/fixed-ui-generative-ui",
+    "date": "2026-10-05",
+    "titleJa": "固定UIってもう全部必要なのか？AIがその場でUIを作る時代を考える",
+    "summaryJa": "従来、UIは利用者が将来使いそうな操作を予測して固定で作られてきましたが、AIが入ると、その場でUIを生成する方法が活用できる領域があります。重要なのはAIに任意のデータ操作をさせるのではなく、システムが安全に公開した操作を呼ばせることです。探索・分析など要望が増えやすい領域では生成UIが扱いやすい一方で、確定操作・定型操作には固定UIが向いており、操作ごとに最適なUI形式を使い分ける必要があります。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Devuntu(AI開発に最適化したプロジェクト管理ツール)を作成してみた",
+    "url": "https://zenn.dev/playree/articles/731cd212391954",
+    "date": "2026-10-05",
+    "titleJa": "Devuntu(AI開発に最適化したプロジェクト管理ツール)を作成してみた",
+    "summaryJa": "Devuntuはかんばん形式のボード管理、MCP連携、AIエージェント統合を備えたセルフホスト型プロジェクト管理ツールです。MCPサーバー機能によってAIからのチケット操作やDevuntuエージェント機能によるAIの自動処理、GitHub/GitLabとの連携、Slack通知など、AI開発に最適化された機能を多く備えており、チケット処理の自動化と就寝中の有効活用が可能になります。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "PhotoshopやIllustrator代替OSS 7種をCodexにMCP接続してみた",
+    "url": "https://zenn.dev/610birth/articles/9c1b5a701f26a2",
+    "date": "2026-10-05",
+    "titleJa": "PhotoshopやIllustrator代替OSS 7種をCodexにMCP接続してみた",
+    "summaryJa": "PhotoCraft、VectorCraft、FilmCraft、LightCraft、PrintCraft、EffectCraft、DesignCraftの7つのOSSをWindows環境に導入し、CodexからMCP経由で操作できるようにセットアップしました。合計468個のツールを認識し、LightCraftでの画像補正やPhotoCraftでの文字入れなど、実際の操作を確認できる環境を構築しています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MCPツール説明文のリンターを、Pythonの試作から採点を1点も変えずにTypeScriptへ移植した",
+    "url": "https://zenn.dev/nomunomu0504/articles/forecall-lint-port",
+    "date": "2026-10-05",
+    "titleJa": "MCPツール説明文のリンターを、Pythonの試作から採点を1点も変えずにTypeScriptへ移植した",
+    "summaryJa": "ForecallはMCPサーバーのツール説明文を目的、いつ使うか、引数、戻り値、制約と副作用、例の6項目で100点満点で採点するリンターです。Pythonでスクリプトとして試作した後、採点結果を1点も変えずにTypeScriptへ移植し、PythonとJavaScriptの正規表現や丸め方の細かい差異を吸収して、Web版とCLI版の両方で動作する構成を実現しました。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "claude mcp add の --scope local / project / user の違いと使い分け",
+    "url": "https://zenn.dev/aicoding_guide/articles/acg-claude-code-mcp-scope",
+    "date": "2026-10-05",
+    "titleJa": "claude mcp add の --scope local / project / user の違いと使い分け",
+    "summaryJa": "claude mcp add の --scope パラメータには3つのスコープがあります。既定値の local はプロジェクトで自分だけが使い、project はバージョン管理でチームに共有され、user はすべてのプロジェクトで自分が使う設定です。保存先や共有範囲が異なり、同じ名前が複数スコープにあるときは優先順位が決まります。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AIに画面操作させる前に考える、API・MCP Tool・Skill・E2Eの境界",
+    "url": "https://zenn.dev/tonbi_attack/articles/ai-operation-boundary",
+    "date": "2026-10-05",
+    "titleJa": "AIに画面操作させる前に考える、API・MCP Tool・Skill・E2Eの境界",
+    "summaryJa": "AIが外部システムを扱うとき、画面操作は高コストですが、APIやMCP Tool、Skillを適切に層分けすることで、より効率的に実行できます。APIはシステムの機能を定義し、MCPはAIに公開する操作の境界を整え、Skillは複数手順や判断基準を定義する役割があり、画面操作が必要なのはユーザー導線そのものを確かめたいE2Eテストの領域に限ります。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AIが返すJSONを信じない ― TypeScriptの「型は実行時に消える」から始めるAI開発",
+    "url": "https://zenn.dev/genhiroko/articles/468fc439f79b0b",
+    "date": "2026-10-05",
+    "titleJa": "AIが返すJSONを信じない ― TypeScriptの「型は実行時に消える」から始めるAI開発",
+    "summaryJa": "TypeScriptの型は実行時に消えるため、AIが返すJSONは外部データとして扱い、受け取り時に検証する必要があります。型アサーション（as Answer）は検証ではなく宣言にすぎず、unknown として受け取ったデータを必ず検証した後に型を信じて書くことで、AIの不安定な出力でもアプリ全体が壊れにくくなります。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "手元の .blend を Claude.ai や ChatGPT から、何も入れずにレンダリングする",
+    "url": "https://zenn.dev/renderjanction/articles/ba83bb636977f4",
+    "date": "2026-10-05",
+    "titleJa": "手元の .blend を Claude.ai や ChatGPT から、何も入れずにレンダリングする",
+    "summaryJa": "JANCTION Render は、AI エージェントが利用できるクラウド GPU レンダーファームであり、新たに upload ページを追加してローカルの .blend ファイルを簡単に AI に渡せるようにしました。ファイルを置くと 12 時間有効なリンクが生成され、そのリンクを AI に貼るだけでレンダリングが行われます。無料ベータの枠は API キーごとに 1 日 10 GPU 分で、登録やログイン不要です。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Cloudflare Web Search API を MCP 化して Firecrawl・Bright Data・Exa と使い分ける",
+    "url": "https://zenn.dev/serotoninmax/articles/cloudflare-web-search-mcp-routing",
+    "date": "2026-10-05",
+    "titleJa": "Cloudflare Web Search API を MCP 化して Firecrawl・Bright Data・Exa と使い分ける",
+    "summaryJa": "著者は Claude Code の Web 検索を SearXNG から Cloudflare Web Search API に移行し、AI Gateway 経由で ceramic・exa・linkup を切り替える MCP サーバーを実装しました。Cloudflare のキャッシュと ceramic の言語判定に関する問題の切り分けと解決方法を説明し、各 provider の特性（費用、遅延、向いている問い）と既存ツールとの役割分担構成をまとめています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "WebMCP：開いているページを、AIが呼べるAPIにする",
+    "url": "https://zenn.dev/interpark/articles/cd69dfc262c164",
+    "date": "2026-10-05",
+    "titleJa": "WebMCP：開いているページを、AIが呼べるAPIにする",
+    "summaryJa": "WebMCP は、開いている Web ページが自分の機能を AI から呼べるツールとして公開する仕組みです。著者は検索からのクリック率低下を背景に、来訪者がページ上で AI に作業させるユースケースを想定し、問い合わせフォーム自動入力のデモで実装と効果を示しています。WebMCP は検索順位向上には貢献しませんが、ユーザーが既に開いたページでの操作効率を高めます。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Hermes Agentに自社タスク管理ツールをMCPで繋いだ",
+    "url": "https://zenn.dev/tamat_llc/articles/hermes-agent-taskhub-mcp-setup",
+    "date": "2026-10-05",
+    "titleJa": "Hermes Agentに自社タスク管理ツールをMCPで繋いだ",
+    "summaryJa": "TamaT LLC は社内タスク管理ツール TaskHub を MCP サーバーとして Hermes Agent に接続し、エージェントがタスク検索・参照・更新を行えるようにしました。既存の Web UI の権限モデル（RLS、入力検証）を維持するため、汎用 DB MCP ではなく社内クエリ層を再利用する薄い MCP を自作し、認証は利用者本人の Google ログインで管理しています。実装効果を確認する一方、コンテキスト消費とログイン手動化の課題が残っています。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Delta LakeのMERGE INTOをOSSコードから読み解く —— ジョイン戦略とデータスキッピングの効き方",
+    "url": "https://zenn.dev/ivry/articles/delta-lake-merge-into-internals-and-clustering",
+    "date": "2026-10-05",
+    "titleJa": "Delta LakeのMERGE INTOをOSSコードから読み解く —— ジョイン戦略とデータスキッピングの効き方",
+    "summaryJa": "著者は Delta Lake OSS コードを読んで、MERGE INTO の内部動作を 2 段階のジョイン（ファイル特定と書き込み計算）として整理しました。ジョイン戦略が WHEN 句の組み合わせと Deletion Vectors の設定で決まること、Z-order などのデータスキッピングが ON 句のターゲット側条件にのみ依存することを詳しく解説しています。"
+  },
+  {
     "source": "claude-blog",
     "title": "How Cresta turned CX expertise into an agent builder on the Claude Agent SDK",
     "url": "https://claude.com/resources/articles/how-cresta-turned-cx-expertise-into-an-agent-builder-on-the-claude-agent-sdk",
@@ -158,6 +686,94 @@
     "date": "2026-10-05",
     "titleJa": "Agent Bricks のコードファースト エージェント開発向けドキュメント",
     "summaryJa": "Agent Bricks ドキュメントがコードでカスタムエージェントを構築、デプロイ、実行することに中心が置かれるようになりました。エージェント フレームワーク、エージェント サーバー、エージェント ランタイムの関係性や、DurableAgentServer と Agent Runtime の機能が説明されています。"
+  },
+  {
+    "source": "qiita-databricks",
+    "title": "MLflow 3.14の @mlflow.test で、エージェントの評価をpytestのテストにする",
+    "url": "https://qiita.com/taka_yayoi/items/91e13561a4ef3751df37",
+    "date": "2026-10-04",
+    "titleJa": "MLflow 3.14の @mlflow.test で、エージェントの評価をpytestのテストにする",
+    "summaryJa": "MLflow 3.14 で追加された @mlflow.test デコレータにより、mlflow.genai.evaluate() の評価結果を pytest のテストとして扱えるようになりました。エージェントの評価をテスト化することで、CI で実行して品質低下を検出できます。実験では、合格と不合格のテストを実施し、結果が MLflow の評価ランにまとまることを確認し、pytest の出力からはスコアラーの判定理由も確認できることが示されています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "AIが作った画像・動画・音声を並べて見比べるビューアをOSSで公開【Claude Code】",
+    "url": "https://zenn.dev/mohhh_ok/articles/2026-10-moodboard-ai-output-viewer",
+    "date": "2026-10-04",
+    "titleJa": "AIが作った画像・動画・音声を並べて見比べるビューアをOSSで公開【Claude Code】",
+    "summaryJa": "著者は Claude Code などのエージェントが生成した画像・動画・音声を 1 つの窓に並べて見比べるための macOS 用ビューアを MIT ライセンスで公開しました。ズーム・重ね合わせ・背景切り替えなど操作機能を備えており、エージェント向けのスキルとしても提供されており、生成物の選別効率を高めます。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "【登壇資料】DevelopersIO 2026 Osakaで「Claude Code × 複数タスクで セッション乱⽴！「Orca」の意外な使い⽅で まるごと整理してみた」というタイトルで登壇しました！ #devio2026",
+    "url": "https://dev.classmethod.jp/articles/devio2026-osaka-claude-code-orca-task-organization/",
+    "date": "2026-10-03",
+    "titleJa": "【登壇資料】DevelopersIO 2026 Osakaで「Claude Code × 複数タスクで セッション乱⽴！「Orca」の意外な使い⽅で まるごと整理してみた」というタイトルで登壇しました！ #devio2026",
+    "summaryJa": "DevelopersIO 2026 Osaka での登壇資料で、Claude Code を使用して複数タスクを並行推進する際の課題を紹介しています。セッション増加による管理の煩雑さと、ローカルフォルダとセッションの関連付けの手間を、Orca というツール上での整理によって解決した経験を述べています。Orca 上でタスクごとにセッションを組織することで、セッション迷子の防止と異なるタスク間の干渉低減が実現されました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.288 の主要アップデート - /code-review の --max-findings 追加と bash -c 内の危険な rm の確認漏れ修正",
+    "url": "https://dev.classmethod.jp/articles/20261003-cc-updates-v2-1-288/",
+    "date": "2026-10-03",
+    "titleJa": "Claude Code v2.1.288 の主要アップデート - /code-review の --max-findings 追加と bash -c 内の危険な rm の確認漏れ修正",
+    "summaryJa": "Claude Code v2.1.288 では、/code-review に報告する指摘の件数を指定する --max-findings オプションが追加され、差分が大きい場合の指摘数制御が可能になりました。また、Ctrl+C で消したプロンプトを復元できるようになり、長い指示や画像の誤削除に対応できるようになりました。さらに、bash -c 内の危険な rm が確認を経ずに実行される問題や、パス指定のルールが Write/Edit で読み込まれない問題が修正され、セキュリティと機能性が向上しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code の blockReadsOutsideWorkingDirectories で作業ディレクトリ外の読み取りを拒否してみた",
+    "url": "https://dev.classmethod.jp/articles/claude-code-block-reads-outside-working-directories/",
+    "date": "2026-10-03",
+    "titleJa": "Claude Code の blockReadsOutsideWorkingDirectories で作業ディレクトリ外の読み取りを拒否してみた",
+    "summaryJa": "Claude Code v2.1.257で追加された permissions.blockReadsOutsideWorkingDirectories 設定により、作業ディレクトリ外のファイル読み取りが権限モードに関わらず拒否されます。Read ツール、Bash（sandbox 有無）の各手段で異なる挙動が示され、/add-dir や追加設定による許可方法と効果が検証結果として示されています。"
+  },
+  {
+    "source": "qiita-databricks",
+    "title": "SnowPro CoreとDatabricks DEA、先に取るならどっち？公式ガイドを突き合わせて決めた",
+    "url": "https://qiita.com/y0shidahr/items/9bbfbe9ce3619e9b1aa4",
+    "date": "2026-10-03",
+    "titleJa": "SnowPro CoreとDatabricks DEA、先に取るならどっち？公式ガイドを突き合わせて決めた",
+    "summaryJa": "Snowflake の SnowPro Core と Databricks の DEA 認定資格について、受験料、出題数、合格ラインなどの公開情報を比較し、先に取るべき資格を判断する基準を示しています。実務経験の有無と配点情報の開示方針の違いが決定要因となり、状況別の推奨順序が提示されています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "【メモ】pstack (Claude Code 移植版pstack-claude) のスタック構成とオーケストレーションを読む",
+    "url": "https://zenn.dev/uehaj/articles/claude-code-pstack-structure-memo",
+    "date": "2026-10-03",
+    "titleJa": "【メモ】pstack (Claude Code 移植版pstack-claude) のスタック構成とオーケストレーションを読む",
+    "summaryJa": "著者は Claude Code 用プラグイン pstack-claude の内部構成を詳しく分析しました。pstack は層状に積まれた指示書（セッションフック→poteto-mode→プレイブック→原則→子エージェント）とコードで構成され、何時間も継続して高難度な修正をこなします。元の Cursor 版との移植時の置き換え規則や、マルチエージェント運用での同じ進め方の徹底が詳述されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.287 の主要アップデート - Claude Mods の追加とシェル書き込みの安全策強化",
+    "url": "https://dev.classmethod.jp/articles/20261002-cc-updates-v2-1-287/",
+    "date": "2026-10-02",
+    "titleJa": "Claude Code v2.1.287 の主要アップデート - Claude Mods の追加とシェル書き込みの安全策強化",
+    "summaryJa": "Claude Code v2.1.287では、プラグインが画面表示や動作を変更できる新機能「Claude Mods」が追加され、組み込み mod「You should know」も実装されました。シェルコマンド経由の削除・書き込みに対する確認が強化され、コミット済みシンボリックリンク経由や保護対象ファイルへのアクセスに対してセキュリティが向上しています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Codeでプロンプトインジェクションされたくないので調べてみた",
+    "url": "https://dev.classmethod.jp/articles/claude-code-prompt-injection-webfetch-domain-allowlist/",
+    "date": "2026-10-02",
+    "titleJa": "Claude Codeでプロンプトインジェクションされたくないので調べてみた",
+    "summaryJa": "WebFetch ツール使用時のプロンプトインジェクション対策として、PreToolUse フックを用いて信頼できるドメイン（公式ドキュメントと社内リポジトリ）のみへのアクセスをホワイトリスト方式で制限する実装が示されています。許可リスト外のサイトについては claude.ai で調査した内容を人間が仲介するプロセスが運用方針として提案されています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "QAエンジニアがAIと複数プロダクト横断のE2Eテスト自動化フレームワークを設計した話",
+    "url": "https://zenn.dev/qubena/articles/cf7017f4d113ab",
+    "date": "2026-10-02",
+    "titleJa": "QAエンジニアがAIと複数プロダクト横断のE2Eテスト自動化フレームワークを設計した話",
+    "summaryJa": "株式会社 COMPASS は Playwright と AI エージェント、MCP を組み合わせた複数プロダクト横断の E2E テスト自動化フレームワークを PoC 検証中です。テスト項目書からテストコード自動生成から実行・品質判定まで一気通貫で行い、各段階で品質ゲート（Drift 検査、エビデンス検証など）を設置して AI の出力を検証します。マルチプロダクト対応と既存への影響ゼロを実現する設計になっており、実運用での効果検証は今後進めるフェーズです。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Open-Jevを Databricks AI Runtime と Model Serving で動かしてみた",
+    "url": "https://zenn.dev/hiouchiy/articles/886218093d35de",
+    "date": "2026-10-02",
+    "titleJa": "Open-Jevを Databricks AI Runtime と Model Serving で動かしてみた",
+    "summaryJa": "Open-Jev（決定モデル）を AWS 東京リージョンの Databricks ワークスペースで、AI Runtime（サーバレス GPU）と Model Serving の 2 つの方式で実装・検証しました。バッチ推論では A10G で 1 秒あたり 116〜246 問を処理でき、RTX PRO 6000 を使った高性能なサービング環境も確認しています。"
   },
   {
     "source": "anthropic-news",
@@ -248,6 +864,46 @@
     "summaryJa": "ai_extract の標準（デフォルト）モードは新しいモデルチェックポイントを採用し、追加コストなしで2.3倍の高速化を実現しながら全体的な品質を向上させています。"
   },
   {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.286 の主要アップデート - --bare の変更とプラグインの npm ソース制限",
+    "url": "https://dev.classmethod.jp/articles/20261001-cc-updates-v2-1-286/",
+    "date": "2026-10-01",
+    "titleJa": "Claude Code v2.1.286 の主要アップデート - --bare の変更とプラグインの npm ソース制限",
+    "summaryJa": "Claude Code v2.1.286では、--bare オプションの動作がコマンドラインで指定した MCP サーバーのみに接続するよう変更され、プラグインのインストール時に git リポジトリやフォルダーを指す npm ソースが拒否されるようになりました。VS Code 拡張機能にはブックマーク機能が追加され、Claude の応答を保存できます。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "【登壇資料】「Claude起点の仕様駆動開発」というタイトルでDevelopersIO 2026 Osakaに登壇しました #devio2026",
+    "url": "https://dev.classmethod.jp/articles/claude-spec-driven-development-developersio-2026-osaka/",
+    "date": "2026-10-01",
+    "titleJa": "【登壇資料】「Claude起点の仕様駆動開発」というタイトルでDevelopersIO 2026 Osakaに登壇しました #devio2026",
+    "summaryJa": "DevelopersIO 2026 Osaka で、Claude Desktop、Google Stitch、Pencil.dev、Claude Code を連携させたプロダクト開発の試みについて登壇しました。デザインが仕様書の役割を担い、人間がドキュメントやソースコードを書かない開発を目指しており、MCP 連携とツールの役割分担による部分的な成功と課題が共有されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Codeにうっかり貼ってしまった秘密情報・個人情報を、送信前に止めるフックを自作してみた",
+    "url": "https://dev.classmethod.jp/articles/claude-code-hook-block-secrets-pii-before-send/",
+    "date": "2026-10-01",
+    "titleJa": "Claude Codeにうっかり貼ってしまった秘密情報・個人情報を、送信前に止めるフックを自作してみた",
+    "summaryJa": "UserPromptSubmit フックを使用して、送信前に API キー、認証情報、メールアドレスや電話番号などの個人情報を検出・ブロックし、マスク済みテキストをクリップボードに準備する仕組みが実装されています。正規表現とチェックデジット検算を組み合わせた複数のアプローチで検出され、誤検知スキップタグによる例外処理も用意されています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "脱臭は表面しか動かさない。「AI っぽさ」という代理指標と、判定の置き場所",
+    "url": "https://zenn.dev/kongyokongyo/articles/3a35a0ecf6a55a",
+    "date": "2026-10-01",
+    "titleJa": "脱臭は表面しか動かさない。「AI っぽさ」という代理指標と、判定の置き場所",
+    "summaryJa": "AI 文章から「AI っぽさ」を消す脱臭は検証の有無の代理指標で、表面のみを判定するため、意図のある圧縮を削除し中身のない平文を通す誤りが生じます。ルールは足す方向にのみ書けるため公文書的な文体に寄り、意図の有無は語ではなく意味で判定する必要があります。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Aurora PostgreSQL から Databricks Delta Lake テーブルにクエリする",
+    "url": "https://zenn.dev/ivry/articles/0b0bb60b57d4dd",
+    "date": "2026-10-01",
+    "titleJa": "Aurora PostgreSQL から Databricks Delta Lake テーブルにクエリする",
+    "summaryJa": "Aurora PostgreSQL の新機能 aurora_analytics extension と Glue の catalog federation を使い、Iceberg REST Catalog API 経由で Databricks の Delta Lake テーブルにクエリできることを検証しました。Unity Catalog のガバナンスはテーブル単位での権限制御が可能です。"
+  },
+  {
     "source": "anthropic-news",
     "title": "Barclays scales Claude to upgrade operations and improve client experience",
     "url": "https://www.anthropic.com/news/barclays-scales-claude",
@@ -312,6 +968,46 @@
     "summaryJa": "Databricks ダッシュボードに SQL データセットのマテリアライゼーション、複数テーブルの同時選択、ウィンドウメジャーの一般提供、Genie Code による編集機能の拡張などが追加されました。また、検索インデックス、PDF 出力、埋め込みダッシュボードのフィルタ表示など、複数のバグ修正と改善も実装されました。"
   },
   {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.285 の主要アップデート - バックグラウンドコマンドの時間制限と allowedProviders の追加",
+    "url": "https://dev.classmethod.jp/articles/20260930-cc-updates-v2-1-285/",
+    "date": "2026-09-30",
+    "titleJa": "Claude Code v2.1.285 の主要アップデート - バックグラウンドコマンドの時間制限と allowedProviders の追加",
+    "summaryJa": "Claude Code v2.1.285では、WebFetch ツール無効化の環境変数 CLAUDE_CODE_DISABLE_WEB_FETCH と、利用可能な API プロバイダーを制限する managed setting の allowedProviders が追加されました。セキュリティ関連の修正が多く、PowerShell 権限チェック、Artifact ツール、ストリーミング API リトライの問題が改善されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Xcode 27 の公式スキルを Claude Code から使ってみた",
+    "url": "https://dev.classmethod.jp/articles/xcode-agent-skills-claude-code/",
+    "date": "2026-09-30",
+    "titleJa": "Xcode 27 の公式スキルを Claude Code から使ってみた",
+    "summaryJa": "Xcode 27 に同梱されたスキルを Claude Code プラグインとして取り出し、実際に複数のスキルを試しました。swiftui-whats-new-27 スキルを使うと iOS 27 の新機能を活用した実装ができ、実装行数の大幅な削減や開発時間の短縮が実現できます。audit-xcode-security-settings や device-interaction など、セキュリティレビューやシミュレータでの動作確認も自動化できました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Codeサンドボックスを設定したら、1Password経由のgh/gitが動かなくなった話",
+    "url": "https://dev.classmethod.jp/articles/claude-code-sandbox-1password-gh/",
+    "date": "2026-09-30",
+    "titleJa": "Claude Codeサンドボックスを設定したら、1Password経由のgh/gitが動かなくなった話",
+    "summaryJa": "Claude Code のサンドボックス有効化により 1Password 経由の gh コマンドが失敗する問題に直面したため、その原因と解決手順をまとめました。allowMachLookup、allowedDomains、enableWeakerNetworkIsolation の 3 つの設定で必要な通信経路を段階的に開放し、さらに permissions.deny で直接の op 呼び出しを禁止することで、サンドボックスの保護を維持しながら運用できるようにしました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code on the web から複数リポジトリを操作する：Issue作成・PR作成・コミット",
+    "url": "https://dev.classmethod.jp/articles/claude-code-web-multi-repo-issues-prs/",
+    "date": "2026-09-30",
+    "titleJa": "Claude Code on the web から複数リポジトリを操作する：Issue作成・PR作成・コミット",
+    "summaryJa": "Claude Code の Web 版で複数リポジトリを接続した場合、両方のリポジトリに対して独立した Issue と Draft PR を作成できることを確認しました。また、複数のファイル変更がある状況でも、プロンプトで対象リポジトリと対象ファイルを明確に指定すれば、特定ファイルのみをコミットして PR に含める操作も可能です。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "SAP BDCナレッジ集：Delta SharingでDatasphereとSAP Databricksをつなぐ",
+    "url": "https://zenn.dev/nttdata_tech/articles/cac9b749a83b11",
+    "date": "2026-09-30",
+    "titleJa": "SAP BDCナレッジ集：Delta SharingでDatasphereとSAP Databricksをつなぐ",
+    "summaryJa": "SAP Datasphere のデータを Custom Data Product として公開し、Delta Sharing 経由で SAP Databricks へ Zero-Copy で共有する方法を検証しました。CSV データから Local Table（File）を作成し、Data Product 化、Business Data Cloud での共有設定の一連の流れを説明しています。"
+  },
+  {
     "source": "claude-blog",
     "title": "Claude for Government is now generally available",
     "url": "https://claude.com/resources/articles/claude-for-government-is-now-generally-available",
@@ -366,6 +1062,54 @@
     "date": "2026-09-30",
     "titleJa": "Anthropic の営業チームが Claude Managed Agents でインバウンド営業を再構築",
     "summaryJa": "Anthropic は Claude Managed Agents を使用して、顧客からの問い合わせに自動応答する購買エージェントを構築しました。このエージェントは毎日数千の会話を処理し、料金プランに関する質問に答え、顧客をチェックアウトに導きます。以前の形式と比べて、エスカレートされたリードはオポチュニティに転換する率が 2 倍以上となり、クローズまでの期間は約 5 日短縮されました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "CloudflareとClaude Codeを連携させてみた",
+    "url": "https://dev.classmethod.jp/articles/cloudflare-agent-setup-claude-code/",
+    "date": "2026-09-29",
+    "titleJa": "CloudflareとClaude Codeを連携させてみた",
+    "summaryJa": "Cloudflare の公式ドキュメント「Agent setup」に従い、Claude Code に Cloudflare plugin（Cloudflare Skills と MCP サーバー）をインストールしました。プラグインマーケットプレイスの登録とプラグインのインストールの 2 ステップで、Claude Code から Cloudflare リソースにアクセスできるようになります。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Clawd をもっと愛でたい ~statusLine 編~",
+    "url": "https://dev.classmethod.jp/articles/love-clawd-claude-code/",
+    "date": "2026-09-29",
+    "titleJa": "Clawd をもっと愛でたい ~statusLine 編~",
+    "summaryJa": "Claude Code の公式マスコット Clawd を statusLine で常に愛でられるようにカスタマイズしました。コンテキスト使用率に応じて Clawd を 5 段階で太らせ、一定以上の使用率では色も変わるようにしています。さらに Claude の応答中にアニメーションさせることで、実用性を兼ねた楽しい statusLine を実現しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "【登壇資料】 いちAWSエンジニアのAI活用を振り返る #devio2026",
+    "url": "https://dev.classmethod.jp/articles/devio2026-osaka-kawahara/",
+    "date": "2026-09-29",
+    "titleJa": "【登壇資料】 いちAWSエンジニアのAI活用を振り返る #devio2026",
+    "summaryJa": "DevelopersIO 2026 Osaka で、AWS エンジニアの AI 活用の変化について登壇しました。2025年前半から後半にかけて、AI ツールが AI-Starter・simonw/llm から Claude Code 中心へと移行し、AWS MCP Server や DuckDB Skills などの連携により、技術調査から IaC 生成まで多様な用途で活用されるようになったことを紹介しています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.284 の主要アップデート - Sonnet 5.5 登場 と auto mode 既定化の全プラン拡大",
+    "url": "https://dev.classmethod.jp/articles/20260929-cc-updates-v2-1-284/",
+    "date": "2026-09-29",
+    "titleJa": "Claude Code v2.1.284 の主要アップデート - Sonnet 5.5 登場 と auto mode 既定化の全プラン拡大",
+    "summaryJa": "Claude Code v2.1.284 では Claude Sonnet 5.5 が追加され、Anthropic API における Sonnet の既定モデルになりました。セキュリティ面では権限モード未設定時に auto mode で開始する変更が全プラン・全プロバイダーに拡大され、compact 後もエラーから抜け出せない問題や破損したレスポンスストリームの表示の問題も修正されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "自作のClaude Code SkillをPluginにしてみた",
+    "url": "https://dev.classmethod.jp/articles/create-claude-code-plugin-from-skill/",
+    "date": "2026-09-29",
+    "titleJa": "自作のClaude Code SkillをPluginにしてみた",
+    "summaryJa": "draw.io Skill を Claude Code Plugin としてパッケージ化し、GitHub からインストールできるようにしました。marketplace.json と plugin.json を作成し、claude plugin validate で検証した後に GitHub リポジトリに公開することで、他のプロジェクトからも効率的に Skill を利用できるようになります。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "非構造化データはどう持つ？ Snowflake・Databricks・Lanceの公式ドキュメントを読んで整理する",
+    "url": "https://zenn.dev/khorosho/articles/93273783cab820",
+    "date": "2026-09-29",
+    "titleJa": "非構造化データはどう持つ？ Snowflake・Databricks・Lanceの公式ドキュメントを読んで整理する",
+    "summaryJa": "Snowflake、Databricks、Lance の公式ドキュメントを元に、PDF や画像などの非構造化データの保存・管理方法を比較しました。Databricks の Unity Catalog Volume の FILE 型と Medallion Architecture の関係、Snowflake の Directory Table と Stage、Lance の設計思想を説明しています。"
   },
   {
     "source": "claude-blog",
@@ -430,6 +1174,46 @@
     "date": "2026-09-29",
     "titleJa": "Genie One のメモリ機能が一般提供開始",
     "summaryJa": "Genie One のメモリ機能が一般提供されました。ユーザーの好みや報告規約などを保存し、後の会話で活用できます。メモリはユーザープライベートで、他のユーザーとは共有されません。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code on the web で複数リポジトリを接続する：CLAUDE.md・Skillsの挙動",
+    "url": "https://dev.classmethod.jp/articles/claude-code-web-multiple-repositories/",
+    "date": "2026-09-28",
+    "titleJa": "Claude Code on the web で複数リポジトリを接続する：CLAUDE.md・Skillsの挙動",
+    "summaryJa": "Claude CodeのWeb版で複数リポジトリを追加したときの動作を検証しました。クラウド環境側で「追加リポジトリのCLAUDE.mdも読み込む設定」が有効化されているため、複数のCLAUDE.mdと Skillsが同時に読み込まれ、選択順に関わらず両方のリポジトリの指示が適用される挙動を確認しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "AWS DevOps AgentをClaude Codeから使えるようにセットアップしてみた（Agent Toolkit for AWS）",
+    "url": "https://dev.classmethod.jp/articles/aws-devops-agent-claude-code-agent-toolkit-setup/",
+    "date": "2026-09-28",
+    "titleJa": "AWS DevOps AgentをClaude Codeから使えるようにセットアップしてみた（Agent Toolkit for AWS）",
+    "summaryJa": "AWS DevOps AgentをClaude Codeから利用するための「Agent Toolkit for AWS」のセットアップ手順を実施しました。セットアップにより AWS MCP Server と 24 個の AWS スキルが導入され、Claude Code から DevOps Agent に接続して AWS リソースの調査ができるようになります。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "スキルの管理をしたい ~スキルとおむすび~",
+    "url": "https://zenn.dev/relic_tech/articles/12c134597dca54",
+    "date": "2026-09-28",
+    "titleJa": "スキルの管理をしたい ~スキルとおむすび~",
+    "summaryJa": "AI エージェントのスキルは自然言語で書かれるため、変更の影響を検知しにくくリグレッションが見えない状態になりやすい課題があります。要求工学の手法を参考に、PRD との対応管理、曖昧さの自動検査、実行結果の記録・評価により、スキルの品質管理を実現しています。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Genie One + UC Function + SkillでAgentを作る",
+    "url": "https://zenn.dev/data_and_ai/articles/analytics_agent_databricks",
+    "date": "2026-09-28",
+    "titleJa": "Genie One + UC Function + SkillでAgentを作る",
+    "summaryJa": "Databricks の Genie One に Python の統計処理関数（UC Function）を組み込み、自然言語での統計検定依頼に対応するエージェントを実装しました。SQL 内から UC Function を呼ぶ方法により、ウェアハウス内で全行データを処理できることを確認しています。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "RLVRを理解する②──DatabricksでのSQL生成品質向上例",
+    "url": "https://zenn.dev/gixo/articles/rlvr-databricks-text2sql-tao",
+    "date": "2026-09-28",
+    "titleJa": "RLVRを理解する②──DatabricksでのSQL生成品質向上例",
+    "summaryJa": "Databricks が組織固有のルール・スキーマに対応した Text-to-SQL モデルを実装するため、「TAO（オフライン学習）→ オンライン RLVR（GRPO）→ self-consistency」の 5 段階の手順を採用しました。BIRD ベンチマークで追加データや商用モデルなしに精度向上を実現し、Agent Bricks への統合を予定しています。"
   },
   {
     "source": "claude-blog",
@@ -552,6 +1336,22 @@
     "summaryJa": "xAI の最新モデル Grok 4.7 が Unity Gateway で利用可能になりました。Foundation Model API を通じてアクセスでき、使用量に応じた従量課金制となっています。"
   },
   {
+    "source": "classmethod-claudecode",
+    "title": "【小ネタ】Claude Code on the web でリポジトリを12個同時接続してみた",
+    "url": "https://dev.classmethod.jp/articles/claude-code-web-twelve-repositories/",
+    "date": "2026-09-27",
+    "titleJa": "【小ネタ】Claude Code on the web でリポジトリを12個同時接続してみた",
+    "summaryJa": "Claude CodeのWeb版で12個のリポジトリを同時接続し、セッションの起動とファイルの読み取りが問題なく動作することを確認しました。URLのqueryパラメーター repositories を使って複数リポジトリを事前選択できることも検証されました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "[アップデート] Agent Toolkit for AWS で AWS Startup Advisor プラグインが利用可能になったので試してみた",
+    "url": "https://dev.classmethod.jp/articles/20260927-aws-startup-advisor/",
+    "date": "2026-09-27",
+    "titleJa": "[アップデート] Agent Toolkit for AWS で AWS Startup Advisor プラグインが利用可能になったので試してみた",
+    "summaryJa": "AWS Startup Advisor プラグインが Agent Toolkit for AWS のマーケットプレースに追加されました。このプラグインの architect-for-startups スキルは、スタートアップの成長段階に合わせた AWS 構成の助言とレビューを提供し、11個のスキルとサブエージェント、検証スクリプトから構成されています。"
+  },
+  {
     "source": "databricks-release-notes",
     "title": "Usage tracking adds session metadata and token details (Public Preview)",
     "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#usage-tracking-adds-session-metadata-and-token-details-public-preview",
@@ -566,6 +1366,46 @@
     "date": "2026-09-27",
     "titleJa": "利用状況トラッキングにセッションメタデータとトークン詳細情報が追加（パブリックプレビュー）",
     "summaryJa": "Unity Gateway の system.ai_gateway.usage システムテーブルが、コーディングエージェントのセッションメタデータと呼び出し元情報を記録するようになりました。プロンプトキャッシュに書き込まれたトークンやファイル・ウェブ検索数など、新しいトークン詳細フィールドが追加されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code on the web の設定項目を整理する：環境変数・API認証情報・ネットワーク・スクリプト",
+    "url": "https://dev.classmethod.jp/articles/claude-code-cloud-environment-settings/",
+    "date": "2026-09-26",
+    "titleJa": "Claude Code on the web の設定項目を整理する：環境変数・API認証情報・ネットワーク・スクリプト",
+    "summaryJa": "Claude CodeのWeb版の環境設定について、環境変数・セットアップスクリプト・ネットワークアクセス・API認証情報の4つの項目の役割と挙動を検証しました。環境変数はコマンドから直接読み取れる一方、セットアップスクリプト内での export はセッションに反映されないなど、各設定項目の特性が異なることを確認しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.282〜v2.1.283 の主要アップデート - /doctor prompt-audit の追加と auto mode の既定化",
+    "url": "https://dev.classmethod.jp/articles/20260924-cc-updates-v2-1-283/",
+    "date": "2026-09-26",
+    "titleJa": "Claude Code v2.1.282〜v2.1.283 の主要アップデート - /doctor prompt-audit の追加と auto mode の既定化",
+    "summaryJa": "Claude Code v2.1.282〜v2.1.283のアップデートでは、プロンプトの古い書き方を監査する /doctor prompt-audit が追加され、管理者向けにモデルを制限する managed settings（deniedModels、availableModelsMatch）が実装されました。セキュリティ修正も11件含まれており、特に権限ルールや Windows 環境での削除制限に関する改善が行われています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude初心者がAutoModeでも安心できるセキュリティ設定をしてみた話",
+    "url": "https://dev.classmethod.jp/articles/claude-security-configuration-tips/",
+    "date": "2026-09-25",
+    "titleJa": "Claude初心者がAutoModeでも安心できるセキュリティ設定をしてみた話",
+    "summaryJa": "自動モードで開発効率を上げながら破壊的な操作を防ぐため、Bashサンドボックス・permissions・hooksを組み合わせた多層防御を検証しました。hooks で危険なコマンドを事前に遮断し、permissions で allow/ask/deny を振り分け、Bashサンドボックスで OS レベルのアクセスを制限する3層の役割分担により、確認プロンプトを減らしつつ安全性を確保できることを確認しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude の自動実行が権限不足のエラーが出るときの原因と対処法",
+    "url": "https://dev.classmethod.jp/articles/claude-code-permission-error-fix/",
+    "date": "2026-09-25",
+    "titleJa": "Claude の自動実行が権限不足のエラーが出るときの原因と対処法",
+    "summaryJa": "Claude の自動実行でコネクタの権限不足エラーが発生する原因は、自動実行では承認ダイアログが表示されないため「常に許可」の設定が必須となるのに対し、組織レベルの権限設定でこの選択肢が無効化されていることにあります。組織管理者が権限コントロール設定で「常に許可」を選択可能にすることで、問題が解消されることを確認しました。"
+  },
+  {
+    "source": "zenn-databricks",
+    "title": "Agent MetadataでDatabricks Genieの挙動はどう変わるか？",
+    "url": "https://zenn.dev/ivry/articles/0cc8fde9067891",
+    "date": "2026-09-25",
+    "titleJa": "Agent MetadataでDatabricks Genieの挙動はどう変わるか？",
+    "summaryJa": "Databricks Genie を使う際、社内用語と実際のメトリック名がズレることによる問題を解決するため、メトリックビューのAgent Metadata機能、特にsynonyms項目を試しました。社内特有の略語や複数の指標を指す言葉にsynonymsを登録すると、Genieが意図した指標を引ける確率が向上しますが、ドメイン間で同じ言葉が使われている場合など完全には直らないケースもあり、事前に言葉と指標の定義を決めることが重要です。"
   },
   {
     "source": "databricks-release-notes",
@@ -598,6 +1438,38 @@
     "date": "2026-09-25",
     "titleJa": "Genie Code がインテリジェントなドキュメント処理パイプラインを構築できるようになった",
     "summaryJa": "Genie Code がインテリジェントなドキュメント処理パイプラインの構築に対応しました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "AIが作ったHTMLをGoogle Workspaceで社内限定公開する方法（スキル付き！）",
+    "url": "https://dev.classmethod.jp/articles/html-service-20260924/",
+    "date": "2026-09-24",
+    "titleJa": "AIが作ったHTMLをGoogle Workspaceで社内限定公開する方法（スキル付き！）",
+    "summaryJa": "Claude Code で作成した HTML レポートを、Google Apps Script と clasp を使って Google Workspace 内で社内限定公開する方法が紹介されています。Agent Skill 化することで、「HTMLでまとめて社内限定で公開して」と一言指示するだけでレポート作成から URL 発行まで完結し、同じ URL で更新内容が反映される仕組みが構築されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "settings.json を Claude Code 自身に書き換えさせない方法を検証した～deny ルールと保護されたパス（protected paths）について",
+    "url": "https://dev.classmethod.jp/articles/claude-code-protect-settings-json-deny-rule-protected-paths/",
+    "date": "2026-09-24",
+    "titleJa": "settings.json を Claude Code 自身に書き換えさせない方法を検証した～deny ルールと保護されたパス（protected paths）について",
+    "summaryJa": "Claude Code の settings.json 保護について、deny ルールと保護されたパスが検証されています。Edit(//**/.claude/settings.json) で Edit / Write 経由の書き換えはブロック可能ですが、Bash 経由のコマンド実行はブロックできないこと、また .claude/settings.json は deny がなくても保護されたパスとして保護される一方で権限モードによって挙動が変わることが示されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.281 の主要アップデート - attribution: false の追加と rm -rf の確認強化",
+    "url": "https://dev.classmethod.jp/articles/20260924-cc-updates-v2-1-281/",
+    "date": "2026-09-24",
+    "titleJa": "Claude Code v2.1.281 の主要アップデート - attribution: false の追加と rm -rf の確認強化",
+    "summaryJa": "Claude Code v2.1.281 が 176 件の変更でリリースされました。Claude のコミットトレーラーを非表示にする \"attribution\": false が追加され、危険な rm コマンドの確認が強化されて 2 分後に自動拒否されるようになりました。auto モードや --dangerously-skip-permissions での無人実行時の挙動が複数変更されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "[書評]AIを毎日使っているエンジニアこそ読むべき「［みのるん式］ビジネスパーソンのためのClaude Code仕事術」は自分のAIを育てる指南書 #みのるん式",
+    "url": "https://dev.classmethod.jp/articles/minorun-method-claude-code-technique/",
+    "date": "2026-09-24",
+    "titleJa": "[書評]AIを毎日使っているエンジニアこそ読むべき「［みのるん式］ビジネスパーソンのためのClaude Code仕事術」は自分のAIを育てる指南書 #みのるん式",
+    "summaryJa": "「［みのるん式］ビジネスパーソンのためのClaude Code仕事術」の書評で、AIを毎日使うエンジニアこそ読むべき本として推奨されています。本書では「何でもAIに相談する癖」「半自動化のサイクル」「コンテキストの複利」という 3 つの仕事術を通じて、自分専用のAI秘書を育てる方法が全 296 ページで解説されています。"
   },
   {
     "source": "databricks-release-notes",
@@ -646,6 +1518,38 @@
     "date": "2026-09-24",
     "titleJa": "Genie One の機能拡張",
     "summaryJa": "Genie One では、テキストファイルのアップロード、リアルタイムストリーミング応答、チャットのダウンロード機能が追加されました。さらに、チャットのピン留め、10 MB 以上のファイルアップロード対応、自動ツールアクション承認も実装されています。"
+  },
+  {
+    "source": "qiita-claudeskills",
+    "title": "【Claude Skill解説・後編】自作Skill「japanese-web-design」を公開し、実案件で試し、ChatGPTに負けて、直した話",
+    "url": "https://qiita.com/norizou4/items/d56186216ef6907bec46",
+    "date": "2026-09-23",
+    "titleJa": "【Claude Skill解説・後編】自作Skill「japanese-web-design」を公開し、実案件で試し、ChatGPTに負けて、直した話",
+    "summaryJa": "自作 Claude Skill 「japanese-web-design」を実案件に適用したところ ChatGPT に負け、その原因を掘った結果 Skill の設計に根本的な欠落が見つかった過程が記述されています。削らないルール、画像解析スクリプト、スクロール連動フェードインの実装など、複数の修正ラウンドを通じて Skill が改善されていきました。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Claude Code v2.1.280 の主要アップデート - Fable 5.1 と GPT-6 Astra 超えの最新モデル Opus 5.5 の登場",
+    "url": "https://dev.classmethod.jp/articles/20260923-cc-updates-v2-1-280/",
+    "date": "2026-09-23",
+    "titleJa": "Claude Code v2.1.280 の主要アップデート - Fable 5.1 と GPT-6 Astra 超えの最新モデル Opus 5.5 の登場",
+    "summaryJa": "Claude Code v2.1.280 が 114 件の変更でリリースされました。Claude Opus 5.5 が既定の Opus モデルになり料金が 20% 削減されたほか、Pro・Team Standard プランの既定モデルが Sonnet から Opus に変更されました。ダイアログの y/n キー操作変更やシンボリックリンク経由の書き込み判定修正など複数の破壊的変更が含まれています。"
+  },
+  {
+    "source": "classmethod-databricks",
+    "title": "Databricks 上で Delta テーブルの基本操作を試してみた",
+    "url": "https://dev.classmethod.jp/articles/delta-table-basic-try-on-databricks/",
+    "date": "2026-09-23",
+    "titleJa": "Databricks 上で Delta テーブルの基本操作を試してみた",
+    "summaryJa": "Databricks 上で Delta Lake の基本操作を実践した記事で、タイムトラベル、ロールバック、最適化、VARIANT 型対応、制約設定などが検証されています。Delta Lake はトランザクションログと Parquet ファイルで構成され、マネージドテーブルと外部テーブルの 2 種類があることが説明されています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "記事と読書中の AI 対話を知識ベースに蒸留する個人パイプライン",
+    "url": "https://zenn.dev/20220227/articles/a2eec69bbde9b2",
+    "date": "2026-09-23",
+    "titleJa": "記事と読書中の AI 対話を知識ベースに蒸留する個人パイプライン",
+    "summaryJa": "読んだ記事とAIとの対話から得た知識を知識ベースに蒸留する個人パイプライン「K-Boat」の構築について述べています。既製プロダクト（Claude、Gemini、Obsidian、Gemini Notebook）を組み合わせ、自作したのはそれらをつなぐ処理プログラムとAgent Skillsだけ。記事本文由来と対話由来の知識を区別して概念ごとに蓄積し、後から問い合わせて引き出せる仕組みになっています。"
   },
   {
     "source": "anthropic-news",

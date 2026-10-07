@@ -27,9 +27,11 @@ export function TrendList({ items, showSource = true }: { items: TrendEntry[]; s
                 <ExternalLink href={it.url}>{it.titleJa}</ExternalLink>
               </h3>
               <p className="mt-1 text-sm leading-relaxed">{it.summaryJa}</p>
-              <p lang="en" className="mt-1 text-xs break-words text-muted">
-                原題：{it.title}
-              </p>
+              {it.title !== it.titleJa && (
+                <p lang="en" className="mt-1 text-xs break-words text-muted">
+                  原題：{it.title}
+                </p>
+              )}
             </article>
           </li>
         );
