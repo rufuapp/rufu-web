@@ -6,6 +6,7 @@ import { databricksGenai } from './databricks-genai';
 import { claudeApi } from './claude-api';
 import { claudePrompting } from './claude-prompting';
 import { claudeCodeMcp } from './claude-code-mcp';
+import { claudeVocabulary } from './claude-vocabulary';
 
 export const QUESTIONS: Question[] = [
   ...databricksDataEngineer,
@@ -15,6 +16,7 @@ export const QUESTIONS: Question[] = [
   ...claudeApi,
   ...claudePrompting,
   ...claudeCodeMcp,
+  ...claudeVocabulary,
 ];
 
 export function questionsForExam(examId: string): Question[] {

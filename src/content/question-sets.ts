@@ -1,4 +1,5 @@
 import type { QuestionSet, TrackId } from '@/lib/quiz/types';
+import { CLAUDE_VOCABULARY } from '@/content/vocabulary/claude';
 
 export const TRACKS: Record<TrackId, { name: string; tagline: string; accent: string }> = {
   databricks: {
@@ -119,6 +120,22 @@ export const QUESTION_SETS: QuestionSet[] = [
       { id: 'extend', name: '拡張' },
       { id: 'mcp', name: 'MCP' },
     ],
+  },
+  {
+    id: 'claude-vocabulary',
+    track: 'claude',
+    kind: 'vocabulary',
+    title: 'Claude 頻出英単語 問題集',
+    shortTitle: '頻出英単語',
+    level: '入門',
+    summary: '設問の言い回しと、API・エージェント・安全性・運用でよく使われる英単語の意味を、例文を読みながら確かめます。',
+    certificationIds: [
+      'claude-certified-associate-foundations',
+      'claude-certified-developer-foundations',
+      'claude-certified-architect-foundations',
+      'claude-certified-architect-professional',
+    ],
+    domains: CLAUDE_VOCABULARY.map((g) => ({ id: g.id, name: g.name })),
   },
 ];
 

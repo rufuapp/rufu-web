@@ -36,6 +36,18 @@ beforeEach(() => {
 });
 
 describe('ExamClient', () => {
+  it('英単語の問題集では、設問の例文を英語として表示する', () => {
+    const vocabSet = getQuestionSet('claude-vocabulary')!;
+    const vocabQuestions = questionsForExam('claude-vocabulary');
+    render(<ExamClient set={vocabSet} questions={vocabQuestions} />);
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
+    fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
+
+    const heading = screen.getByRole('heading', { level: 2, name: (n) => vocabQuestions.some((q) => q.question === n) });
+    const q = vocabQuestions.find((x) => x.question === heading.textContent)!;
+    expect(screen.getByText(q.passage!)).toHaveAttribute('lang', 'en');
+  });
+
   it('練習モードで正解すると解説が出て、最後に結果と記録が残る', () => {
     render(<ExamClient set={set} questions={questions} />);
     fireEvent.click(screen.getByRole('radio', { name: '5問' }));

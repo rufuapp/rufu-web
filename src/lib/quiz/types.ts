@@ -18,6 +18,8 @@ export type QuestionSet = {
   /** 関連する資格（certifications.ts の id） */
   certificationIds: string[];
   domains: Domain[];
+  /** 英単語の問題集（単語帳から問題を作る。今日の一問には出さない） */
+  kind?: 'vocabulary';
 };
 
 export type Question = {
@@ -27,6 +29,8 @@ export type Question = {
   domain: string;
   type: 'single' | 'multi';
   question: string;
+  /** 設問で読む英文（英単語の問題で、例文を示すときに使う） */
+  passage?: string;
   code?: string;
   choices: string[];
   /** choices のインデックス（0始まり） */
@@ -73,9 +77,35 @@ export type StudyTopic = {
   intro: string[];
   points: { heading: string; body: string }[];
   terms: { term: string; desc: string }[];
+  /** 単語帳（英単語の学習ガイドだけが持つ） */
+  vocabulary?: VocabularyGroup[];
   resources: Resource[];
   /** この内容を確かめられる問題集と分野 */
   practice: { setId: string; domains: string[] }[];
+};
+
+export type PartOfSpeech = '名詞' | '動詞' | '形容詞' | '句';
+
+/** 単語帳の1語 */
+export type VocabularyWord = {
+  en: string;
+  pos: PartOfSpeech;
+  /** 意味（問題の選択肢にも使うので短くする） */
+  ja: string;
+  /** 補足（よく知られた意味との違いなど） */
+  note?: string;
+  /** 例文（en を含める。大文字・小文字と、語尾の変化は問わない） */
+  example: string;
+  exampleJa: string;
+  /** 意味が近くて紛らわしいため、誤答の選択肢に使わない語（en で指定） */
+  avoid?: string[];
+};
+
+/** 単語帳の分野。id は英単語の問題集の分野 id と同じにする */
+export type VocabularyGroup = {
+  id: string;
+  name: string;
+  words: VocabularyWord[];
 };
 
 export type QuizMode = 'practice' | 'mock' | 'review';
