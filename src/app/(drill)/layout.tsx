@@ -2,7 +2,7 @@ import type { Viewport } from 'next';
 import { SiteFooter, SiteHeader } from '@/components/quiz/SiteChrome';
 
 export const viewport: Viewport = {
-  themeColor: '#f8faf8',
+  themeColor: '#fbf9f3',
   colorScheme: 'light',
 };
 

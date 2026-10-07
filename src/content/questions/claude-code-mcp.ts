@@ -83,10 +83,10 @@ export const claudeCodeMcp: Question[] = [
     examId,
     domain: 'extend',
     type: 'single',
-    question: 'よく使う手順を、チームで共有できる独自のスラッシュコマンドにしたい。どこにファイルを置くか。',
-    choices: ['.claude/commands/ に Markdown ファイルを置く', '~/.bashrc にエイリアスを書く', 'node_modules/ に置く', '.github/workflows/ に置く'],
+    question: 'よく使う手順を、/deploy のように呼び出せる独自のコマンドにして、チームで共有したい。現在推奨される定義の方法はどれか。',
+    choices: ['.claude/skills/deploy/SKILL.md にスキルとして定義する', '~/.bashrc にエイリアスを書く', 'node_modules/ にスクリプトを置く', '.github/workflows/ にワークフローを書く'],
     answer: [0],
-    explanation: '.claude/commands/ に置いた Markdown ファイルは、ファイル名をコマンド名とするスラッシュコマンドになります。リポジトリにコミットすればチームで共有できます（スキルとして定義する方法もあります）。',
+    explanation: 'カスタムコマンドはスキルに統合されました。.claude/skills/deploy/SKILL.md を置くと /deploy で呼び出せ、リポジトリにコミットすればチームで共有できます。従来の .claude/commands/deploy.md も引き続き使えます。',
   },
   {
     id: 'ccm-08',

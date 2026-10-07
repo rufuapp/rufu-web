@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { EXAMS, TRACKS, domainName, getExam } from '@/content/exams';
+import { QUESTION_SETS, domainName, getQuestionSet } from '@/content/question-sets';
 import { QUESTIONS, questionsForExam } from '@/content/questions';
+import { topicForDomain } from '@/content/catalog';
 import { emptyProgress, examStat, localDate, streakDays } from '@/lib/quiz/progress';
 import { updateProgress, useIsClient, useProgress } from '@/lib/quiz/store';
-import { rateColor, tint } from './style';
+import { rateColor } from './style';
 
 const MODE_NAME = { practice: '練習', mock: '模試', review: '苦手克服' } as const;
 
@@ -15,149 +16,191 @@ export function ProgressClient() {
   const progress = useProgress();
   const [confirmReset, setConfirmReset] = useState(false);
 
-  if (!isClient) return <div className="card mt-10 h-96 animate-pulse" aria-hidden />;
+  if (!isClient) return <div className="box mt-8 h-64" aria-hidden />;
 
   const all = examStat(progress, QUESTIONS.map((q) => q.id));
   const streak = streakDays(progress, localDate());
 
   if (all.answered === 0) {
     return (
-      <div className="card mt-10 px-6 py-14 text-center">
+      <div className="box mt-8 px-6 py-12 text-center">
         <p className="text-lg font-bold">まだ記録がありません</p>
-        <p className="mt-2 text-sm text-muted">問題を解くと、ここに正答率や苦手な分野が表示されます。</p>
-        <Link href="/exams" className="btn btn-primary mt-6">
-          試験を選ぶ
+        <p className="mt-2 text-muted">問題を解くと、ここに正答率や苦手な分野が表示されます。</p>
+        <Link href="/#question-sets" className="btn btn-primary mt-6">
+          問題集を選ぶ
         </Link>
       </div>
     );
   }
 
-  const tiles = [
-    { k: '連続学習', v: streak, u: '日', cls: streak > 0 ? 'text-brand' : '' },
-    { k: '解いた問題', v: all.answered, u: `/${all.total}`, cls: '' },
-    { k: '通算正答率', v: Math.round(all.accuracy * 100), u: '%', cls: '' },
-    { k: '苦手な問題', v: all.weak, u: '問', cls: all.weak > 0 ? 'text-warn' : '' },
-  ];
+  // 解いたことのある分野を、正答率の低い順に
+  const weakDomains = QUESTION_SETS.flatMap((set) => {
+    const qs = questionsForExam(set.id);
+    return set.domains
+      .map((d) => ({ set, domain: d.id, stat: examStat(progress, qs.filter((q) => q.domain === d.id).map((q) => q.id)) }))
+      .filter((x) => x.stat.answered > 0 && x.stat.accuracy < 0.7);
+  }).sort((a, b) => a.stat.accuracy - b.stat.accuracy);
 
   return (
-    <div className="mt-10 space-y-12">
-      <dl className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {tiles.map((s) => (
-          <div key={s.k} className="card p-5">
-            <dt className="text-xs text-muted">{s.k}</dt>
-            <dd className={`mt-2 text-4xl font-black tracking-tight tabular-nums ${s.cls}`}>
-              {s.v}
-              <span className="ml-0.5 text-sm font-semibold text-muted">{s.u}</span>
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <div className="mt-8 space-y-12">
+      <table className="ruled">
+        <tbody>
+          <tr>
+            <th scope="row" className="w-1/2 font-normal text-muted">
+              連続学習
+            </th>
+            <td className="font-bold tabular-nums">{streak} 日</td>
+          </tr>
+          <tr>
+            <th scope="row" className="font-normal text-muted">
+              解いた問題
+            </th>
+            <td className="font-bold tabular-nums">
+              {all.answered} / {all.total} 問
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" className="font-normal text-muted">
+              通算の正答率
+            </th>
+            <td className="font-bold tabular-nums">{Math.round(all.accuracy * 100)}%</td>
+          </tr>
+          <tr>
+            <th scope="row" className="font-normal text-muted">
+              苦手な問題（直近で不正解）
+            </th>
+            <td className="font-bold tabular-nums">{all.weak} 問</td>
+          </tr>
+        </tbody>
+      </table>
 
       <section>
-        <h2 className="text-xl font-bold tracking-tight">試験別</h2>
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">
-          {EXAMS.map((exam) => {
-            const qs = questionsForExam(exam.id);
-            const stat = examStat(progress, qs.map((q) => q.id));
-            const domainStats = exam.domains
-              .map((d) => ({ d, s: examStat(progress, qs.filter((q) => q.domain === d.id).map((q) => q.id)) }))
-              .filter((x) => x.s.answered > 0);
-            const weakest = [...domainStats].sort((a, b) => a.s.accuracy - b.s.accuracy)[0];
-            return (
-              <div key={exam.id} className="card flex flex-col p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <span className="chip tint" style={tint(TRACKS[exam.track].accent)}>
-                      <span className="size-1.5 rounded-full bg-current" />
-                      {TRACKS[exam.track].name}
-                    </span>
-                    <Link href={`/exams/${exam.id}`} className="mt-2 block text-lg font-bold tracking-tight hover:underline">
-                      {exam.shortTitle}
-                    </Link>
-                  </div>
-                  <div className="text-right">
-                    {stat.answered ? (
-                      <p className="text-2xl font-black tracking-tight tabular-nums">{Math.round(stat.accuracy * 100)}%</p>
-                    ) : (
-                      <p className="pt-1.5 text-sm font-semibold text-muted">未挑戦</p>
-                    )}
-                    <p className="text-xs text-muted">
-                      {stat.answered}/{stat.total} 問
-                    </p>
-                  </div>
-                </div>
-                {domainStats.length > 0 && (
-                  <div className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-                    {domainStats.map(({ d, s }) => (
-                      <div key={d.id}>
-                        <div className="mb-1 flex justify-between gap-2 text-xs">
-                          <span>{domainName(exam, d.id)}</span>
-                          <span className="text-muted tabular-nums">{Math.round(s.accuracy * 100)}%</span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-subtle">
-                          <div
-                            className="bar-fill h-full rounded-full"
-                            style={{ width: `${s.accuracy * 100}%`, backgroundColor: rateColor(s.accuracy) }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <div className="flex-1" />
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-                  {weakest && weakest.s.accuracy < 0.7 ? (
-                    <p className="text-xs text-muted">
-                      伸びしろ：<span className="font-semibold text-warn">{weakest.d.name}</span>
-                    </p>
-                  ) : (
-                    <span />
-                  )}
-                  {stat.weak > 0 ? (
-                    <Link href={`/exams/${exam.id}?mode=review`} className="btn bg-warn/10 px-4 py-2 text-xs text-warn hover:bg-warn/15">
-                      苦手 {stat.weak} 問を解く
-                    </Link>
-                  ) : (
-                    <Link href={`/exams/${exam.id}`} className="btn btn-secondary px-4 py-2 text-xs">
-                      解く
-                    </Link>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        <h2 className="mb-3 border-l-4 border-ink pl-3 text-lg">問題集ごとの記録</h2>
+        <div className="overflow-x-auto">
+          <table className="ruled">
+            <thead>
+              <tr>
+                <th scope="col">問題集</th>
+                <th scope="col">解答済み</th>
+                <th scope="col">正答率</th>
+                <th scope="col">
+                  <span className="sr-only">操作</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {QUESTION_SETS.map((set) => {
+                const stat = examStat(progress, questionsForExam(set.id).map((q) => q.id));
+                return (
+                  <tr key={set.id}>
+                    <th scope="row" className="font-normal">
+                      <Link href={`/question-sets/${set.id}`} className="link">
+                        {set.title}
+                      </Link>
+                    </th>
+                    <td className="whitespace-nowrap tabular-nums">
+                      {stat.answered} / {stat.total}
+                    </td>
+                    <td className="whitespace-nowrap tabular-nums" style={stat.answered ? { color: rateColor(stat.accuracy) } : undefined}>
+                      {stat.answered ? `${Math.round(stat.accuracy * 100)}%` : <span className="text-muted">未挑戦</span>}
+                    </td>
+                    <td className="text-right text-sm whitespace-nowrap">
+                      {stat.weak > 0 && (
+                        <Link href={`/question-sets/${set.id}?mode=review`} className="link text-warn">
+                          苦手 {stat.weak} 問を解く
+                        </Link>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </section>
 
-      {progress.sessions.length > 0 && (
+      {weakDomains.length > 0 && (
         <section>
-          <h2 className="text-xl font-bold tracking-tight">最近の挑戦</h2>
-          <ul className="card mt-4 divide-y divide-line">
-            {progress.sessions.slice(0, 10).map((s, i) => {
-              const exam = getExam(s.examId);
-              const rate = s.total ? s.correct / s.total : 0;
-              return (
-                <li key={`${s.at}-${i}`} className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5 text-sm">
-                  <span className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs text-muted tabular-nums">{s.day.replaceAll('-', '/')}</span>
-                    <span className="font-medium">{exam?.shortTitle ?? s.examId}</span>
-                    <span className="chip bg-subtle text-muted ring-1 ring-line">{MODE_NAME[s.mode]}</span>
-                  </span>
-                  <span className="font-semibold tabular-nums" style={{ color: rateColor(rate) }}>
-                    {s.correct}/{s.total}（{Math.round(rate * 100)}%）
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <h2 className="mb-1 border-l-4 border-ink pl-3 text-lg">復習したい分野</h2>
+          <p className="mb-3 text-sm text-muted">正答率が 70% に届いていない分野です。学習ガイドで要点を確かめてから、もう一度解いてみましょう。</p>
+          <div className="overflow-x-auto">
+            <table className="ruled">
+              <thead>
+                <tr>
+                  <th scope="col">分野</th>
+                  <th scope="col">正答率</th>
+                  <th scope="col">学習ガイド</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weakDomains.map(({ set, domain, stat }) => {
+                  const topic = topicForDomain(set.id, domain);
+                  return (
+                    <tr key={`${set.id}-${domain}`}>
+                      <th scope="row" className="font-normal">
+                        {domainName(set, domain)}
+                        <span className="block text-xs text-muted">{set.title}</span>
+                      </th>
+                      <td className="font-bold tabular-nums" style={{ color: rateColor(stat.accuracy) }}>
+                        {Math.round(stat.accuracy * 100)}%
+                      </td>
+                      <td className="text-sm">
+                        {topic ? (
+                          <Link href={`/study/${topic.id}`} className="link">
+                            {topic.title}
+                          </Link>
+                        ) : (
+                          <span className="text-muted">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
 
-      <section className="flex justify-end">
+      {progress.sessions.length > 0 && (
+        <section>
+          <h2 className="mb-3 border-l-4 border-ink pl-3 text-lg">最近の挑戦</h2>
+          <div className="overflow-x-auto">
+            <table className="ruled">
+              <thead>
+                <tr>
+                  <th scope="col">日付</th>
+                  <th scope="col">問題集</th>
+                  <th scope="col">形式</th>
+                  <th scope="col">結果</th>
+                </tr>
+              </thead>
+              <tbody>
+                {progress.sessions.slice(0, 10).map((s, i) => {
+                  const set = getQuestionSet(s.examId);
+                  const rate = s.total ? s.correct / s.total : 0;
+                  return (
+                    <tr key={`${s.at}-${i}`}>
+                      <td className="text-sm whitespace-nowrap tabular-nums">{s.day.replaceAll('-', '.')}</td>
+                      <td className="text-sm">{set?.title ?? s.examId}</td>
+                      <td className="text-sm whitespace-nowrap">{MODE_NAME[s.mode]}</td>
+                      <td className="text-sm whitespace-nowrap tabular-nums" style={{ color: rateColor(rate) }}>
+                        {s.correct} / {s.total}（{Math.round(rate * 100)}%）
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      <section className="text-right">
         {confirmReset ? (
-          <div className="drill-enter card flex flex-wrap items-center gap-3 p-4 text-sm">
+          <div className="box inline-flex flex-wrap items-center gap-3 p-4 text-left text-sm">
             <span>記録をすべて削除します。元に戻せません。</span>
-            <button type="button" onClick={() => setConfirmReset(false)} className="btn btn-secondary px-4 py-2">
+            <button type="button" onClick={() => setConfirmReset(false)} className="btn btn-outline px-4 py-1.5 text-sm">
               やめる
             </button>
             <button
@@ -166,14 +209,14 @@ export function ProgressClient() {
                 updateProgress(() => emptyProgress());
                 setConfirmReset(false);
               }}
-              className="btn bg-ng px-4 py-2 text-white hover:bg-ng/90"
+              className="btn btn-outline border-ng px-4 py-1.5 text-sm text-ng"
             >
               削除する
             </button>
           </div>
         ) : (
-          <button type="button" onClick={() => setConfirmReset(true)} className="btn btn-ghost text-xs">
-            学習記録をリセット
+          <button type="button" onClick={() => setConfirmReset(true)} className="btn btn-quiet text-xs">
+            学習記録をすべて消す
           </button>
         )}
       </section>

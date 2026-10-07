@@ -1,4 +1,4 @@
-import type { Exam, TrackId } from '@/lib/quiz/types';
+import type { QuestionSet, TrackId } from '@/lib/quiz/types';
 
 export const TRACKS: Record<TrackId, { name: string; tagline: string; accent: string }> = {
   databricks: {
@@ -8,20 +8,20 @@ export const TRACKS: Record<TrackId, { name: string; tagline: string; accent: st
   },
   claude: {
     name: 'Claude',
-    tagline: 'Claude API・プロンプト設計・Claude Code / MCP の実践力を測る非公式スキル検定',
+    tagline: 'Claude API・プロンプト設計・Claude Code / MCP の実践的な理解を確かめる演習',
     accent: 'var(--d-cld)',
   },
 };
 
-export const EXAMS: Exam[] = [
+export const QUESTION_SETS: QuestionSet[] = [
   {
     id: 'databricks-data-engineer-associate',
     track: 'databricks',
-    title: 'Data Engineer Associate 対策',
+    title: 'Data Engineer Associate 問題集',
     shortTitle: 'Data Engineer Associate',
     level: '入門',
     summary: 'Delta Lake、取り込み（Auto Loader / COPY INTO）、メダリオン設計、パイプライン、ジョブ、Unity Catalog の基礎。',
-    officialName: 'Databricks Certified Data Engineer Associate',
+    certificationIds: ['databricks-data-engineer-associate'],
     domains: [
       { id: 'delta', name: 'Delta Lake' },
       { id: 'ingest', name: 'データ取り込み' },
@@ -33,11 +33,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'databricks-data-analyst-associate',
     track: 'databricks',
-    title: 'Data Analyst Associate 対策',
+    title: 'Data Analyst Associate 問題集',
     shortTitle: 'Data Analyst Associate',
     level: '入門',
     summary: 'Databricks SQL、SQL の集計・ウィンドウ関数、ダッシュボードとアラート、AI/BI Genie、データ探索。',
-    officialName: 'Databricks Certified Data Analyst Associate',
+    certificationIds: ['databricks-data-analyst-associate'],
     domains: [
       { id: 'dbsql', name: 'Databricks SQL' },
       { id: 'sql', name: 'SQL 分析' },
@@ -48,11 +48,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'databricks-ml-associate',
     track: 'databricks',
-    title: 'Machine Learning Associate 対策',
+    title: 'Machine Learning Associate 問題集',
     shortTitle: 'ML Associate',
     level: '中級',
     summary: 'MLflow によるトラッキングとモデル管理、特徴量、評価指標、AutoML、バッチ／リアルタイム推論。',
-    officialName: 'Databricks Certified Machine Learning Associate',
+    certificationIds: ['databricks-machine-learning-associate'],
     domains: [
       { id: 'mlflow', name: 'MLflow とモデル管理' },
       { id: 'modeling', name: 'モデリングと評価' },
@@ -63,11 +63,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'databricks-genai-engineer-associate',
     track: 'databricks',
-    title: 'Generative AI Engineer Associate 対策',
+    title: 'Generative AI Engineer Associate 問題集',
     shortTitle: 'GenAI Engineer Associate',
     level: '中級',
-    summary: 'RAG 設計、Vector Search、Model Serving と Foundation Model APIs、エージェント、評価とガバナンス。',
-    officialName: 'Databricks Certified Generative AI Engineer Associate',
+    summary: 'RAG 設計、Databricks AI Search、Model Serving、エージェント、評価とガバナンス。',
+    certificationIds: ['databricks-genai-engineer-associate'],
     domains: [
       { id: 'rag', name: 'RAG とデータ準備' },
       { id: 'serving', name: 'モデル提供' },
@@ -78,11 +78,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'claude-api',
     track: 'claude',
-    title: 'Claude API 検定',
+    title: 'Claude API 問題集',
     shortTitle: 'Claude API',
     level: '中級',
-    summary: 'Messages API の基本、ストリーミング、ツール利用、プロンプトキャッシュ、Batches、マルチモーダル。',
-    officialName: null,
+    summary: 'Messages API の基本、ストリーミング、ツール利用、プロンプトキャッシュ、Batches、思考の制御。',
+    certificationIds: ['claude-certified-developer-foundations'],
     domains: [
       { id: 'basics', name: 'Messages API の基本' },
       { id: 'tools', name: 'ツール利用' },
@@ -93,11 +93,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'claude-prompting',
     track: 'claude',
-    title: 'Claude プロンプト設計検定',
+    title: 'プロンプト設計 問題集',
     shortTitle: 'プロンプト設計',
     level: '入門',
     summary: '明確な指示、例示、XML タグ、長文の扱い、思考の促し方、ハルシネーション対策、タスク分割。',
-    officialName: null,
+    certificationIds: ['claude-certified-associate-foundations', 'claude-certified-developer-foundations'],
     domains: [
       { id: 'clarity', name: '明確な指示' },
       { id: 'structure', name: '構造化' },
@@ -108,11 +108,11 @@ export const EXAMS: Exam[] = [
   {
     id: 'claude-code-mcp',
     track: 'claude',
-    title: 'Claude Code & MCP 検定',
+    title: 'Claude Code & MCP 問題集',
     shortTitle: 'Claude Code & MCP',
     level: '上級',
-    summary: 'CLAUDE.md、権限設定、フック、カスタムコマンド、サブエージェント、MCP のプリミティブと接続方式。',
-    officialName: null,
+    summary: 'CLAUDE.md、権限設定、フック、スキル、サブエージェント、MCP のプリミティブと接続方式。',
+    certificationIds: ['claude-certified-developer-foundations', 'claude-certified-architect-foundations'],
     domains: [
       { id: 'setup', name: '設定とメモリ' },
       { id: 'workflow', name: 'ワークフロー' },
@@ -122,10 +122,10 @@ export const EXAMS: Exam[] = [
   },
 ];
 
-export function getExam(id: string): Exam | undefined {
-  return EXAMS.find((e) => e.id === id);
+export function getQuestionSet(id: string): QuestionSet | undefined {
+  return QUESTION_SETS.find((s) => s.id === id);
 }
 
-export function domainName(exam: Exam, domainId: string): string {
-  return exam.domains.find((d) => d.id === domainId)?.name ?? domainId;
+export function domainName(set: QuestionSet, domainId: string): string {
+  return set.domains.find((d) => d.id === domainId)?.name ?? domainId;
 }

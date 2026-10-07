@@ -10,22 +10,23 @@
   --txts: #7aad8a;
 }
 
-/* ───────── 資格ドリル（ライト） ───────── */
+/* ───────── 資格ドリル（クラシック） ───────── */
 :root {
-  --d-paper:        oklch(0.985 0.004 150);
-  --d-card:         oklch(1 0 0);
-  --d-subtle:       oklch(0.963 0.007 150);
-  --d-line:         oklch(0.918 0.008 150);
-  --d-line-strong:  oklch(0.86 0.012 150);
-  --d-ink:          oklch(0.235 0.02 160);
-  --d-muted:        oklch(0.5 0.016 160);
-  --d-brand:        #00782f;
-  --d-brand-strong: #005f25;
-  --d-ok:           #15803d;
-  --d-ng:           #dc2626;
-  --d-warn:         #b45309;
-  --d-dbx:          #c2410c;
-  --d-cld:          #7c3aed;
+  --d-paper:        #fbf9f3;
+  --d-card:         #fffdf8;
+  --d-subtle:       #f3eee2;
+  --d-line:         #d8d0c0;
+  --d-line-strong:  #1f1c18;
+  --d-ink:          #1f1c18;
+  --d-muted:        #5d574e;
+  --d-brand:        #1c5b3a;
+  --d-brand-strong: #134229;
+  --d-ok:           #1c6b3a;
+  --d-ng:           #b3261e;
+  --d-warn:         #8a5a00;
+  --d-dbx:          #9a3b1b;
+  --d-cld:          #2c4a7a;
+  --d-serif: var(--font-noto-serif-jp), "Hiragino Mincho ProN", "Yu Mincho", YuMincho, serif;
 }
 
 @theme inline {
@@ -47,17 +48,15 @@
   --color-dbx: var(--d-dbx);
   --color-cld: var(--d-cld);
 
-  --font-sans: var(--font-geist-sans), var(--font-noto-sans-jp), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --font-sans: var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --font-serif: var(--d-serif);
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  --shadow-soft: 0 1px 2px oklch(0.235 0.02 160 / 0.05), 0 8px 24px -12px oklch(0.235 0.02 160 / 0.14);
-  --shadow-lift: 0 2px 4px oklch(0.235 0.02 160 / 0.05), 0 22px 44px -18px oklch(0.235 0.02 160 / 0.24);
 }
 
 body {
   background-color: var(--bg);
   color: var(--txt);
-  font-family: var(--font-geist-sans), var(--font-noto-sans-jp), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  font-family: var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
 }
 
 /* ユーティリティ（旧 SNS ページ） */
@@ -75,7 +74,7 @@ body {
 
 /* ───────── 資格ドリル ───────── */
 
-/* ドリルのページでは body ごとライトにする（オーバースクロールしても白） */
+/* ドリルのページでは body ごと紙の色にする */
 body:has(.drill) {
   background-color: var(--d-paper);
   color: var(--d-ink);
@@ -83,205 +82,172 @@ body:has(.drill) {
 
 .drill {
   color-scheme: light;
-  interpolate-size: allow-keywords;
   background-color: var(--d-paper);
   color: var(--d-ink);
+  font-family: var(--d-serif);
+  font-size: 16px;
+  line-height: 1.85;
   accent-color: var(--d-brand);
-  -webkit-tap-highlight-color: transparent;
 }
 
-/* 日本語の見出しは文節で改行し、行の長さをそろえる */
-.drill :is(h1, h2, h3) {
+.drill :is(h1, h2, h3, h4) {
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
   text-wrap: balance;
   word-break: auto-phrase;
-}
-.drill :is(h1, .display) {
-  font-feature-settings: "palt";
 }
 .drill p {
   text-wrap: pretty;
 }
+.drill :is(code, pre, kbd) {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
 .drill ::selection {
-  background-color: color-mix(in oklch, var(--d-brand) 22%, transparent);
+  background-color: color-mix(in srgb, var(--d-brand) 18%, transparent);
 }
 .drill :focus-visible {
   outline: 2px solid var(--d-brand);
   outline-offset: 2px;
 }
-/* 見えないラジオ／チェックボックスにフォーカスがあるときは、ラベル側に枠を出す */
-.drill label:has(> input:focus-visible) {
-  outline: 2px solid var(--d-brand);
-  outline-offset: 2px;
+
+/* 罫線で囲んだ箱 */
+@utility box {
+  background-color: var(--d-card);
+  border: 1px solid var(--d-line);
 }
 
-@utility card {
-  @apply rounded-2xl bg-card shadow-soft ring-1 ring-line;
-}
-
-@utility chip {
-  @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap;
-}
-
+/* ボタン：形だけを決め、見た目は btn-outline / btn-primary / btn-quiet で */
 @utility btn {
-  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition duration-150 ease-out select-none active:scale-[0.98] disabled:pointer-events-none disabled:opacity-40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 0.9375rem;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 120ms, color 120ms, border-color 120ms;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
 }
-@utility btn-lg {
-  @apply px-7 py-3.5 text-base;
+@utility btn-outline {
+  border-color: var(--d-ink);
+  background-color: var(--d-card);
+  color: var(--d-ink);
+  &:hover:not(:disabled) {
+    background-color: var(--d-subtle);
+  }
 }
 @utility btn-primary {
-  @apply bg-brand text-white shadow-md shadow-brand/25 hover:bg-brand-strong;
+  border-color: var(--d-brand);
+  background-color: var(--d-brand);
+  color: #fffdf8;
+  &:hover:not(:disabled) {
+    background-color: var(--d-brand-strong);
+    border-color: var(--d-brand-strong);
+  }
 }
-@utility btn-secondary {
-  @apply bg-card text-ink ring-1 ring-line-strong hover:bg-subtle;
-}
-@utility btn-ghost {
-  @apply text-muted hover:bg-subtle hover:text-ink;
-}
-
-/* トラック色などを --tint で受け取って淡く敷く */
-.tint {
-  background-color: color-mix(in oklch, var(--tint) 9%, var(--d-card));
-  color: var(--tint);
-}
-
-.text-gradient {
-  background-image: linear-gradient(100deg, var(--d-brand) 5%, oklch(0.6 0.15 160) 50%, oklch(0.62 0.12 195) 95%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.drill-dots {
-  background-image: radial-gradient(color-mix(in oklch, var(--d-ink) 14%, transparent) 1px, transparent 1.5px);
-  background-size: 22px 22px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 25%, transparent 75%);
-}
-
-.drill-aurora {
-  background:
-    radial-gradient(closest-side, color-mix(in oklch, var(--d-brand) 24%, transparent), transparent) 6% 0% / 46rem 30rem no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--d-cld) 17%, transparent), transparent) 96% 2% / 40rem 26rem no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--d-dbx) 14%, transparent), transparent) 62% 48% / 34rem 22rem no-repeat;
-  filter: blur(8px);
-}
-
-/* 出現アニメーション（@starting-style 非対応のブラウザでは即表示） */
-.drill-enter {
-  transition: opacity 280ms ease-out, translate 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-@starting-style {
-  .drill-enter {
-    opacity: 0;
-    translate: 0 10px;
+@utility btn-quiet {
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--d-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  &:hover:not(:disabled) {
+    color: var(--d-ink);
   }
 }
 
-/* バーは scale で伸ばす（width はインラインで指定するため） */
-.bar-fill {
-  transform-origin: left center;
-  transition: scale 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-@starting-style {
-  .bar-fill {
-    scale: 0 1;
+/* 本文中のリンク */
+@utility link {
+  color: var(--d-brand);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  &:hover {
+    text-decoration-thickness: 2px;
   }
 }
 
-/* 正答率リング：登録済みカスタムプロパティ（@property）で数値ごとアニメーション */
-@property --pct {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-.score-ring {
-  --pct: var(--pct-to, 0);
-  background: conic-gradient(var(--ring, var(--d-brand)) calc(var(--pct) * 1%), var(--d-subtle) 0);
-  transition: --pct 1100ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-@starting-style {
-  .score-ring {
-    --pct: 0;
-  }
+/* 枠で囲んだ小さなラベル（【公式】など） */
+@utility tag {
+  display: inline-block;
+  border: 1px solid currentColor;
+  padding: 0 0.45em;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
-/* スクロール連動のふわっと表示（対応ブラウザのみ） */
-@keyframes drill-rise {
-  from {
-    opacity: 0;
-    translate: 0 28px;
-  }
+/* 上下を太い罫線で締める、論文風の表 */
+.drill table.ruled {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--d-ink);
+  border-bottom: 2px solid var(--d-ink);
 }
-@supports (animation-timeline: view()) {
-  @media screen and (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: drill-rise linear both;
-      animation-timeline: view();
-      /* セクションの高さに関係なく、画面に 160px 入ったところで表示しきる */
-      animation-range: entry 0% entry 160px;
-    }
-  }
+.drill table.ruled :is(thead th) {
+  border-bottom: 1px solid var(--d-ink);
+  padding: 0.55rem 0.75rem;
+  color: var(--d-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: left;
+  white-space: nowrap;
 }
-
-/* <details> をなめらかに開閉する */
-.drill summary {
-  list-style: none;
-  cursor: pointer;
+.drill table.ruled :is(tbody td, tbody th) {
+  border-top: 1px solid var(--d-line);
+  padding: 0.75rem;
+  vertical-align: top;
+  text-align: left;
 }
-.drill summary::-webkit-details-marker {
-  display: none;
-}
-.drill details::details-content {
-  block-size: 0;
-  overflow-y: clip;
-  transition: block-size 320ms cubic-bezier(0.2, 0.8, 0.2, 1), content-visibility 320ms allow-discrete;
-}
-.drill details[open]::details-content {
-  block-size: auto;
-}
-
-/* ポップオーバー（popover 属性） */
-.drill [popover] {
-  opacity: 0;
-  translate: 0 6px;
-  transition: opacity 180ms ease-out, translate 180ms ease-out, display 180ms allow-discrete, overlay 180ms allow-discrete;
-}
-.drill [popover]:popover-open {
-  opacity: 1;
-  translate: 0 0;
-}
-@starting-style {
-  .drill [popover]:popover-open {
-    opacity: 0;
-    translate: 0 6px;
-  }
-}
-.drill [popover]::backdrop {
-  background-color: oklch(0.235 0.02 160 / 0.14);
+.drill table.ruled tbody tr:first-child :is(td, th) {
+  border-top: 0;
 }
 
 .drill kbd {
   display: inline-block;
   min-width: 1.6em;
-  padding: 0.1em 0.45em;
-  border-radius: 0.375rem;
-  background-color: var(--d-subtle);
-  box-shadow: inset 0 -1px 0 var(--d-line-strong), 0 0 0 1px var(--d-line);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  padding: 0 0.4em;
+  border: 1px solid var(--d-line);
+  border-bottom-width: 2px;
+  background-color: var(--d-card);
   font-size: 0.75rem;
   text-align: center;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .drill *,
-  .drill *::before,
-  .drill *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+.drill summary {
+  cursor: pointer;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html:has(.drill) {
-    scroll-behavior: smooth;
-  }
+.drill [popover] {
+  border: 1px solid var(--d-ink);
+  background-color: var(--d-card);
+  color: var(--d-ink);
+}
+.drill [popover]::backdrop {
+  background-color: rgb(31 28 24 / 0.18);
+}
+
+/* 採点結果の判子 */
+.drill .stamp {
+  display: inline-grid;
+  place-items: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  border: 4px double currentColor;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  rotate: -10deg;
 }

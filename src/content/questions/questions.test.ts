@@ -1,4 +1,4 @@
-import { EXAMS } from '@/content/exams';
+import { QUESTION_SETS } from '@/content/question-sets';
 import { QUESTIONS, questionsForExam } from './index';
 
 describe('問題データの整合性', () => {
@@ -8,12 +8,12 @@ describe('問題データの整合性', () => {
   });
 
   it('試験 ID が重複していない', () => {
-    const ids = EXAMS.map((e) => e.id);
+    const ids = QUESTION_SETS.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
   it.each(QUESTIONS.map((q) => [q.id, q] as const))('%s の形式が正しい', (_, q) => {
-    const exam = EXAMS.find((e) => e.id === q.examId);
+    const exam = QUESTION_SETS.find((e) => e.id === q.examId);
     expect(exam).toBeDefined();
     expect(exam!.domains.map((d) => d.id)).toContain(q.domain);
     expect(q.choices.length).toBeGreaterThanOrEqual(2);
@@ -29,8 +29,8 @@ describe('問題データの整合性', () => {
     expect(q.explanation.length).toBeGreaterThan(10);
   });
 
-  it.each(EXAMS.map((e) => [e.id] as const))('%s は 10 問以上あり、全分野に問題がある', (id) => {
-    const exam = EXAMS.find((e) => e.id === id)!;
+  it.each(QUESTION_SETS.map((e) => [e.id] as const))('%s は 10 問以上あり、全分野に問題がある', (id) => {
+    const exam = QUESTION_SETS.find((e) => e.id === id)!;
     const qs = questionsForExam(id);
     expect(qs.length).toBeGreaterThanOrEqual(10);
     for (const d of exam.domains) {
