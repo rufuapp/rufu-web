@@ -16,7 +16,23 @@ export type TrendSourceId =
   | 'qiita-mcp'
   | 'zenn-databricks'
   | 'qiita-databricks'
-  | 'classmethod-databricks';
+  | 'classmethod-databricks'
+  // 比較対象の技術記事
+  | 'zenn-openai'
+  | 'qiita-openai'
+  | 'zenn-snowflake'
+  | 'qiita-snowflake'
+  // 比較対象の公式発表
+  | 'openai-news'
+  | 'aws-ml-blog'
+  | 'gcp-ai-blog'
+  | 'azure-blog'
+  | 'azure-foundry-blog'
+  | 'nvidia-blog'
+  | 'nvidia-developer-blog'
+  | 'snowflake-blog'
+  | 'snowflake-builders-blog'
+  | 'palantir-blog';
 
 export type TrendItem = {
   source: TrendSourceId;
@@ -88,6 +104,11 @@ export function parseAtom(xml: string, source: TrendSourceId): TrendItem[] {
     if (title && link && date) items.push({ source, title, url: decodeEntities(link), date });
   }
   return items;
+}
+
+/** RSS と Atom のどちらでも読む */
+export function parseFeed(xml: string, source: TrendSourceId): TrendItem[] {
+  return /<feed[\s>]/i.test(xml) && /<entry[\s>]/i.test(xml) ? parseAtom(xml, source) : parseRss(xml, source);
 }
 
 const SHORT_DATE = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2}, \d{4}$/;

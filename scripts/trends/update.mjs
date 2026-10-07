@@ -19,7 +19,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync, mkdtempSync } fro
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseAnthropicNews, parseAtom, parseClaudeBlog, parseRss } from '../../src/lib/trends/parse.ts';
+import { parseAnthropicNews, parseAtom, parseClaudeBlog, parseFeed, parseRss } from '../../src/lib/trends/parse.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ITEMS_FILE = join(ROOT, 'src/content/trends/items.json');
@@ -31,7 +31,7 @@ const NO_GIT = args.has('--no-git');
 /** 初回や久しぶりの実行で古い記事を大量に訳さないよう、この日数より前の記事は対象にしない */
 const LOOKBACK_DAYS = 14;
 /** 1 回の実行で訳す上限（多すぎる日は翌日に回す） */
-const MAX_NEW_PER_RUN = 60;
+const MAX_NEW_PER_RUN = 100;
 /** Claude Code 1 回の呼び出しで訳す記事の数 */
 const BATCH_SIZE = 8;
 /** 保存しておく件数の上限 */
@@ -57,6 +57,22 @@ const SOURCES = [
   { id: 'zenn-databricks', url: 'https://zenn.dev/topics/databricks/feed', parse: (xml) => parseRss(xml, 'zenn-databricks') },
   { id: 'qiita-databricks', url: 'https://qiita.com/tags/databricks/feed', parse: (xml) => parseAtom(xml, 'qiita-databricks') },
   { id: 'classmethod-databricks', url: 'https://dev.classmethod.jp/tags/databricks/feed/', parse: (xml) => parseRss(xml, 'classmethod-databricks') },
+  // 比較対象の技術記事（Claude・Databricks と直接競合する OpenAI と Snowflake）
+  { id: 'zenn-openai', url: 'https://zenn.dev/topics/openai/feed', parse: (xml) => parseRss(xml, 'zenn-openai'), compare: true },
+  { id: 'qiita-openai', url: 'https://qiita.com/tags/openai/feed', parse: (xml) => parseAtom(xml, 'qiita-openai'), compare: true },
+  { id: 'zenn-snowflake', url: 'https://zenn.dev/topics/snowflake/feed', parse: (xml) => parseRss(xml, 'zenn-snowflake'), compare: true },
+  { id: 'qiita-snowflake', url: 'https://qiita.com/tags/snowflake/feed', parse: (xml) => parseAtom(xml, 'qiita-snowflake'), compare: true },
+  // 比較対象の公式発表（主役の Claude・Databricks と比べるため）
+  { id: 'openai-news', url: 'https://openai.com/news/rss.xml', parse: (xml) => parseFeed(xml, 'openai-news'), compare: true },
+  { id: 'aws-ml-blog', url: 'https://aws.amazon.com/blogs/machine-learning/feed/', parse: (xml) => parseFeed(xml, 'aws-ml-blog'), compare: true },
+  { id: 'gcp-ai-blog', url: 'https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/', parse: (xml) => parseFeed(xml, 'gcp-ai-blog'), compare: true },
+  { id: 'azure-blog', url: 'https://azure.microsoft.com/en-us/blog/feed/', parse: (xml) => parseFeed(xml, 'azure-blog'), compare: true },
+  { id: 'azure-foundry-blog', url: 'https://devblogs.microsoft.com/foundry/feed/', parse: (xml) => parseFeed(xml, 'azure-foundry-blog'), compare: true },
+  { id: 'nvidia-blog', url: 'https://blogs.nvidia.com/feed/', parse: (xml) => parseFeed(xml, 'nvidia-blog'), compare: true },
+  { id: 'nvidia-developer-blog', url: 'https://developer.nvidia.com/blog/feed', parse: (xml) => parseFeed(xml, 'nvidia-developer-blog'), compare: true },
+  { id: 'snowflake-blog', url: 'https://www.snowflake.com/feed/', parse: (xml) => parseFeed(xml, 'snowflake-blog'), compare: true },
+  { id: 'snowflake-builders-blog', url: 'https://medium.com/feed/snowflake', parse: (xml) => parseFeed(xml, 'snowflake-builders-blog'), compare: true },
+  { id: 'palantir-blog', url: 'https://blog.palantir.com/feed', parse: (xml) => parseFeed(xml, 'palantir-blog'), compare: true },
 ];
 
 const log = (...m) => console.log('[trends]', ...m);
@@ -73,7 +89,8 @@ function daysBefore(day, n) {
 async function get(url) {
   const res = await fetch(url, {
     signal: AbortSignal.timeout(20_000),
-    headers: { 'user-agent': 'Mozilla/5.0 (compatible; FDE-Kiso-Tokuhon/1.0)' },
+    // 一部のサイト（Snowflake・Azure）は、ブラウザ以外からの取得を断るため、ブラウザと同じ名乗りにする
+    headers: { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36' },
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
   return res.text();
@@ -131,11 +148,11 @@ function prompt(batch) {
   const articles = batch
     .map((it, i) => `### 記事 ${i + 1}\nURL: ${it.url}\n見出し: ${it.title}\n本文（抜粋）:\n${it.text || '（本文を取得できませんでした。見出しだけから訳してください）'}`)
     .join('\n\n');
-  return `あなたは、Claude と Databricks の公式発表と技術記事を日本語で紹介する技術サイトの編集者です。
+  return `あなたは、生成 AI とデータ基盤（Claude・Databricks を中心に、OpenAI・Snowflake・各クラウドなど）の公式発表と技術記事を日本語で紹介する技術サイトの編集者です。
 次の各記事について、日本語の見出し（titleJa）と、まとめ（summaryJa）を作ってください。
 
 決まり:
-- titleJa: 原文の見出しの自然な日本語訳。製品名・機能名（Claude Code、Unity Catalog など）は英語のまま残す。見出しがすでに日本語なら、一字も変えずにそのまま返す。
+- titleJa: 原文の見出しの自然な日本語訳。製品名・機能名（Claude Code、Unity Catalog、Amazon Bedrock、Snowpark など）は英語のまま残す。見出しがすでに日本語なら、一字も変えずにそのまま返す。
 - summaryJa: 本文に書かれている事実だけを、2〜3 文、です・ます調で書く。公式発表なら何が発表され誰にどう役立つかを、技術記事なら何を試し、どんな工夫や結論が書かれているかを中心にする。本文にない推測や評価は書かない。
 - 本文を取得できなかった記事は、見出しから分かることだけを 1 文で書く。
 - url は、与えられた URL をそのまま返す。すべての記事について 1 件ずつ返す。
@@ -206,7 +223,11 @@ async function main() {
   // 同じ URL は、先に見つけた（SOURCES で先に書いた）情報源の記事として残す
   const firstByUrl = new Map();
   for (const it of found) if (!firstByUrl.has(it.url)) firstByUrl.set(it.url, it);
-  const unique = [...firstByUrl.values()].sort((a, b) => b.date.localeCompare(a.date));
+  // 主役（Claude・Databricks）の記事を先に訳し、比較対象の記事はその後にする（上限で溢れたら比較対象を次回に回す）
+  const compareIds = new Set(SOURCES.filter((s) => s.compare).map((s) => s.id));
+  const byDate = (a, b) => b.date.localeCompare(a.date);
+  const all = [...firstByUrl.values()];
+  const unique = [...all.filter((it) => !compareIds.has(it.source)).sort(byDate), ...all.filter((it) => compareIds.has(it.source)).sort(byDate)];
   const targets = unique.slice(0, MAX_NEW_PER_RUN);
   if (unique.length > targets.length) log(`多いため ${targets.length} 件だけ訳し、残り ${unique.length - targets.length} 件は次回に回します。`);
   if (targets.length === 0) {
