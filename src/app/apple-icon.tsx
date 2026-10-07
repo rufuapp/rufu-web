@@ -11,24 +11,14 @@ export default function AppleIcon() {
           width: 180,
           height: 180,
           borderRadius: 40,
-          backgroundColor: '#00782f',
+          backgroundColor: '#1c5b3a',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <span
-          style={{
-            color: '#ffffff',
-            fontSize: 110,
-            fontWeight: 800,
-            fontFamily: 'serif',
-            lineHeight: 1,
-            marginTop: 6,
-          }}
-        >
-          r
-        </span>
+        {/* 答案につける「◯」の印 */}
+        <div style={{ width: 110, height: 110, borderRadius: 9999, border: '15px solid #fbf9f3' }} />
       </div>
     ),
     { ...size },

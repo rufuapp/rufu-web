@@ -7,7 +7,7 @@ export type Domain = {
   name: string;
 };
 
-/** 問題集（rufu のオリジナル問題をまとめたもの） */
+/** 問題集（本サイトのオリジナル問題をまとめたもの） */
 export type QuestionSet = {
   id: string;
   track: TrackId;

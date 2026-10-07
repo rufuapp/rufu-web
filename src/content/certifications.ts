@@ -34,7 +34,7 @@ const MULTI_LANG = '英語・日本語・ポルトガル語（ブラジル）・
 
 const DATABRICKS_STUDY_PLAN = [
   '公式ページで最新の試験ガイドを確認し、出題範囲と配点を把握する',
-  'rufu の学習ガイドで、分野ごとの要点と用語をつかむ',
+  '本サイトの学習ガイドで、分野ごとの要点と用語をつかむ',
   'Databricks Academy の関連トレーニングと公式ドキュメントで理解を深め、実際のワークスペースで手を動かす',
   '問題集の練習モードで分野ごとに解き、間違えた問題は苦手克服モードで解き直す',
   '仕上げに模試モードで、1 問あたり約 2 分の時間配分に慣れておく',
@@ -101,7 +101,7 @@ export const CERTIFICATIONS: Certification[] = [
       { name: 'Troubleshooting, Monitoring, and Optimization', nameJa: 'トラブルシューティング・監視・最適化', weight: 10, topicIds: ['lakehouse-delta-lake', 'pipelines-and-jobs'] },
       { name: 'Governance and Security', nameJa: 'ガバナンスとセキュリティ', weight: 15, topicIds: ['unity-catalog'] },
     ],
-    outlineNote: 'CI/CD（Declarative Automation Bundles など）は、rufu の学習ガイドと問題集ではまだ扱っていません。公式ドキュメントで学習してください。',
+    outlineNote: 'CI/CD（Declarative Automation Bundles など）は、本サイトの学習ガイドと問題集ではまだ扱っていません。公式ドキュメントで学習してください。',
     studyPlan: DATABRICKS_STUDY_PLAN,
     topicIds: ['lakehouse-delta-lake', 'data-ingestion', 'pipelines-and-jobs', 'unity-catalog'],
     officialUrl: 'https://www.databricks.com/learn/certification/data-engineer-associate',
@@ -208,7 +208,7 @@ export const CERTIFICATIONS: Certification[] = [
     summary: 'Claude に関わるプロジェクトで働く人向けに、Claude を日々の実務で使いこなす力を証明する、Anthropic の公式資格。',
     description: [
       '2026年7月に Anthropic が発表した、役割別の Claude 認定資格の 1 つです。コンサルタントやプロジェクトリード、ビジネス職・技術職を問わず、Claude に関わるプロジェクトに携わる人を対象に、Claude の日常的な実務での活用力を問います。',
-      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。個人で学ぶ場合は、無料の Claude Academy のコースと、rufu の学習ガイド・問題集で同じ領域の力を身につけられます。',
+      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。個人で学ぶ場合は、無料の Claude Academy のコースと、本サイトの学習ガイド・問題集で同じ領域の力を身につけられます。',
     ],
     audience: ['Claude を業務で使うコンサルタントやプロジェクトリード', 'Claude の導入を進めるビジネス職・技術職', 'まず Claude の実務活用の基礎を固めたい人'],
     facts: CLAUDE_FACTS,
@@ -217,7 +217,7 @@ export const CERTIFICATIONS: Certification[] = [
     studyPlan: [
       '公式発表で、資格の対象者と受験の条件（Claude Partner Network への加盟）を確認する',
       '無料の Claude Academy で「AI Fluency: Framework and foundations」などのコースを受講する',
-      'rufu の学習ガイド「プロンプト設計の基本」で、指示の出し方の要点をつかむ',
+      '本サイトの学習ガイド「プロンプト設計の基本」で、指示の出し方の要点をつかむ',
       'プロンプト設計の問題集で理解を確かめ、間違えた問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],
@@ -235,7 +235,7 @@ export const CERTIFICATIONS: Certification[] = [
     summary: 'Claude を使ったアプリケーションを作るエンジニア向けに、Claude API・ツール利用・エージェント開発の力を証明する公式資格。',
     description: [
       'Claude を組み込んだアプリケーションを作るエンジニア向けの資格です。公式発表では、Claude API、ツール利用（tool use）、エージェント開発が対象として挙げられています。',
-      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。rufu では、関連する技能を Claude API・プロンプト設計・Claude Code & MCP の問題集で練習できます。',
+      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。本サイトでは、関連する技能を Claude API・プロンプト設計・Claude Code & MCP の問題集で練習できます。',
     ],
     audience: ['Claude API でアプリケーションを開発するエンジニア', 'ツール連携やエージェントを実装する人', 'Claude を使ったプロダクトの技術面に責任を持つ人'],
     facts: CLAUDE_FACTS,
@@ -247,7 +247,7 @@ export const CERTIFICATIONS: Certification[] = [
     outlineNote: CLAUDE_OUTLINE_NOTE,
     studyPlan: [
       '公式発表で、資格の対象者と受験の条件を確認する',
-      'rufu の学習ガイドで、Messages API・ツール利用・コストと性能の最適化の要点をつかむ',
+      '本サイトの学習ガイドで、Messages API・ツール利用・コストと性能の最適化の要点をつかむ',
       '公式ドキュメントのコード例を実際に動かし、API の挙動を確かめる',
       'Claude API とプロンプト設計の問題集で理解を確かめ、苦手な問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
@@ -271,7 +271,7 @@ export const CERTIFICATIONS: Certification[] = [
     summary: 'Claude を使ったエージェントシステムを設計・構築する、ソリューションアーキテクト向けの公式資格。',
     description: [
       'Claude を中心としたエージェントシステムを設計し、構築するソリューションアーキテクト向けの資格です。',
-      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。rufu では、関連する技能として、ツール利用・MCP・Claude Code の学習ガイドと問題集を用意しています。',
+      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。本サイトでは、関連する技能として、ツール利用・MCP・Claude Code の学習ガイドと問題集を用意しています。',
     ],
     audience: ['エージェントを含むシステムの設計を担うアーキテクト', '複数のツールやデータソースを Claude とつなぐ設計をする人', '開発チームの技術選定に関わる人'],
     facts: CLAUDE_FACTS,
@@ -281,7 +281,7 @@ export const CERTIFICATIONS: Certification[] = [
     outlineNote: CLAUDE_OUTLINE_NOTE,
     studyPlan: [
       '公式発表で、資格の対象者と受験の条件を確認する',
-      'rufu の学習ガイドで、ツール利用・MCP・Claude Code の要点をつかむ',
+      '本サイトの学習ガイドで、ツール利用・MCP・Claude Code の要点をつかむ',
       '小さなエージェントを実際に作り、ツールや MCP サーバーをつないで動かしてみる',
       'Claude Code & MCP の問題集で理解を確かめ、苦手な問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
@@ -304,7 +304,7 @@ export const CERTIFICATIONS: Certification[] = [
     summary: 'エンタープライズ規模の役割を担う人向けの上位資格。統合アーキテクチャ、ガバナンス、評価が対象。',
     description: [
       'アーキテクト資格の上位にあたる、エンタープライズ規模の役割向けの資格です。公式発表では、統合アーキテクチャ、ガバナンス、評価が対象として挙げられています。',
-      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。この資格に直接対応する rufu の問題集はまだありません。',
+      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。この資格に直接対応する本サイトの問題集はまだありません。',
     ],
     audience: ['大きな組織で Claude の導入アーキテクチャを設計する人', 'AI の運用ガバナンスや評価の仕組みづくりを担う人'],
     facts: CLAUDE_FACTS,
@@ -313,10 +313,10 @@ export const CERTIFICATIONS: Certification[] = [
       { name: 'Governance', nameJa: 'ガバナンス', topicIds: [] },
       { name: 'Evaluation', nameJa: '評価', topicIds: ['prompt-engineering'] },
     ],
-    outlineNote: `${CLAUDE_OUTLINE_NOTE} ガバナンスの分野は、rufu の学習ガイドではまだ扱っていません。`,
+    outlineNote: `${CLAUDE_OUTLINE_NOTE} ガバナンスの分野は、本サイトの学習ガイドではまだ扱っていません。`,
     studyPlan: [
       '公式発表で、資格の対象者と受験の条件を確認する',
-      'Foundations の範囲（API・ツール利用・エージェント設計）を、rufu の学習ガイドと問題集で固める',
+      'Foundations の範囲（API・ツール利用・エージェント設計）を、本サイトの学習ガイドと問題集で固める',
       'MCP によるシステム連携と、プロンプトの評価の進め方を公式ドキュメントで深める',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],

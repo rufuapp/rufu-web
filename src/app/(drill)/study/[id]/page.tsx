@@ -5,6 +5,7 @@ import { STUDY_TOPICS, getStudyTopic } from '@/content/study-topics';
 import { domainName, getQuestionSet } from '@/content/question-sets';
 import { QUESTIONS } from '@/content/questions';
 import { adjacentTopics, certificationsForTopic, topicsForTrack } from '@/content/catalog';
+import { SITE_NAME } from '@/content/site';
 import { Breadcrumb, ResourceList, SubTitle, TrackLabel } from '@/components/quiz/ui';
 
 const KANJI = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
@@ -22,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${topic.title}（学習ガイド）`,
     description: topic.summary,
-    openGraph: { title: `${topic.title} | rufu 資格ドリル`, description: topic.summary, type: 'article' },
-    twitter: { card: 'summary', title: `${topic.title} | rufu 資格ドリル`, description: topic.summary },
+    openGraph: { title: `${topic.title} | ${SITE_NAME}`, description: topic.summary, type: 'article' },
+    twitter: { card: 'summary', title: `${topic.title} | ${SITE_NAME}`, description: topic.summary },
   };
 }
 

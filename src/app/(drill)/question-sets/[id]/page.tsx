@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { QUESTION_SETS, getQuestionSet } from '@/content/question-sets';
 import { questionsForExam } from '@/content/questions';
 import { certificationsForQuestionSet, topicsForQuestionSet } from '@/content/catalog';
+import { SITE_NAME } from '@/content/site';
 import { ExamClient } from '@/components/quiz/ExamClient';
 import { Breadcrumb, TrackLabel } from '@/components/quiz/ui';
 
@@ -22,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: set.title,
     description,
-    openGraph: { title: `${set.title} | rufu 資格ドリル`, description, type: 'website' },
-    twitter: { card: 'summary', title: `${set.title} | rufu 資格ドリル`, description },
+    openGraph: { title: `${set.title} | ${SITE_NAME}`, description, type: 'website' },
+    twitter: { card: 'summary', title: `${set.title} | ${SITE_NAME}`, description },
   };
 }
 

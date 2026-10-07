@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { CERTIFICATIONS, FACTS_CHECKED_ON, getCertification } from '@/content/certifications';
 import { getStudyTopic } from '@/content/study-topics';
 import { questionIdsBySet, questionSetsForCertification, topicsForCertification } from '@/content/catalog';
+import { SITE_NAME } from '@/content/site';
 import { Breadcrumb, ExternalLink, ResourceList, SubTitle, TrackLabel } from '@/components/quiz/ui';
 
 export function generateStaticParams() {
@@ -20,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title,
     description: cert.summary,
-    openGraph: { title: `${title} | rufu 資格ドリル`, description: cert.summary, type: 'article' },
-    twitter: { card: 'summary', title: `${title} | rufu 資格ドリル`, description: cert.summary },
+    openGraph: { title: `${title} | ${SITE_NAME}`, description: cert.summary, type: 'article' },
+    twitter: { card: 'summary', title: `${title} | ${SITE_NAME}`, description: cert.summary },
   };
 }
 
@@ -72,7 +73,7 @@ export default async function CertificationPage({ params }: { params: Promise<{ 
                 <tr>
                   <th scope="col">分野</th>
                   {hasWeights && <th scope="col">配点</th>}
-                  <th scope="col">rufu の学習ガイド</th>
+                  <th scope="col">本サイトの学習ガイド</th>
                 </tr>
               </thead>
               <tbody>

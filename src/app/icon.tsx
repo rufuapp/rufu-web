@@ -11,24 +11,14 @@ export default function Icon() {
           width: 32,
           height: 32,
           borderRadius: 8,
-          backgroundColor: '#00782f',
+          backgroundColor: '#1c5b3a',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <span
-          style={{
-            color: '#ffffff',
-            fontSize: 20,
-            fontWeight: 800,
-            fontFamily: 'serif',
-            lineHeight: 1,
-            marginTop: 1,
-          }}
-        >
-          r
-        </span>
+        {/* 答案につける「◯」の印 */}
+        <div style={{ width: 20, height: 20, borderRadius: 9999, border: '3px solid #fbf9f3' }} />
       </div>
     ),
     { ...size },
