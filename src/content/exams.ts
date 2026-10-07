@@ -4,12 +4,12 @@ export const TRACKS: Record<TrackId, { name: string; tagline: string; accent: st
   databricks: {
     name: 'Databricks',
     tagline: 'データエンジニアリングから生成AIまで、Databricks 認定資格の出題範囲を想定した演習',
-    accent: '#ff7a59',
+    accent: 'var(--d-dbx)',
   },
   claude: {
     name: 'Claude',
     tagline: 'Claude API・プロンプト設計・Claude Code / MCP の実践力を測る非公式スキル検定',
-    accent: '#e3a072',
+    accent: 'var(--d-cld)',
   },
 };
 

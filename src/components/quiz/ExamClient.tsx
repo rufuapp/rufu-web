@@ -110,138 +110,136 @@ export function ExamClient({ exam, questions }: { exam: Exam; questions: Questio
     );
   }
 
+  const countOptions = [5, 10, 20, questions.length].filter((n, i, arr) => n <= questions.length && arr.indexOf(n) === i);
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-      <section className="rounded-2xl p-5 sm:p-7 theme-card">
-        <h2 className="mb-4 text-sm font-bold">モードを選ぶ</h2>
-        <div className="grid gap-2 sm:grid-cols-3" role="radiogroup" aria-label="モード">
-          {MODES.map((m) => {
-            const active = mode === m.id;
-            const disabled = m.id === 'review' && weakIds.length === 0;
-            return (
-              <button
-                key={m.id}
-                type="button"
-                role="radio"
-                aria-checked={active}
-                disabled={disabled}
-                onClick={() => setMode(m.id)}
-                className="rounded-xl p-4 text-left transition-colors enabled:hover:bg-white/5 disabled:opacity-40"
-                style={{ border: `1.5px solid ${active ? 'var(--acc)' : 'var(--bor)'}`, backgroundColor: active ? 'rgba(74,222,128,0.06)' : 'transparent' }}
-              >
-                <span className="block font-bold">
-                  {m.name}
-                  {m.id === 'review' && (
-                    <span className="ml-1.5 text-xs font-semibold" style={{ color: weakIds.length ? 'var(--warn)' : 'var(--txts)' }}>
-                      {weakIds.length}問
-                    </span>
-                  )}
-                </span>
-                <span className="mt-1 block text-xs leading-relaxed" style={{ color: 'var(--txts)' }}>
-                  {disabled ? 'まだ間違えた問題はありません' : m.desc}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+    <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          startFromSetup();
+        }}
+        className="card p-6 sm:p-8"
+      >
+        <fieldset>
+          <legend className="text-sm font-bold">モード</legend>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {MODES.map((m) => {
+              const disabled = m.id === 'review' && weakIds.length === 0;
+              return (
+                <label
+                  key={m.id}
+                  className="flex cursor-pointer flex-col rounded-xl p-4 ring-1 ring-line transition hover:bg-subtle has-checked:bg-brand/5 has-checked:ring-2 has-checked:ring-brand has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:hover:bg-transparent"
+                >
+                  <input
+                    type="radio"
+                    name="mode"
+                    value={m.id}
+                    checked={mode === m.id}
+                    disabled={disabled}
+                    onChange={() => setMode(m.id)}
+                    className="sr-only"
+                  />
+                  <span className="flex items-center justify-between gap-2 font-bold">
+                    {m.name}
+                    {m.id === 'review' && (
+                      <span className={`chip ${weakIds.length ? 'bg-warn/10 text-warn' : 'bg-subtle text-muted'}`}>{weakIds.length}問</span>
+                    )}
+                  </span>
+                  <span className="mt-1 text-xs leading-relaxed text-muted">{disabled ? 'まだ間違えた問題はありません' : m.desc}</span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
 
         {mode !== 'review' && (
-          <>
-            <h2 className="mb-3 mt-7 text-sm font-bold">問題数</h2>
-            <div className="flex flex-wrap gap-2">
-              {[5, 10, 20, questions.length]
-                .filter((n, i, arr) => n <= questions.length && arr.indexOf(n) === i)
-                .map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setCount(n)}
-                    aria-pressed={count === n}
-                    className="rounded-lg px-4 py-2 text-sm font-semibold"
-                    style={{ border: `1.5px solid ${count === n ? 'var(--acc)' : 'var(--bor)'}`, color: count === n ? 'var(--acc)' : 'var(--txt)' }}
-                  >
-                    {n === questions.length ? `全問（${n}）` : `${n}問`}
-                  </button>
-                ))}
+          <fieldset className="mt-8">
+            <legend className="text-sm font-bold">問題数</legend>
+            <div className="mt-3 inline-flex flex-wrap gap-1 rounded-full bg-subtle p-1 ring-1 ring-line">
+              {countOptions.map((n) => (
+                <label
+                  key={n}
+                  className="cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold text-muted transition hover:text-ink has-checked:bg-card has-checked:text-ink has-checked:shadow-soft"
+                >
+                  <input type="radio" name="count" value={n} checked={count === n} onChange={() => setCount(n)} className="sr-only" />
+                  {n === questions.length ? `全問（${n}）` : `${n}問`}
+                </label>
+              ))}
             </div>
-          </>
+          </fieldset>
         )}
 
         {mode === 'practice' && (
-          <>
-            <h2 className="mb-1 mt-7 text-sm font-bold">分野で絞り込む</h2>
-            <p className="mb-3 text-xs" style={{ color: 'var(--txts)' }}>
-              未選択ならすべての分野から出題します
-            </p>
-            <div className="flex flex-wrap gap-2">
+          <fieldset className="mt-8">
+            <legend className="text-sm font-bold">分野で絞り込む</legend>
+            <p className="mt-1 text-xs text-muted">未選択なら、すべての分野から出題します</p>
+            <div className="mt-3 flex flex-wrap gap-2">
               {exam.domains.map((d) => {
                 const on = domains.includes(d.id);
                 const n = questions.filter((q) => q.domain === d.id).length;
                 return (
-                  <button
+                  <label
                     key={d.id}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => setDomains(on ? domains.filter((x) => x !== d.id) : [...domains, d.id])}
-                    className="rounded-full px-3.5 py-1.5 text-xs font-semibold"
-                    style={{
-                      border: `1.5px solid ${on ? 'var(--acc)' : 'var(--bor)'}`,
-                      backgroundColor: on ? 'rgba(74,222,128,0.1)' : 'transparent',
-                      color: on ? 'var(--acc)' : 'var(--txt)',
-                    }}
+                    className="chip cursor-pointer bg-card px-3.5 py-1.5 text-[13px] text-ink ring-1 ring-line transition hover:bg-subtle has-checked:bg-brand has-checked:text-white has-checked:ring-brand"
                   >
+                    <input
+                      type="checkbox"
+                      name="domain"
+                      value={d.id}
+                      checked={on}
+                      onChange={() => setDomains(on ? domains.filter((x) => x !== d.id) : [...domains, d.id])}
+                      className="sr-only"
+                    />
                     {d.name}
-                    <span className="ml-1 opacity-60">{n}</span>
-                  </button>
+                    <span className="tabular-nums opacity-60">{n}</span>
+                  </label>
                 );
               })}
             </div>
-          </>
+          </fieldset>
         )}
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            onClick={startFromSetup}
-            disabled={plannedCount === 0}
-            className="rounded-xl px-7 py-3 text-base font-bold disabled:opacity-40"
-            style={{ backgroundColor: 'var(--acc)', color: 'var(--bg)' }}
-          >
+        <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-6">
+          <button type="submit" disabled={plannedCount === 0} className="btn btn-primary btn-lg">
             {plannedCount}問をはじめる
           </button>
           {mode === 'mock' && (
-            <span className="text-sm" style={{ color: 'var(--txts)' }}>
-              制限時間 {Math.round((plannedCount * MOCK_SECONDS_PER_QUESTION) / 60)} 分
-            </span>
+            <span className="text-sm text-muted">制限時間 {Math.round((plannedCount * MOCK_SECONDS_PER_QUESTION) / 60)} 分</span>
           )}
         </div>
-      </section>
+      </form>
 
       <aside className="space-y-4">
-        <div className="rounded-2xl p-5 theme-card">
-          <h2 className="mb-3 text-sm font-bold">この試験の記録</h2>
-          <dl className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--surf2)' }}>
-              <dt className="text-[11px]" style={{ color: 'var(--txts)' }}>解いた問題</dt>
-              <dd className="text-xl font-bold tabular-nums">
+        <div className="card p-6">
+          <h2 className="text-sm font-bold">この試験の記録</h2>
+          <dl className="mt-4 grid grid-cols-2 gap-3 text-center">
+            <div className="rounded-xl bg-subtle p-3">
+              <dt className="text-[11px] text-muted">解いた問題</dt>
+              <dd className="mt-0.5 text-2xl font-black tabular-nums">
                 {stat.answered}
-                <span className="text-xs font-normal" style={{ color: 'var(--txts)' }}>/{stat.total}</span>
+                <span className="text-xs font-semibold text-muted">/{stat.total}</span>
               </dd>
             </div>
-            <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--surf2)' }}>
-              <dt className="text-[11px]" style={{ color: 'var(--txts)' }}>正答率</dt>
-              <dd className="text-xl font-bold tabular-nums">{stat.answered ? `${Math.round(stat.accuracy * 100)}%` : '—'}</dd>
+            <div className="rounded-xl bg-subtle p-3">
+              <dt className="text-[11px] text-muted">正答率</dt>
+              <dd className="mt-0.5 text-2xl font-black tabular-nums">
+                {stat.answered ? `${Math.round(stat.accuracy * 100)}%` : <span className="text-sm font-semibold text-muted">未挑戦</span>}
+              </dd>
             </div>
           </dl>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--surf2)' }}>
-            <div className="h-full rounded-full" style={{ width: `${(stat.answered / Math.max(1, stat.total)) * 100}%`, backgroundColor: 'var(--acc)' }} />
+          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-subtle">
+            <div className="bar-fill h-full rounded-full bg-brand" style={{ width: `${(stat.answered / Math.max(1, stat.total)) * 100}%` }} />
           </div>
         </div>
-        <div className="rounded-2xl p-5 text-sm leading-relaxed theme-card">
-          <h2 className="mb-2 font-bold">出題分野</h2>
-          <ul className="space-y-1" style={{ color: 'var(--txts)' }}>
+        <div className="card p-6">
+          <h2 className="text-sm font-bold">出題分野</h2>
+          <ul className="mt-3 space-y-2 text-sm">
             {exam.domains.map((d) => (
-              <li key={d.id}>・{d.name}</li>
+              <li key={d.id} className="flex justify-between gap-2">
+                <span>{d.name}</span>
+                <span className="text-muted tabular-nums">{questions.filter((q) => q.domain === d.id).length}問</span>
+              </li>
             ))}
           </ul>
         </div>

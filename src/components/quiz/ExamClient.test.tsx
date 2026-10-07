@@ -16,8 +16,16 @@ function currentQuestion() {
   return questions.find((q) => q.question === text)!;
 }
 
-function choiceButton(label: string) {
-  return screen.getAllByRole('button').find((b) => b.getAttribute('aria-pressed') !== null && b.textContent?.includes(label))!;
+function choiceInputs() {
+  return [...screen.queryAllByRole('radio'), ...screen.queryAllByRole('checkbox')];
+}
+
+function choiceInput(text: string) {
+  const found = choiceInputs().find((el) =>
+    Array.from(el.closest('label')?.querySelectorAll('span') ?? []).some((s) => s.textContent === text),
+  );
+  if (!found) throw new Error(`選択肢が見つかりません: ${text}`);
+  return found;
 }
 
 beforeEach(() => {
@@ -28,14 +36,14 @@ beforeEach(() => {
 describe('ExamClient', () => {
   it('練習モードで正解すると解説が出て、最後に結果と記録が残る', () => {
     render(<ExamClient exam={exam} questions={questions} />);
-    fireEvent.click(screen.getByRole('button', { name: '5問' }));
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
     fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
 
     for (let i = 0; i < 5; i++) {
       const q = currentQuestion();
-      for (const a of q.answer) fireEvent.click(choiceButton(q.choices[a]));
+      for (const a of q.answer) fireEvent.click(choiceInput(q.choices[a]));
       fireEvent.click(screen.getByRole('button', { name: '回答する' }));
-      expect(screen.getByText('◯ 正解')).toBeInTheDocument();
+      expect(screen.getByText('正解！')).toBeInTheDocument();
       expect(screen.getByText(q.explanation)).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: i < 4 ? '次の問題 →' : '結果を見る' }));
     }
@@ -50,14 +58,14 @@ describe('ExamClient', () => {
 
   it('間違えた問題は苦手克服モードで出題できる', () => {
     render(<ExamClient exam={exam} questions={questions} />);
-    fireEvent.click(screen.getByRole('button', { name: '5問' }));
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
     fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
 
     const q = currentQuestion();
     const wrong = q.choices.findIndex((_, i) => !q.answer.includes(i));
-    fireEvent.click(choiceButton(q.choices[wrong]));
+    fireEvent.click(choiceInput(q.choices[wrong]));
     fireEvent.click(screen.getByRole('button', { name: '回答する' }));
-    expect(screen.getByText('✕ 不正解')).toBeInTheDocument();
+    expect(screen.getByText('残念、不正解')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: '中断' }));
     fireEvent.click(screen.getByRole('button', { name: '中断する' }));
@@ -69,12 +77,25 @@ describe('ExamClient', () => {
     expect(currentQuestion().id).toBe(q.id);
   });
 
+  it('選択肢にフォーカスがあっても、数字キーで選んで Enter で回答できる', () => {
+    render(<ExamClient exam={exam} questions={questions} />);
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
+    fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
+
+    const [first] = choiceInputs();
+    first.focus();
+    fireEvent.keyDown(first, { key: '1' });
+    expect(first).toBeChecked();
+    fireEvent.keyDown(first, { key: 'Enter' });
+    expect(screen.getByRole('status')).toHaveTextContent(currentQuestion().explanation);
+  });
+
   it('模試モードは時間切れで自動採点される', () => {
     jest.useFakeTimers();
     try {
       render(<ExamClient exam={exam} questions={questions} />);
       fireEvent.click(screen.getByRole('radio', { name: /模試/ }));
-      fireEvent.click(screen.getByRole('button', { name: '5問' }));
+      fireEvent.click(screen.getByRole('radio', { name: '5問' }));
       expect(screen.getByText('制限時間 10 分')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
       expect(screen.queryByRole('button', { name: '回答する' })).not.toBeInTheDocument();
