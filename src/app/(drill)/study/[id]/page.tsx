@@ -125,7 +125,7 @@ export default async function StudyTopicPage({ params }: { params: Promise<{ id:
                 return (
                   <section key={g.id} aria-labelledby={`voc-${g.id}`} className="mt-8">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink pb-1.5">
-                      <h4 id={`voc-${g.id}`} className="scroll-mt-6 font-bold">
+                      <h4 id={`voc-${g.id}`} className="scroll-mt-16 font-bold">
                         <span className="mr-1 text-muted">{KANJI[i] ?? i + 1}、</span>
                         {g.name}
                         <span className="ml-2 text-sm font-normal text-muted">{g.words.length} 語</span>

@@ -1,22 +1,34 @@
-import { decodeEntities, mergeTrends, parseAnthropicNews, parseClaudeBlog, parseRss, toIsoDate } from './parse';
+import { decodeEntities, mergeTrends, parseAnthropicNews, parseAtom, parseClaudeBlog, parseRss, toIsoDate } from './parse';
 
 describe('公式発表の読み取り', () => {
   it('文字参照と CDATA を戻す', () => {
     expect(decodeEntities('A &amp; B &#x27;x&#39; <![CDATA[C]]>')).toBe("A & B 'x' C");
   });
 
-  it('日付を YYYY-MM-DD にし、読めなければ undefined', () => {
-    expect(toIsoDate('Tue, 06 Oct 2026 16:35:12 GMT')).toBe('2026-10-06');
+  it('日付を日本時間の YYYY-MM-DD にし、読めなければ undefined', () => {
+    expect(toIsoDate('Tue, 06 Oct 2026 14:35:12 GMT')).toBe('2026-10-06');
+    expect(toIsoDate('Tue, 06 Oct 2026 16:35:12 GMT')).toBe('2026-10-07');
+    expect(toIsoDate('2026-10-08T05:00:00+09:00')).toBe('2026-10-08');
+    expect(toIsoDate('Oct 6, 2026')).toBe('2026-10-06');
     expect(toIsoDate('nope')).toBeUndefined();
   });
 
   it('RSS の item から見出し・リンク・日付を読む（欠けた item は捨てる）', () => {
     const xml = `<rss><channel><title>Databricks</title>
-      <item><title><![CDATA[ Lakehouse &amp; more ]]></title><link>https://www.databricks.com/blog/a</link><pubDate>Tue, 06 Oct 2026 16:35:12 GMT</pubDate></item>
+      <item><title><![CDATA[ Lakehouse &amp; more ]]></title><link>https://www.databricks.com/blog/a</link><pubDate>Tue, 06 Oct 2026 10:35:12 GMT</pubDate></item>
       <item><title>no date</title><link>https://x</link></item>
     </channel></rss>`;
     expect(parseRss(xml, 'databricks-blog')).toEqual([
       { source: 'databricks-blog', title: 'Lakehouse & more', url: 'https://www.databricks.com/blog/a', date: '2026-10-06' },
+    ]);
+  });
+
+  it('Atom の entry から、alternate のリンクと公開日を読む', () => {
+    const xml = `<feed><link rel="alternate" href="https://qiita.com"/>
+      <entry><published>2026-10-07T19:19:48+09:00</published><link rel="alternate" type="text/html" href="https://qiita.com/u/items/1"/><title>Claude Code &amp; Skills</title></entry>
+    </feed>`;
+    expect(parseAtom(xml, 'qiita-claudecode')).toEqual([
+      { source: 'qiita-claudecode', title: 'Claude Code & Skills', url: 'https://qiita.com/u/items/1', date: '2026-10-07' },
     ]);
   });
 

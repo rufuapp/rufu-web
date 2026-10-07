@@ -113,7 +113,7 @@ export default function TopPage() {
       </section>
 
       {/* 第一章 最新の動向 */}
-      <section id="trends" className="scroll-mt-6 py-10">
+      <section id="trends" className="scroll-mt-16 py-10">
         <SectionTitle num="第一章" title="最新の動向" en="Latest updates" />
         <p className="mb-6">
           Anthropic と Databricks の公式サイトから、発表を毎日集めています。日本語の見出しとまとめは、本文をもとに AI（Claude）が作ったものです。正確な内容は、リンク先の公式の記事で確かめてください。
@@ -127,10 +127,10 @@ export default function TopPage() {
       </section>
 
       {/* 第二章 技術 Tips */}
-      <section id="tips" className="scroll-mt-6 py-10">
+      <section id="tips" className="scroll-mt-16 py-10">
         <SectionTitle num="第二章" title="技術 Tips" en="Tips" />
         <p className="mb-6">
-          どんな Skill を作るとよいか、Claude Code や Databricks をどう使いこなすか。技術記事サイト Zenn の記事を毎日集め、AI（Claude）が短いまとめを付けています。記事は個人の方が書いたものです。
+          どんな Skill を作るとよいか、Claude Code や Databricks をどう使いこなすか。Zenn・Qiita・DevelopersIO の技術記事を毎日集め、AI（Claude）が短いまとめを付けています。記事は各サイトの書き手の方によるものです。
         </p>
         <TrendList items={TIPS.slice(0, TOP_TIPS_COUNT)} />
         <p className="mt-4 text-right">
@@ -141,7 +141,7 @@ export default function TopPage() {
       </section>
 
       {/* 第三章 資格一覧 */}
-      <section id="certifications" className="scroll-mt-6 py-10">
+      <section id="certifications" className="scroll-mt-16 py-10">
         <SectionTitle num="第三章" title="資格一覧" en="Certifications" />
         {TRACK_ORDER.map((track) => (
           <div key={track} className="mb-12 last:mb-0">
@@ -199,7 +199,7 @@ export default function TopPage() {
       </section>
 
       {/* 第四章 学習すべき内容 */}
-      <section id="study" className="scroll-mt-6 py-10">
+      <section id="study" className="scroll-mt-16 py-10">
         <SectionTitle num="第四章" title="学習すべき内容" en="Study guide" />
         <p className="mb-8">
           資格の出題範囲をもとに、学ぶべき内容を項目ごとにまとめました。それぞれの項目に、押さえるべき点、重要な用語、公式の教材、確認の問題をそろえています。
@@ -233,7 +233,7 @@ export default function TopPage() {
       </section>
 
       {/* 第五章 問題集一覧 */}
-      <section id="question-sets" className="scroll-mt-6 py-10">
+      <section id="question-sets" className="scroll-mt-16 py-10">
         <SectionTitle num="第五章" title="問題集一覧" en="Question sets" />
         <p className="mb-6">
           すべて解説付きのオリジナル問題です。練習（1問ごとに解説）、模試（制限時間つき）、苦手克服（間違えた問題だけ）の 3 つの形式で解けます。

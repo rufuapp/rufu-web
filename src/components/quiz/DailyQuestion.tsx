@@ -109,7 +109,7 @@ function DailyBody({ today }: { today: string }) {
 export function DailyQuestion() {
   const isClient = useIsClient();
   return (
-    <div id="daily" className="scroll-mt-6">
+    <div id="daily" className="scroll-mt-16">
       {isClient ? <DailyBody today={localDate()} /> : <div className="box h-96" aria-hidden />}
     </div>
   );

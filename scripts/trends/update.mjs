@@ -19,7 +19,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync, mkdtempSync } fro
 import { homedir, tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseAnthropicNews, parseClaudeBlog, parseRss } from '../../src/lib/trends/parse.ts';
+import { parseAnthropicNews, parseAtom, parseClaudeBlog, parseRss } from '../../src/lib/trends/parse.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ITEMS_FILE = join(ROOT, 'src/content/trends/items.json');
@@ -45,11 +45,18 @@ const SOURCES = [
   { id: 'claude-blog', url: 'https://claude.com/blog', parse: parseClaudeBlog },
   { id: 'databricks-blog', url: 'https://www.databricks.com/feed', parse: (xml) => parseRss(xml, 'databricks-blog') },
   { id: 'databricks-release-notes', url: 'https://docs.databricks.com/aws/en/feed.xml', parse: (xml) => parseRss(xml, 'databricks-release-notes') },
-  // 技術 Tips（Zenn のトピック）。同じ記事が複数のトピックに出たときは、先に書いたトピックの記事として扱う
+  // 技術 Tips（技術記事サイトのタグ・トピック）。同じ記事が複数に出たときは、先に書いたものとして扱う（Skill を先にする）
   { id: 'zenn-agentskills', url: 'https://zenn.dev/topics/agentskills/feed', parse: (xml) => parseRss(xml, 'zenn-agentskills') },
+  { id: 'qiita-agentskills', url: 'https://qiita.com/tags/agentskills/feed', parse: (xml) => parseAtom(xml, 'qiita-agentskills') },
+  { id: 'qiita-claudeskills', url: 'https://qiita.com/tags/claudeskills/feed', parse: (xml) => parseAtom(xml, 'qiita-claudeskills') },
   { id: 'zenn-claudecode', url: 'https://zenn.dev/topics/claudecode/feed', parse: (xml) => parseRss(xml, 'zenn-claudecode') },
+  { id: 'qiita-claudecode', url: 'https://qiita.com/tags/claudecode/feed', parse: (xml) => parseAtom(xml, 'qiita-claudecode') },
+  { id: 'classmethod-claudecode', url: 'https://dev.classmethod.jp/tags/claude-code/feed/', parse: (xml) => parseRss(xml, 'classmethod-claudecode') },
   { id: 'zenn-mcp', url: 'https://zenn.dev/topics/mcp/feed', parse: (xml) => parseRss(xml, 'zenn-mcp') },
+  { id: 'qiita-mcp', url: 'https://qiita.com/tags/mcp/feed', parse: (xml) => parseAtom(xml, 'qiita-mcp') },
   { id: 'zenn-databricks', url: 'https://zenn.dev/topics/databricks/feed', parse: (xml) => parseRss(xml, 'zenn-databricks') },
+  { id: 'qiita-databricks', url: 'https://qiita.com/tags/databricks/feed', parse: (xml) => parseAtom(xml, 'qiita-databricks') },
+  { id: 'classmethod-databricks', url: 'https://dev.classmethod.jp/tags/databricks/feed/', parse: (xml) => parseRss(xml, 'classmethod-databricks') },
 ];
 
 const log = (...m) => console.log('[trends]', ...m);

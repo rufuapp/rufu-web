@@ -15,8 +15,9 @@ const LINKS = [
 export function NavLinks() {
   const pathname = usePathname();
   return (
-    <nav aria-label="メイン" className="border-t border-line">
-      <ul className="flex flex-wrap justify-center divide-x divide-line text-sm">
+    <nav aria-label="メイン" className="-mx-4 overflow-x-auto border-t border-line sm:mx-0">
+      {/* 狭い画面では折り返さず、横にスクロールできる1行にする */}
+      <ul className="mx-auto flex w-max divide-x divide-line px-4 text-sm whitespace-nowrap sm:px-0">
         {LINKS.map((l) => {
           const active = pathname === l.section || pathname.startsWith(`${l.section}/`);
           return (
