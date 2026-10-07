@@ -58,18 +58,13 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
-            <Link href="/#certifications" className="hover:underline">
-              資格一覧
+            <Link href="/basics" className="hover:underline">
+              基礎知識
             </Link>
           </li>
           <li>
-            <Link href="/#study" className="hover:underline">
-              学習すべき内容
-            </Link>
-          </li>
-          <li>
-            <Link href="/#question-sets" className="hover:underline">
-              問題集一覧
+            <Link href="/exam" className="hover:underline">
+              資格対策
             </Link>
           </li>
           <li>

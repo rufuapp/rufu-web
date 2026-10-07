@@ -50,7 +50,7 @@ export default async function StudyTopicPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/#study', label: '学習すべき内容' }, { label: topic.title }]} />
+      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/exam#study', label: '学習すべき内容' }, { label: topic.title }]} />
 
       <header className="mt-6 border-b border-line pb-6">
         <p className="flex flex-wrap items-center gap-3">

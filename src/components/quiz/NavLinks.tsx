@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+// sections: そのタブを選択中として表示するパス（資格対策は、資格・学習ガイド・問題集のページも含む）
 const LINKS = [
-  { href: '/trends', label: '最新の動向', section: '/trends' },
-  { href: '/tips', label: '技術 Tips', section: '/tips' },
-  { href: '/#certifications', label: '資格一覧', section: '/certifications' },
-  { href: '/#study', label: '学習ガイド', section: '/study' },
-  { href: '/#question-sets', label: '問題集', section: '/question-sets' },
-  { href: '/progress', label: '学習記録', section: '/progress' },
+  { href: '/trends', label: '最新の動向', sections: ['/trends'] },
+  { href: '/tips', label: '技術 Tips', sections: ['/tips'] },
+  { href: '/basics', label: '基礎知識', sections: ['/basics'] },
+  { href: '/exam', label: '資格対策', sections: ['/exam', '/certifications', '/study', '/question-sets'] },
+  { href: '/progress', label: '学習記録', sections: ['/progress'] },
 ];
 
 export function NavLinks() {
@@ -19,7 +19,7 @@ export function NavLinks() {
       {/* 狭い画面では折り返さず、横にスクロールできる1行にする */}
       <ul className="mx-auto flex w-max divide-x divide-line px-4 text-sm whitespace-nowrap sm:px-0">
         {LINKS.map((l) => {
-          const active = pathname === l.section || pathname.startsWith(`${l.section}/`);
+          const active = l.sections.some((s) => pathname === s || pathname.startsWith(`${s}/`));
           return (
             <li key={l.href}>
               <Link

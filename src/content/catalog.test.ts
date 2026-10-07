@@ -63,3 +63,22 @@ describe('資格・問題集・学習内容のつながり', () => {
     expect(adjacentTopics('nope')).toEqual({});
   });
 });
+
+describe('基礎知識', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { BASICS_TOPICS, BASICS_GROUPS } = require('./basics') as typeof import('./basics');
+
+  it('ID が重複せず、どの項目もまとまりに属し、公式の情報へのリンクがある', () => {
+    expect(new Set(BASICS_TOPICS.map((t) => t.id)).size).toBe(BASICS_TOPICS.length);
+    for (const t of BASICS_TOPICS) {
+      expect(BASICS_GROUPS.map((g) => g.id)).toContain(t.group);
+      expect(t.sections.length).toBeGreaterThan(0);
+      expect(t.resources.length).toBeGreaterThan(0);
+      for (const r of t.resources) expect(r.url).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('どのまとまりにも項目がある', () => {
+    for (const g of BASICS_GROUPS) expect(BASICS_TOPICS.some((t) => t.group === g.id)).toBe(true);
+  });
+});
