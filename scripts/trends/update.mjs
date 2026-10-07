@@ -37,6 +37,8 @@ const BATCH_SIZE = 8;
 /** 保存しておく件数の上限 */
 const KEEP = 600;
 const ARTICLE_CHARS = 6000;
+/** 最後に本番へ出したコミット（デプロイに失敗した日の分を、次の実行で出し直すため。.vercel は git 管理外） */
+const DEPLOYED_FILE = join(ROOT, '.vercel/trends-last-deployed');
 
 const SOURCES = [
   { id: 'anthropic-news', url: 'https://www.anthropic.com/news', parse: parseAnthropicNews },
@@ -151,6 +153,20 @@ function run(cmd, a) {
   execFileSync(cmd, a, { cwd: ROOT, stdio: 'inherit' });
 }
 
+/** まだ本番に出していないコミットがあれば、push してデプロイする */
+function deployIfNeeded() {
+  if (NO_DEPLOY || NO_GIT) return log('--no-deploy または --no-git のため、push とデプロイはしません。');
+  const head = git('rev-parse', 'HEAD');
+  const deployed = existsSync(DEPLOYED_FILE) ? readFileSync(DEPLOYED_FILE, 'utf8').trim() : '';
+  if (head === deployed) return log('本番は最新です。');
+  run('git', ['push']);
+  run('vercel', ['pull', '--yes', '--environment=production']);
+  run('vercel', ['build', '--prod']);
+  run('vercel', ['deploy', '--prebuilt', '--prod']);
+  writeFileSync(DEPLOYED_FILE, `${head}\n`);
+  log('本番に反映しました。');
+}
+
 async function main() {
   if (!DRY_RUN && !NO_GIT) {
     if (git('rev-parse', '--abbrev-ref', 'HEAD') !== 'main') throw new Error('main ブランチで実行してください。');
@@ -176,7 +192,11 @@ async function main() {
   const unique = [...new Map(found.map((it) => [it.url, it])).values()].sort((a, b) => b.date.localeCompare(a.date));
   const targets = unique.slice(0, MAX_NEW_PER_RUN);
   if (unique.length > targets.length) log(`多いため ${targets.length} 件だけ訳し、残り ${unique.length - targets.length} 件は次回に回します。`);
-  if (targets.length === 0) return log('新しい記事はありません。');
+  if (targets.length === 0) {
+    log('新しい記事はありません。');
+    if (!DRY_RUN) deployIfNeeded();
+    return;
+  }
   if (DRY_RUN) {
     for (const it of targets) log(`  ${it.date} ${it.source} ${it.title}`);
     return log('--dry-run のため、ここで終わります。');
@@ -207,7 +227,11 @@ async function main() {
       added.push({ source: it.source, title: it.title, url: it.url, date: it.date, titleJa: r.titleJa.trim(), summaryJa: r.summaryJa.trim() });
     }
   }
-  if (added.length === 0) return log('保存できた記事はありません。');
+  if (added.length === 0) {
+    log('保存できた記事はありません。');
+    deployIfNeeded();
+    return;
+  }
 
   const merged = [...added, ...existing].sort((a, b) => b.date.localeCompare(a.date)).slice(0, KEEP);
   writeFileSync(ITEMS_FILE, `${JSON.stringify(merged, null, 2)}\n`);
@@ -216,12 +240,7 @@ async function main() {
   if (NO_GIT) return log('--no-git のため、コミットとデプロイはしません。');
   run('git', ['add', 'src/content/trends/items.json']);
   run('git', ['commit', '-m', `chore: 最新の動向を更新（${today}・${added.length} 件）`]);
-  if (NO_DEPLOY) return log('--no-deploy のため、push とデプロイはしません。');
-  run('git', ['push']);
-  run('vercel', ['pull', '--yes', '--environment=production']);
-  run('vercel', ['build', '--prod']);
-  run('vercel', ['deploy', '--prebuilt', '--prod']);
-  log('本番に反映しました。');
+  deployIfNeeded();
 }
 
 main().catch((e) => {
