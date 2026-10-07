@@ -6,6 +6,7 @@ import { TIPS, TIPS_THEMES, TREND_SOURCES, TREND_SOURCE_ORDER } from '@/lib/tren
 const PER_THEME = 15;
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/tips' },
   title: '技術 Tips',
   description: 'Claude Code の Skill・設定・MCP や、Databricks の実務での使い方について、Zenn・Qiita・DevelopersIO の技術記事を毎日集め、日本語の短いまとめを付けて紹介しています。',
 };

@@ -18,6 +18,7 @@ import { Breadcrumb, SectionTitle } from '@/components/quiz/ui';
 import type { TrackId } from '@/lib/quiz/types';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/exam' },
   title: '資格対策',
   description: 'Databricks と Claude の認定資格の解説、資格の出題範囲にもとづく学習ガイド、解説付きのオリジナル問題集。',
 };

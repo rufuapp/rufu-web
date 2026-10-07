@@ -1,11 +1,24 @@
 import type { NextConfig } from "next";
 
+// 正式なアドレスは rufu.app。www.rufu.app は転送し、rufu.dev（検証用）は検索エンジンに載せない
+const STAGING_HOSTS = "(?:www\\.)?rufu\\.dev";
+
 const nextConfig: NextConfig = {
-  // 旧 URL（/exams）を新しい問題集のページへ転送する
   async redirects() {
     return [
+      // 旧 URL（/exams）を新しい問題集のページへ転送する
       { source: "/exams", destination: "/exam#question-sets", permanent: true },
       { source: "/exams/:id", destination: "/question-sets/:id", permanent: true },
+      { source: "/:path*", has: [{ type: "host", value: "www.rufu.app" }], destination: "https://rufu.app/:path*", permanent: true },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: STAGING_HOSTS }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ];
   },
 };

@@ -21,10 +21,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!set) return {};
   const description = `${set.title}（解説付き ${questionsForExam(id).length} 問）。${set.summary}`;
   return {
+    alternates: { canonical: `/question-sets/${set.id}` },
     title: set.title,
     description,
-    openGraph: { title: `${set.title} | ${SITE_NAME}`, description, type: 'website' },
-    twitter: { card: 'summary', title: `${set.title} | ${SITE_NAME}`, description },
+    openGraph: { title: `${set.title} | ${SITE_NAME}`, description, type: 'website', images: '/opengraph-image' },
+    twitter: { card: 'summary_large_image', title: `${set.title} | ${SITE_NAME}`, description, images: '/twitter-image' },
   };
 }
 

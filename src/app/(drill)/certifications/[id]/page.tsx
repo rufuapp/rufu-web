@@ -19,10 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!cert) return {};
   const title = `${cert.nameJa}（${cert.name}）とは`;
   return {
+    alternates: { canonical: `/certifications/${cert.id}` },
     title,
     description: cert.summary,
-    openGraph: { title: `${title} | ${SITE_NAME}`, description: cert.summary, type: 'article' },
-    twitter: { card: 'summary', title: `${title} | ${SITE_NAME}`, description: cert.summary },
+    openGraph: { title: `${title} | ${SITE_NAME}`, description: cert.summary, type: 'article', images: '/opengraph-image' },
+    twitter: { card: 'summary_large_image', title: `${title} | ${SITE_NAME}`, description: cert.summary, images: '/twitter-image' },
   };
 }
 

@@ -34,10 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const topic = getStudyTopic(id);
   if (!topic) return {};
   return {
+    alternates: { canonical: `/study/${topic.id}` },
     title: `${topic.title}（学習ガイド）`,
     description: topic.summary,
-    openGraph: { title: `${topic.title} | ${SITE_NAME}`, description: topic.summary, type: 'article' },
-    twitter: { card: 'summary', title: `${topic.title} | ${SITE_NAME}`, description: topic.summary },
+    openGraph: { title: `${topic.title} | ${SITE_NAME}`, description: topic.summary, type: 'article', images: '/opengraph-image' },
+    twitter: { card: 'summary_large_image', title: `${topic.title} | ${SITE_NAME}`, description: topic.summary, images: '/twitter-image' },
   };
 }
 

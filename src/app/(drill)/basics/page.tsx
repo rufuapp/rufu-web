@@ -4,6 +4,7 @@ import { BASICS_CHECKED_ON, BASICS_GROUPS, basicsForGroup } from '@/content/basi
 import { Breadcrumb, SubTitle } from '@/components/quiz/ui';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/basics' },
   title: '基礎知識',
   description: 'FDE として Claude と Databricks を提案・導入するときに必要な基礎知識。モデルの選び方、データの扱い、料金、PoC の進め方、本番化のチェックリストなど。',
 };

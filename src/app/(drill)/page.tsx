@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CERTIFICATIONS } from '@/content/certifications';
 import { QUESTION_SETS } from '@/content/question-sets';
@@ -8,6 +9,10 @@ import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
 import { TIPS, TRENDS, countSince, todayInTokyo } from '@/lib/trends/sources';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 const TOP_TREND_COUNT = 12;
 const TOP_TIPS_COUNT = 6;
