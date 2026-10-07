@@ -42,12 +42,12 @@ export default function TopPage() {
       <section className="grid gap-10 py-10 md:grid-cols-[1.15fr_1fr] md:py-14">
         <div>
           <h1 className="text-2xl leading-relaxed sm:text-[1.75rem]">
-            Databricks と Claude の資格を、
+            FDE に必要な基礎を、
             <br className="hidden sm:inline" />
             学んで、解いて、確かめる。
           </h1>
           <p className="mt-5">
-            本サイトでは、Databricks と Claude の認定資格について、どんな資格なのか、何をもとに学べばよいのかをまとめています。学んだ内容は、解説付きのオリジナル問題集で確かめられます。登録は要りません。
+            FDE（Forward Deployed Engineer）は、お客さまの現場に入り込み、データ基盤や AI を使って実際の課題を解決するエンジニアです。本サイトでは、その土台となる知識のうち、データ基盤の Databricks と生成 AI の Claude について、認定資格を道しるべにまとめています。学んだ内容は、解説付きのオリジナル問題集で確かめられます。登録は要りません。
           </p>
           <h2 className="mt-8 text-sm font-bold tracking-[0.2em] text-muted">本サイトの使い方</h2>
           <ol className="mt-3 space-y-3">

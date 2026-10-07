@@ -10,11 +10,11 @@ export function SiteHeader() {
       </a>
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="flex flex-col items-center pt-6 pb-4 text-center">
-          <p className="text-[11px] tracking-[0.35em] text-muted">DATABRICKS ・ CLAUDE</p>
+          <p className="text-[11px] tracking-[0.35em] text-muted">FORWARD DEPLOYED ENGINEER</p>
           <Link href="/" className="mt-1 text-3xl font-bold tracking-[0.12em] sm:text-4xl">
             {SITE_NAME}
           </Link>
-          <p className="mt-1 text-xs tracking-[0.15em] text-muted">資格を知り、学び、問題で確かめる</p>
+          <p className="mt-1 text-xs tracking-[0.08em] break-keep text-muted">Databricks と Claude で身につける、FDE の基礎知識</p>
         </div>
         <NavLinks />
       </div>
