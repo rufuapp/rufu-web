@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { EXAMS } from '@/content/exams';
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rufu.app';
+import { SITE_URL as BASE_URL } from '@/lib/site-url';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
