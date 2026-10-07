@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 
 const LINKS = [
   { href: '/#certifications', label: '資格一覧', section: '/certifications' },
-  { href: '/#question-sets', label: '問題集', section: '/question-sets' },
   { href: '/#study', label: '学習ガイド', section: '/study' },
+  { href: '/#question-sets', label: '問題集', section: '/question-sets' },
   { href: '/progress', label: '学習記録', section: '/progress' },
 ];
 

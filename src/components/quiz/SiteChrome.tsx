@@ -34,13 +34,13 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
-            <Link href="/#question-sets" className="hover:underline">
-              問題集一覧
+            <Link href="/#study" className="hover:underline">
+              学習すべき内容
             </Link>
           </li>
           <li>
-            <Link href="/#study" className="hover:underline">
-              学習すべき内容
+            <Link href="/#question-sets" className="hover:underline">
+              問題集一覧
             </Link>
           </li>
           <li>
