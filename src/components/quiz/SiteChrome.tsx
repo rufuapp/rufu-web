@@ -34,6 +34,11 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
+            <Link href="/tips" className="hover:underline">
+              技術 Tips
+            </Link>
+          </li>
+          <li>
             <Link href="/#certifications" className="hover:underline">
               資格一覧
             </Link>
@@ -59,7 +64,7 @@ export function SiteFooter() {
             本サイトは個人が運営する非公式の学習サイトです。Databricks, Inc. および Anthropic PBC とは関係ありません。問題集の問題はすべてオリジナルで、実際の試験問題ではありません。
           </p>
           <p>
-            最新の動向の見出しとリンクは、各社の公式サイトから自動で集めています。資格の情報は各社の公式ページをもとにまとめていますが、内容は変わることがあります。受験の前に、必ず公式の情報を確認してください。製品名・サービス名は各社の商標です。学習記録はお使いのブラウザにのみ保存されます。アクセス数の把握に、個人を特定しない Vercel Web Analytics を使っています。
+            最新の動向は各社の公式サイトから、技術 Tips は Zenn から自動で集め、まとめは AI が作っています。資格の情報は各社の公式ページをもとにまとめていますが、内容は変わることがあります。受験の前に、必ず公式の情報を確認してください。製品名・サービス名は各社の商標です。学習記録はお使いのブラウザにのみ保存されます。アクセス数の把握に、個人を特定しない Vercel Web Analytics を使っています。
           </p>
         </div>
         <p className="mt-6">© {new Date().getFullYear()} {SITE_NAME}</p>

@@ -1,6 +1,15 @@
 // 公式の発表を一覧にするための読み取り処理（RSS と、フィードのない公式サイトの一覧ページ）
 
-export type TrendSourceId = 'anthropic-news' | 'claude-blog' | 'databricks-blog' | 'databricks-release-notes';
+export type TrendSourceId =
+  | 'anthropic-news'
+  | 'claude-blog'
+  | 'databricks-blog'
+  | 'databricks-release-notes'
+  // 技術 Tips（Zenn のトピック）
+  | 'zenn-agentskills'
+  | 'zenn-claudecode'
+  | 'zenn-mcp'
+  | 'zenn-databricks';
 
 export type TrendItem = {
   source: TrendSourceId;

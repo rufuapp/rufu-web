@@ -31,7 +31,7 @@ const NO_GIT = args.has('--no-git');
 /** 初回や久しぶりの実行で古い記事を大量に訳さないよう、この日数より前の記事は対象にしない */
 const LOOKBACK_DAYS = 14;
 /** 1 回の実行で訳す上限（多すぎる日は翌日に回す） */
-const MAX_NEW_PER_RUN = 40;
+const MAX_NEW_PER_RUN = 60;
 /** Claude Code 1 回の呼び出しで訳す記事の数 */
 const BATCH_SIZE = 8;
 /** 保存しておく件数の上限 */
@@ -45,9 +45,15 @@ const SOURCES = [
   { id: 'claude-blog', url: 'https://claude.com/blog', parse: parseClaudeBlog },
   { id: 'databricks-blog', url: 'https://www.databricks.com/feed', parse: (xml) => parseRss(xml, 'databricks-blog') },
   { id: 'databricks-release-notes', url: 'https://docs.databricks.com/aws/en/feed.xml', parse: (xml) => parseRss(xml, 'databricks-release-notes') },
+  // 技術 Tips（Zenn のトピック）。同じ記事が複数のトピックに出たときは、先に書いたトピックの記事として扱う
+  { id: 'zenn-agentskills', url: 'https://zenn.dev/topics/agentskills/feed', parse: (xml) => parseRss(xml, 'zenn-agentskills') },
+  { id: 'zenn-claudecode', url: 'https://zenn.dev/topics/claudecode/feed', parse: (xml) => parseRss(xml, 'zenn-claudecode') },
+  { id: 'zenn-mcp', url: 'https://zenn.dev/topics/mcp/feed', parse: (xml) => parseRss(xml, 'zenn-mcp') },
+  { id: 'zenn-databricks', url: 'https://zenn.dev/topics/databricks/feed', parse: (xml) => parseRss(xml, 'zenn-databricks') },
 ];
 
 const log = (...m) => console.log('[trends]', ...m);
+const JAPANESE = /[\u3040-\u30ff\u3400-\u9fff]/;
 
 function todayInTokyo() {
   return new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
@@ -118,12 +124,12 @@ function prompt(batch) {
   const articles = batch
     .map((it, i) => `### 記事 ${i + 1}\nURL: ${it.url}\n見出し: ${it.title}\n本文（抜粋）:\n${it.text || '（本文を取得できませんでした。見出しだけから訳してください）'}`)
     .join('\n\n');
-  return `あなたは、Claude と Databricks の公式発表を日本語で紹介する技術サイトの編集者です。
+  return `あなたは、Claude と Databricks の公式発表と技術記事を日本語で紹介する技術サイトの編集者です。
 次の各記事について、日本語の見出し（titleJa）と、まとめ（summaryJa）を作ってください。
 
 決まり:
-- titleJa: 原文の見出しの自然な日本語訳。製品名・機能名（Claude Code、Unity Catalog など）は英語のまま残す。
-- summaryJa: 本文に書かれている事実だけを、2〜3 文、です・ます調で書く。何が発表され、誰にどう役立つかを中心にする。本文にない推測や評価は書かない。
+- titleJa: 原文の見出しの自然な日本語訳。製品名・機能名（Claude Code、Unity Catalog など）は英語のまま残す。見出しがすでに日本語なら、一字も変えずにそのまま返す。
+- summaryJa: 本文に書かれている事実だけを、2〜3 文、です・ます調で書く。公式発表なら何が発表され誰にどう役立つかを、技術記事なら何を試し、どんな工夫や結論が書かれているかを中心にする。本文にない推測や評価は書かない。
 - 本文を取得できなかった記事は、見出しから分かることだけを 1 文で書く。
 - url は、与えられた URL をそのまま返す。すべての記事について 1 件ずつ返す。
 
@@ -189,7 +195,10 @@ async function main() {
       log(`${src.id}: 取得できませんでした（${e.message}）`);
     }
   }
-  const unique = [...new Map(found.map((it) => [it.url, it])).values()].sort((a, b) => b.date.localeCompare(a.date));
+  // 同じ URL は、先に見つけた（SOURCES で先に書いた）情報源の記事として残す
+  const firstByUrl = new Map();
+  for (const it of found) if (!firstByUrl.has(it.url)) firstByUrl.set(it.url, it);
+  const unique = [...firstByUrl.values()].sort((a, b) => b.date.localeCompare(a.date));
   const targets = unique.slice(0, MAX_NEW_PER_RUN);
   if (unique.length > targets.length) log(`多いため ${targets.length} 件だけ訳し、残り ${unique.length - targets.length} 件は次回に回します。`);
   if (targets.length === 0) {
@@ -224,7 +233,9 @@ async function main() {
         log(`  訳が返らなかったため次回に回します: ${it.url}`);
         continue;
       }
-      added.push({ source: it.source, title: it.title, url: it.url, date: it.date, titleJa: r.titleJa.trim(), summaryJa: r.summaryJa.trim() });
+      // 見出しがすでに日本語なら、AI の言い換えは使わず原文のままにする
+      const titleJa = JAPANESE.test(it.title) ? it.title : r.titleJa.trim();
+      added.push({ source: it.source, title: it.title, url: it.url, date: it.date, titleJa, summaryJa: r.summaryJa.trim() });
     }
   }
   if (added.length === 0) {

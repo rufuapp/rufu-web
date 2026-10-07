@@ -33,7 +33,7 @@ export default function TrendsPage() {
               <span className="mr-2 inline-block h-5 w-1 align-[-2px]" style={{ backgroundColor: TRACKS[track].accent }} />
               {TRACKS[track].name}
             </h2>
-            {TREND_SOURCE_ORDER.filter((id) => TREND_SOURCES[id].track === track).map((id) => {
+            {TREND_SOURCE_ORDER.filter((id) => TREND_SOURCES[id].kind === 'official' && TREND_SOURCES[id].track === track).map((id) => {
               const src = TREND_SOURCES[id];
               const list = items.filter((it) => it.source === id).slice(0, PER_SOURCE);
               return (

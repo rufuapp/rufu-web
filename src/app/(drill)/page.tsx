@@ -15,7 +15,7 @@ import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { QuestionSetTable } from '@/components/quiz/QuestionSetTable';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
-import { TRENDS, countSince, todayInTokyo } from '@/lib/trends/sources';
+import { TIPS, TRENDS, countSince, todayInTokyo } from '@/lib/trends/sources';
 import type { TrackId } from '@/lib/quiz/types';
 
 const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
@@ -30,6 +30,7 @@ const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
 };
 
 const TOP_TREND_COUNT = 12;
+const TOP_TIPS_COUNT = 6;
 
 export default function TopPage() {
   const ids = questionIdsBySet();
@@ -46,22 +47,29 @@ export default function TopPage() {
       body: 'Claude と Databricks の公式発表を、新しい順に確かめます。',
     },
     {
-      href: '#certifications',
+      href: '#tips',
       num: '第二章',
+      title: '技術 Tips',
+      count: `直近30日 ${countSince(TIPS, today, 30)} 件`,
+      body: 'Skill・Claude Code・MCP・Databricks の技術記事を、短いまとめで確かめます。',
+    },
+    {
+      href: '#certifications',
+      num: '第三章',
       title: '資格一覧',
       count: `${CERTIFICATIONS.length} 資格`,
       body: '目指す資格の概要・試験の形式・出題範囲を確かめます。',
     },
     {
       href: '#study',
-      num: '第三章',
+      num: '第四章',
       title: '学習すべき内容',
       count: `${STUDY_TOPICS.length} 項目`,
       body: '分野ごとに押さえるべき点と、公式の教材を確かめます。',
     },
     {
       href: '#question-sets',
-      num: '第四章',
+      num: '第五章',
       title: '問題集一覧',
       count: `${QUESTION_SETS.length} 冊・${QUESTIONS.length} 問`,
       body: '解説付きの問題で理解を確かめ、間違えた問題は苦手克服で解き直します。',
@@ -118,9 +126,23 @@ export default function TopPage() {
         </p>
       </section>
 
-      {/* 第二章 資格一覧 */}
+      {/* 第二章 技術 Tips */}
+      <section id="tips" className="scroll-mt-6 py-10">
+        <SectionTitle num="第二章" title="技術 Tips" en="Tips" />
+        <p className="mb-6">
+          どんな Skill を作るとよいか、Claude Code や Databricks をどう使いこなすか。技術記事サイト Zenn の記事を毎日集め、AI（Claude）が短いまとめを付けています。記事は個人の方が書いたものです。
+        </p>
+        <TrendList items={TIPS.slice(0, TOP_TIPS_COUNT)} />
+        <p className="mt-4 text-right">
+          <Link href="/tips" className="link">
+            テーマごとの一覧を見る →
+          </Link>
+        </p>
+      </section>
+
+      {/* 第三章 資格一覧 */}
       <section id="certifications" className="scroll-mt-6 py-10">
-        <SectionTitle num="第二章" title="資格一覧" en="Certifications" />
+        <SectionTitle num="第三章" title="資格一覧" en="Certifications" />
         {TRACK_ORDER.map((track) => (
           <div key={track} className="mb-12 last:mb-0">
             <h3 className="text-lg">
@@ -176,9 +198,9 @@ export default function TopPage() {
         ))}
       </section>
 
-      {/* 第三章 学習すべき内容 */}
+      {/* 第四章 学習すべき内容 */}
       <section id="study" className="scroll-mt-6 py-10">
-        <SectionTitle num="第三章" title="学習すべき内容" en="Study guide" />
+        <SectionTitle num="第四章" title="学習すべき内容" en="Study guide" />
         <p className="mb-8">
           資格の出題範囲をもとに、学ぶべき内容を項目ごとにまとめました。それぞれの項目に、押さえるべき点、重要な用語、公式の教材、確認の問題をそろえています。
         </p>
@@ -210,9 +232,9 @@ export default function TopPage() {
         </div>
       </section>
 
-      {/* 第四章 問題集一覧 */}
+      {/* 第五章 問題集一覧 */}
       <section id="question-sets" className="scroll-mt-6 py-10">
-        <SectionTitle num="第四章" title="問題集一覧" en="Question sets" />
+        <SectionTitle num="第五章" title="問題集一覧" en="Question sets" />
         <p className="mb-6">
           すべて解説付きのオリジナル問題です。練習（1問ごとに解説）、模試（制限時間つき）、苦手克服（間違えた問題だけ）の 3 つの形式で解けます。
         </p>
