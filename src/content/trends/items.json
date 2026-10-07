@@ -601,6 +601,14 @@
   },
   {
     "source": "databricks-release-notes",
+    "title": "Dashboard enhancements and bug fixes",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#dashboard-enhancements-and-bug-fixes-1",
+    "date": "2026-09-24",
+    "titleJa": "ダッシュボード機能の強化とバグ修正",
+    "summaryJa": "2026年10月のAI/BIとGenie Oneのリリースでは、SQL データセット のマテリアライズ、複数テーブルの一括選択、Numeric window measures の一般提供など、ダッシュボード構築機能が拡張されました。また、Genie Code は画像ウィジェット対応やダッシュボードマテリアライゼーション作成機能などが追加され、ダッシュボードの管理と作成が一層効率的になりました。"
+  },
+  {
+    "source": "databricks-release-notes",
     "title": "Sharing metric views with OpenSharing is now generally available",
     "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#sharing-metric-views-with-opensharing-is-now-generally-available",
     "date": "2026-09-24",
@@ -638,5 +646,61 @@
     "date": "2026-09-24",
     "titleJa": "Genie One の機能拡張",
     "summaryJa": "Genie One では、テキストファイルのアップロード、リアルタイムストリーミング応答、チャットのダウンロード機能が追加されました。さらに、チャットのピン留め、10 MB 以上のファイルアップロード対応、自動ツールアクション承認も実装されています。"
+  },
+  {
+    "source": "anthropic-news",
+    "title": "Claude discovers a novel enzyme system with CRISPR-like repeats",
+    "url": "https://www.anthropic.com/news/claude-discovers-novel-enzyme-system",
+    "date": "2026-09-23",
+    "titleJa": "Claude が CRISPR 様リピートを持つ新規酵素システムを発見",
+    "summaryJa": "Anthropic が生命科学研究グループを立ち上げ、Claude を使用して DNA データセットから新規タンパク質ファミリーを自動的に特定し、仮説生成と実験検証を行う研究を開始しました。Claude は約950個のエージェントを使用して約21時間の検索を行い、CRISPR に類似した特性を持つ新規酵素システム（Array-associated Reverse Transcriptases、ART）をバクテリオファージから発見しました。この成果は AI エージェントが生命科学研究の加速に貢献できることを実証しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Scalar and Batch Unity Catalog Python UDFs are now generally available",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#scalar-and-batch-unity-catalog-python-udfs-are-now-generally-available",
+    "date": "2026-09-23",
+    "titleJa": "Scalar および Batch Unity Catalog Python UDFs が一般提供開始",
+    "summaryJa": "Scalar および Batch Unity Catalog Python UDFs が一般提供に移行しました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Scala UDFs can access Unity Catalog secrets",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#scala-udfs-can-access-unity-catalog-secrets",
+    "date": "2026-09-23",
+    "titleJa": "Scala UDFs が Unity Catalog シークレットにアクセス可能",
+    "summaryJa": "Scala UDFs が Unity Catalog のシークレットにアクセスできるようになりました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Build governed data and AI apps without code (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#build-governed-data-and-ai-apps-without-code-beta",
+    "date": "2026-09-23",
+    "titleJa": "コードなしで統治されたデータと AI アプリを構築する（ベータ版）",
+    "summaryJa": "コードなしで統治されたデータと AI アプリを構築できるベータ版機能がリリースされました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "DeepSeek V4 Pro (0813) is scheduled for retirement",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#deepseek-v4-pro-0813-is-scheduled-for-retirement",
+    "date": "2026-09-23",
+    "titleJa": "DeepSeek V4 Pro (0813) が廃止予定",
+    "summaryJa": "DeepSeek V4 Pro (0813) は廃止される予定です。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Time travel queries now enforce ABAC policies (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/september#time-travel-queries-now-enforce-abac-policies-beta",
+    "date": "2026-09-23",
+    "titleJa": "Time Travel クエリが ABAC ポリシーを適用（ベータ版）",
+    "summaryJa": "Time Travel クエリが ABAC（属性ベースアクセス制御）ポリシーを適用するベータ版機能がリリースされました。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Lakebase observability telemetry in system tables (Beta)",
+    "url": "https://docs.databricks.com/aws/en/release-notes/lakebase#lakebase-observability-telemetry-in-system-tables-beta",
+    "date": "2026-09-23",
+    "titleJa": "Lakebase observability テレメトリがシステムテーブルに記録（ベータ版）",
+    "summaryJa": "Lakebase は Postgres の observability テレメトリを system.lakebase システムテーブルにキャプチャするようになりました。クエリプラン、セッション履歴、待機イベント、スキーマ変更履歴、データベース・コンピューティング正常性、Postgres ログが自動的に記録され、7日間保持されます。"
   }
 ]
