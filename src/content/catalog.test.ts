@@ -82,3 +82,20 @@ describe('基礎知識', () => {
     for (const g of BASICS_GROUPS) expect(BASICS_TOPICS.some((t) => t.group === g.id)).toBe(true);
   });
 });
+
+describe('やってみた', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { HANDSON_GUIDES } = require('./handson') as typeof import('./handson');
+
+  it('ID が重複せず、手順・確かめ方・公式の情報がそろっている', () => {
+    expect(new Set(HANDSON_GUIDES.map((g) => g.id)).size).toBe(HANDSON_GUIDES.length);
+    for (const g of HANDSON_GUIDES) {
+      expect(g.steps.length).toBeGreaterThan(0);
+      expect(g.check.length).toBeGreaterThan(0);
+      expect(g.resources.length).toBeGreaterThan(0);
+      for (const r of g.resources) expect(r.url).toMatch(/^https:\/\//);
+      // 動作確認済みかどうかと、その説明を必ず書く
+      expect(g.verified.note.length).toBeGreaterThan(10);
+    }
+  });
+});

@@ -8,6 +8,7 @@ const LINKS = [
   { href: '/trends', label: '最新の動向', sections: ['/trends'] },
   { href: '/tips', label: '技術 Tips', sections: ['/tips'] },
   { href: '/basics', label: '基礎知識', sections: ['/basics'] },
+  { href: '/handson', label: 'やってみた', sections: ['/handson'] },
   { href: '/exam', label: '資格対策', sections: ['/exam', '/certifications', '/study', '/question-sets'] },
   { href: '/progress', label: '学習記録', sections: ['/progress'] },
 ];

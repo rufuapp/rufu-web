@@ -63,6 +63,11 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
+            <Link href="/handson" className="hover:underline">
+              やってみた
+            </Link>
+          </li>
+          <li>
             <Link href="/exam" className="hover:underline">
               資格対策
             </Link>
