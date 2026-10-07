@@ -67,7 +67,7 @@ const CLAUDE_FACTS = [
   { label: '認定の証明', value: 'Credly のデジタルバッジ' },
   { label: '受験資格', value: 'Claude Partner Network に加盟する組織のメンバーのみ' },
   { label: '対策コース', value: 'Anthropic Partner Academy（加盟組織向け）' },
-  { label: '受験料・試験時間', value: '公式発表には記載なし（受験時に公式の案内を確認）' },
+  { label: '受験料・試験時間・言語', value: '公式発表には記載なし（受験時に公式の案内を確認）' },
 ];
 
 const CLAUDE_OUTLINE_NOTE =
@@ -221,7 +221,7 @@ export const CERTIFICATIONS: Certification[] = [
       'プロンプト設計の問題集で理解を確かめ、間違えた問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],
-    topicIds: ['prompt-engineering'],
+    topicIds: ['prompt-engineering', 'claude-vocabulary'],
     officialUrl: CLAUDE_ANNOUNCEMENT.url,
     links: [CLAUDE_ACADEMY, CLAUDE_PARTNERS],
   },
@@ -252,7 +252,7 @@ export const CERTIFICATIONS: Certification[] = [
       'Claude API とプロンプト設計の問題集で理解を確かめ、苦手な問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],
-    topicIds: ['claude-messages-api', 'claude-tool-use', 'claude-api-optimization', 'prompt-engineering', 'mcp'],
+    topicIds: ['claude-messages-api', 'claude-tool-use', 'claude-api-optimization', 'prompt-engineering', 'mcp', 'claude-vocabulary'],
     officialUrl: CLAUDE_ANNOUNCEMENT.url,
     links: [
       { title: 'Claude Developer Platform のドキュメント', url: 'https://platform.claude.com/docs/en/intro', kind: '公式ドキュメント' },
@@ -286,7 +286,7 @@ export const CERTIFICATIONS: Certification[] = [
       'Claude Code & MCP の問題集で理解を確かめ、苦手な問題を解き直す',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],
-    topicIds: ['claude-tool-use', 'mcp', 'claude-code', 'prompt-engineering'],
+    topicIds: ['claude-tool-use', 'mcp', 'claude-code', 'prompt-engineering', 'claude-vocabulary'],
     officialUrl: CLAUDE_ANNOUNCEMENT.url,
     links: [
       { title: 'Model Context Protocol（公式サイト）', url: 'https://modelcontextprotocol.io/', kind: '仕様' },
@@ -304,7 +304,7 @@ export const CERTIFICATIONS: Certification[] = [
     summary: 'エンタープライズ規模の役割を担う人向けの上位資格。統合アーキテクチャ、ガバナンス、評価が対象。',
     description: [
       'アーキテクト資格の上位にあたる、エンタープライズ規模の役割向けの資格です。公式発表では、統合アーキテクチャ、ガバナンス、評価が対象として挙げられています。',
-      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。この資格に直接対応する本サイトの問題集はまだありません。',
+      '受験できるのは Claude Partner Network に加盟する組織のメンバーに限られます。この資格の出題範囲に直接対応する問題集は、本サイトにはまだありません。',
     ],
     audience: ['大きな組織で Claude の導入アーキテクチャを設計する人', 'AI の運用ガバナンスや評価の仕組みづくりを担う人'],
     facts: CLAUDE_FACTS,
@@ -320,7 +320,7 @@ export const CERTIFICATIONS: Certification[] = [
       'MCP によるシステム連携と、プロンプトの評価の進め方を公式ドキュメントで深める',
       '受験できる組織に所属している場合は、Anthropic Partner Academy の対策コースで仕上げる',
     ],
-    topicIds: ['mcp', 'claude-tool-use', 'prompt-engineering', 'claude-api-optimization'],
+    topicIds: ['mcp', 'claude-tool-use', 'prompt-engineering', 'claude-api-optimization', 'claude-vocabulary'],
     officialUrl: CLAUDE_ANNOUNCEMENT.url,
     links: [{ title: 'Model Context Protocol（公式サイト）', url: 'https://modelcontextprotocol.io/', kind: '仕様' }, CLAUDE_PARTNERS],
   },

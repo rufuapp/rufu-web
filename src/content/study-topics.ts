@@ -1,4 +1,5 @@
 import type { Resource, StudyTopic } from '@/lib/quiz/types';
+import { CLAUDE_VOCABULARY } from '@/content/vocabulary/claude';
 
 const DBX_DOCS = 'https://docs.databricks.com/aws/en';
 const CLAUDE_DOCS = 'https://platform.claude.com/docs/en';
@@ -680,6 +681,67 @@ export const STUDY_TOPICS: StudyTopic[] = [
       { title: 'Claude Code で MCP を使う（公式ドキュメント）', url: 'https://code.claude.com/docs/en/mcp', kind: '公式ドキュメント' },
     ],
     practice: [{ setId: 'claude-code-mcp', domains: ['mcp'] }],
+  },
+  {
+    id: 'claude-vocabulary',
+    track: 'claude',
+    title: 'Claude の頻出英単語',
+    summary: '公式ドキュメントや英語の設問でよく使われる単語を、分野ごとに例文つきでまとめた単語帳です。',
+    intro: [
+      'Claude の公式ドキュメントは英語が基本で、API のパラメーター名やエラーメッセージ、Claude Code の設定項目も英語です。資格試験の言語は公式発表に記載がありませんが、英語の用語を英語のまま理解しておくと、ドキュメントも設問も速く正確に読めます。',
+      'この単語帳では、設問の言い回しと、Claude を使ったシステムづくりでよく出る単語を、分野ごとに例文つきでまとめました。単語は、公式ドキュメントや資格の出題範囲の説明で使われる用語を中心に選んでいます。実際の試験問題から集めたものではありません。',
+    ],
+    points: [
+      {
+        heading: '問いの一文から先に読む',
+        body: '場面設定のある設問では、問いは最後の一文にあることが多いです。先に問いを読み、何を選ぶのかを決めてから本文を読むと、読む量を減らせます。',
+      },
+      {
+        heading: '強調された語と、選ぶ数を見落とさない',
+        body: 'NOT・EXCEPT・MOST のように大文字で強調された語や、Select TWO のような選ぶ数の指定は、答えを大きく左右します。下の「重要な用語」で確かめておきましょう。',
+      },
+      {
+        heading: 'よく知っている意味に引きずられない',
+        body: 'address（対処する）、primary（主な）、regression（品質の後退）のように、よく知られた意味とは違う意味で使われる語があります。単語帳の補足を読んでおきましょう。',
+      },
+      {
+        heading: '訳しにくい語は、例文ごと英語のまま覚える',
+        body: 'latency・grounding・idempotent のように、日本語に置き換えると意味がぼやける語は、例文と一緒に英語のまま覚えるのが近道です。',
+      },
+    ],
+    terms: [
+      { term: 'Which of the following', desc: '「次のうちどれか」。選択肢から選ぶ問題の書き出しです。' },
+      { term: 'NOT ／ EXCEPT', desc: '「〜でないもの」「〜を除いて」。正しくないものを選ぶ問題で使われ、大文字で強調されることが多い語です。' },
+      { term: 'MOST ／ BEST', desc: '「最も〜なもの」。正しそうな選択肢が複数あっても、最も適切な一つを選びます。' },
+      { term: 'Select TWO', desc: '「2 つ選べ」。選ぶ数を指定する言い方です。Choose all that apply（当てはまるものをすべて選べ）という形もあります。' },
+      { term: 'scenario', desc: '「場面設定」。設問の前提として示される状況の説明です。' },
+    ],
+    vocabulary: CLAUDE_VOCABULARY,
+    resources: [
+      {
+        title: '用語集（Glossary）',
+        url: `${CLAUDE_DOCS}/about-claude/glossary`,
+        kind: '公式ドキュメント',
+        note: 'コンテキストウィンドウ・latency・トークンなど、基本の用語を英語で説明しています',
+      },
+      {
+        title: 'API のエラー一覧',
+        url: `${CLAUDE_DOCS}/api/errors`,
+        kind: '公式ドキュメント',
+        note: 'rate_limit_error（429）など、エラーの種類と意味を確かめられます',
+      },
+      {
+        title: 'ハルシネーションを減らす',
+        url: `${CLAUDE_DOCS}/test-and-evaluate/strengthen-guardrails/reduce-hallucinations`,
+        kind: '公式ドキュメント',
+      },
+      {
+        title: 'Claude Academy（無料のコース）',
+        url: 'https://academy.claude.com/',
+        kind: '公式コース',
+      },
+    ],
+    practice: [{ setId: 'claude-vocabulary', domains: CLAUDE_VOCABULARY.map((g) => g.id) }],
   },
 ];
 

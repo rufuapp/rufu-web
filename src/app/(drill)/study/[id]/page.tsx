@@ -10,6 +10,19 @@ import { Breadcrumb, ResourceList, SubTitle, TrackLabel } from '@/components/qui
 
 const KANJI = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 
+// 例文の中の見出しの語を太字にする（大文字・小文字は区別しない）
+function Highlighted({ text, word }: { text: string; word: string }) {
+  const i = text.toLowerCase().indexOf(word.toLowerCase());
+  if (i < 0) return text;
+  return (
+    <>
+      {text.slice(0, i)}
+      <b>{text.slice(i, i + word.length)}</b>
+      {text.slice(i + word.length)}
+    </>
+  );
+}
+
 export function generateStaticParams() {
   return STUDY_TOPICS.map((t) => ({ id: t.id }));
 }
@@ -91,6 +104,63 @@ export default async function StudyTopicPage({ params }: { params: Promise<{ id:
               </tbody>
             </table>
           </div>
+
+          {topic.vocabulary && (
+            <>
+              <SubTitle>単語帳</SubTitle>
+              <p className="text-sm text-muted">
+                {`${topic.vocabulary.length} 分野・${topic.vocabulary.reduce((n, g) => n + g.words.length, 0)} 語。例文の中の太字が、見出しの語です。`}
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                {topic.vocabulary.map((g, i) => (
+                  <li key={g.id}>
+                    <a href={`#voc-${g.id}`} className="link">
+                      {KANJI[i] ?? i + 1}、{g.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              {topic.vocabulary.map((g, i) => {
+                const drill = topic.practice.find((p) => p.domains.includes(g.id));
+                return (
+                  <section key={g.id} aria-labelledby={`voc-${g.id}`} className="mt-8">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink pb-1.5">
+                      <h4 id={`voc-${g.id}`} className="scroll-mt-6 font-bold">
+                        <span className="mr-1 text-muted">{KANJI[i] ?? i + 1}、</span>
+                        {g.name}
+                        <span className="ml-2 text-sm font-normal text-muted">{g.words.length} 語</span>
+                      </h4>
+                      {drill && (
+                        <Link href={`/question-sets/${drill.setId}?domain=${g.id}`} className="link text-sm">
+                          この分野を問題で確かめる
+                        </Link>
+                      )}
+                    </div>
+                    <dl className="divide-y divide-line">
+                      {g.words.map((w) => (
+                        <div key={w.en} className="grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[11rem_1fr]">
+                          <dt>
+                            <span lang="en" className="font-bold">
+                              {w.en}
+                            </span>
+                            <span className="ml-2 text-xs text-muted">{w.pos}</span>
+                          </dt>
+                          <dd>
+                            <p>{w.ja}</p>
+                            {w.note && <p className="text-sm text-muted">{w.note}</p>}
+                            <p lang="en" className="mt-1 text-sm italic">
+                              <Highlighted text={w.example} word={w.en} />
+                            </p>
+                            <p className="text-sm text-muted">{w.exampleJa}</p>
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                );
+              })}
+            </>
+          )}
 
           <SubTitle>おすすめの教材</SubTitle>
           <p className="mb-3 text-sm text-muted">いずれも公式の情報です。内容は更新されることがあるため、最新の版を確認してください。</p>

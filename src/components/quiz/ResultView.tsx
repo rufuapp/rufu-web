@@ -164,6 +164,11 @@ export function ResultView({ set, session, answers, mode, elapsedSec, onRetry, o
                     <span className="text-muted">{domainName(set, q.domain)}</span>
                   </p>
                   <p className="mt-2 leading-relaxed font-bold break-words">{q.question}</p>
+                  {q.passage && (
+                    <blockquote lang="en" className="mt-2 border-l-4 border-line-strong pl-3 leading-relaxed italic break-words">
+                      {q.passage}
+                    </blockquote>
+                  )}
                   {q.code && (
                     <pre className="mt-3 overflow-x-auto border border-line bg-subtle p-3 text-xs leading-relaxed">
                       <code>{q.code}</code>

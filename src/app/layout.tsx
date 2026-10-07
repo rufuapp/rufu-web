@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site-url";
 import { SITE_NAME } from "@/content/site";
 
@@ -22,8 +23,8 @@ const notoSerifJp = Noto_Serif_JP({
   preload: false,
 });
 
-const SITE_TITLE = `${SITE_NAME} — FDE を目指す人のための基礎知識`;
-const SITE_DESC = 'FDE（Forward Deployed Engineer）を目指す人のための学習サイトです。データ基盤の Databricks と生成 AI の Claude について、認定資格を道しるべに学ぶべき内容をまとめ、解説付きのオリジナル問題集で理解を確かめられます。';
+const SITE_TITLE = `${SITE_NAME} — Claude と Databricks の最新動向と基礎知識`;
+const SITE_DESC = 'FDE（Forward Deployed Engineer）を目指す人のためのサイトです。Claude と Databricks の公式発表を1時間ごとに集めてまとめ、あわせて認定資格の解説と、解説付きのオリジナル問題集を用意しています。';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -58,6 +59,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
+        <Analytics />
       </body>
     </html>
   );

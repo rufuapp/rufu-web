@@ -205,6 +205,11 @@ export function QuizPlayer({ set, session, mode, onFinish, onQuit }: Props) {
         <h2 id={`q-${q.id}`} className="mt-2 text-lg leading-relaxed break-words">
           {q.question}
         </h2>
+        {q.passage && (
+          <blockquote lang="en" className="mt-4 border-l-4 border-line-strong pl-4 text-lg leading-relaxed italic break-words">
+            {q.passage}
+          </blockquote>
+        )}
         {q.code && (
           <pre className="mt-4 overflow-x-auto border border-line bg-subtle p-4 text-[13px] leading-relaxed">
             <code>{q.code}</code>

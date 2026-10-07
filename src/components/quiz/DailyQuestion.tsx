@@ -10,8 +10,11 @@ import { localDate, recordAnswer } from '@/lib/quiz/progress';
 import { updateProgress, useIsClient } from '@/lib/quiz/store';
 import { CHOICE_LABELS } from './style';
 
+// 英単語の問題集は、今日の一問には出さない
+const DAILY_POOL = QUESTIONS.filter((q) => getQuestionSet(q.examId)?.kind !== 'vocabulary');
+
 function DailyBody({ today }: { today: string }) {
-  const q = pickDaily(QUESTIONS, today)!;
+  const q = pickDaily(DAILY_POOL, today)!;
   const set = getQuestionSet(q.examId)!;
   const topic = topicForDomain(set.id, q.domain);
   const [selected, setSelected] = useState<number[]>([]);

@@ -161,7 +161,7 @@ export default async function CertificationPage({ params }: { params: Promise<{ 
             <dl className="mt-2 divide-y divide-line text-sm">
               {cert.facts.map((f) => (
                 <div key={f.label} className="grid grid-cols-[6.5rem_1fr] gap-2 py-2">
-                  <dt className="text-muted">{f.label}</dt>
+                  <dt className="break-keep text-muted">{f.label}</dt>
                   <dd>{f.value}</dd>
                 </div>
               ))}
