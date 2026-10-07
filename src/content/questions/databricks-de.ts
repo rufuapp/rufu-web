@@ -103,7 +103,7 @@ export const databricksDataEngineer: Question[] = [
     examId,
     domain: 'pipeline',
     type: 'single',
-    question: '宣言型パイプライン（Lakeflow Declarative Pipelines、旧 Delta Live Tables）で、id が NULL のレコードも残したまま違反件数だけを記録したい。どのエクスペクテーションが適切か。',
+    question: 'Lakeflow パイプライン（旧 Delta Live Tables）で、id が NULL のレコードも残したまま違反件数だけを記録したい。どのエクスペクテーションが適切か。',
     choices: [
       'CONSTRAINT valid_id EXPECT (id IS NOT NULL)',
       'CONSTRAINT valid_id EXPECT (id IS NOT NULL) ON VIOLATION DROP ROW',

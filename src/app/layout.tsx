@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site-url";
 
@@ -13,8 +13,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_TITLE = 'rufu 資格ドリル — Databricks・Claude の資格対策問題';
-const SITE_DESC = 'Databricks 認定資格の対策問題と Claude の実践スキル検定を、登録なしで解けるドリルサイト。練習・模試・苦手克服モードと学習記録つき。すべて解説付きのオリジナル問題です。';
+// 資格ドリルの本文は明朝体（使う文字の分だけ unicode-range で読み込まれる）
+const notoSerifJp = Noto_Serif_JP({
+  variable: "--font-noto-serif-jp",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+});
+
+const SITE_TITLE = 'rufu 資格ドリル — Databricks・Claude の資格と学習ガイド';
+const SITE_DESC = 'Databricks と Claude の認定資格について、どんな資格か、何を学べばよいかをまとめ、解説付きのオリジナル問題集で理解を確かめられる学習サイトです。';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoSerifJp.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}

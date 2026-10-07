@@ -151,7 +151,7 @@ export const claudeApi: Question[] = [
   {
     id: 'api-13',
     examId,
-    domain: 'advanced',
+    domain: 'basics',
     type: 'single',
     question: 'Messages API で画像を入力する方法として正しいものはどれか。',
     choices: [
@@ -168,14 +168,14 @@ export const claudeApi: Question[] = [
     examId,
     domain: 'advanced',
     type: 'single',
-    question: '拡張思考（extended thinking）を budget_tokens 付きで有効にするときの制約として正しいものはどれか。',
+    question: 'Claude 4.7 以降のモデルで、Claude にどのくらい深く考えさせるかを調整したい。推奨される方法はどれか。',
     choices: [
-      'budget_tokens は max_tokens より小さくする必要がある',
-      'budget_tokens は max_tokens より大きくする必要がある',
-      'budget_tokens を指定すると max_tokens は無視される',
-      'ストリーミングと同時には使えない',
+      'thinking: {"type": "adaptive"} を指定し、output_config の effort で深さを調整する',
+      'thinking: {"type": "enabled", "budget_tokens": 10000} で思考の予算を指定する',
+      'temperature を 0 にする',
+      'max_tokens をできるだけ小さくする',
     ],
     answer: [0],
-    explanation: 'thinking: {"type": "enabled", "budget_tokens": N} を使う場合、思考に使えるトークン数 N は max_tokens 未満にします。思考も出力トークンとして max_tokens に含まれるためです。',
+    explanation: '最新のモデルでは adaptive thinking を使い、effort で思考の深さを調整します。budget_tokens で予算を指定する従来の方式（type: "enabled"）は、Claude 4.6 では非推奨、Claude 4.7 以降では 400 エラーになります。',
   },
 ];

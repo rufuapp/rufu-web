@@ -5,25 +5,36 @@ import { useSearchParams } from 'next/navigation';
 import { MOCK_SECONDS_PER_QUESTION, buildSession } from '@/lib/quiz/engine';
 import { examStat, localDate, recordSession, weakQuestionIds } from '@/lib/quiz/progress';
 import { updateProgress, useProgress } from '@/lib/quiz/store';
-import type { AnswerRecord, Exam, Question, QuizMode, SessionQuestion } from '@/lib/quiz/types';
+import type { AnswerRecord, Question, QuestionSet, QuizMode, SessionQuestion } from '@/lib/quiz/types';
 import { QuizPlayer } from './QuizPlayer';
 import { ResultView } from './ResultView';
 
 const MODES: { id: QuizMode; name: string; desc: string }[] = [
-  { id: 'practice', name: '練習', desc: '1問ごとに正誤と解説を表示' },
-  { id: 'mock', name: '模試', desc: '制限時間つき・最後にまとめて採点' },
-  { id: 'review', name: '苦手克服', desc: '直近で間違えた問題だけを出題' },
+  { id: 'practice', name: '練習', desc: '1問ごとに正誤と解説を表示します' },
+  { id: 'mock', name: '模試', desc: '制限時間つきで解き、最後にまとめて採点します' },
+  { id: 'review', name: '苦手克服', desc: '直近で間違えた問題だけを出題します' },
 ];
 
 type Phase = 'setup' | 'play' | 'result';
 
-export function ExamClient({ exam, questions }: { exam: Exam; questions: Question[] }) {
+/** URL の ?domain=a,b から、この問題集にある分野だけを取り出す */
+export function domainsFromParams(params: URLSearchParams, set: QuestionSet): string[] {
+  const valid = new Set(set.domains.map((d) => d.id));
+  return params
+    .getAll('domain')
+    .flatMap((v) => v.split(','))
+    .filter((d, i, arr) => valid.has(d) && arr.indexOf(d) === i);
+}
+
+type Props = { set: QuestionSet; questions: Question[]; sidebar?: React.ReactNode };
+
+export function ExamClient({ set, questions, sidebar }: Props) {
   const searchParams = useSearchParams();
   const progress = useProgress();
   const [phase, setPhase] = useState<Phase>('setup');
   const [mode, setMode] = useState<QuizMode>(searchParams.get('mode') === 'review' ? 'review' : 'practice');
   const [count, setCount] = useState(10);
-  const [domains, setDomains] = useState<string[]>([]);
+  const [domains, setDomains] = useState<string[]>(() => domainsFromParams(searchParams, set));
   const [session, setSession] = useState<SessionQuestion[]>([]);
   const [playMode, setPlayMode] = useState<QuizMode>('practice');
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
@@ -67,7 +78,7 @@ export function ExamClient({ exam, questions }: { exam: Exam; questions: Questio
       if (records.length > 0) {
         updateProgress((p) =>
           recordSession(p, {
-            examId: exam.id,
+            examId: set.id,
             mode: playMode,
             total: records.length,
             correct: records.filter((r) => r.correct).length,
@@ -79,26 +90,17 @@ export function ExamClient({ exam, questions }: { exam: Exam; questions: Questio
       setPhase('result');
       window.scrollTo({ top: 0 });
     },
-    [exam.id, playMode],
+    [set.id, playMode],
   );
 
   if (phase === 'play') {
-    return (
-      <QuizPlayer
-        key={runId}
-        exam={exam}
-        session={session}
-        mode={playMode}
-        onFinish={handleFinish}
-        onQuit={() => setPhase('setup')}
-      />
-    );
+    return <QuizPlayer key={runId} set={set} session={session} mode={playMode} onFinish={handleFinish} onQuit={() => setPhase('setup')} />;
   }
 
   if (phase === 'result') {
     return (
       <ResultView
-        exam={exam}
+        set={set}
         session={session}
         answers={answers}
         mode={playMode}
@@ -110,141 +112,119 @@ export function ExamClient({ exam, questions }: { exam: Exam; questions: Questio
     );
   }
 
+  const countOptions = [5, 10, 20, questions.length].filter((n, i, arr) => n <= questions.length && arr.indexOf(n) === i);
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-      <section className="rounded-2xl p-5 sm:p-7 theme-card">
-        <h2 className="mb-4 text-sm font-bold">モードを選ぶ</h2>
-        <div className="grid gap-2 sm:grid-cols-3" role="radiogroup" aria-label="モード">
-          {MODES.map((m) => {
-            const active = mode === m.id;
-            const disabled = m.id === 'review' && weakIds.length === 0;
-            return (
-              <button
-                key={m.id}
-                type="button"
-                role="radio"
-                aria-checked={active}
-                disabled={disabled}
-                onClick={() => setMode(m.id)}
-                className="rounded-xl p-4 text-left transition-colors enabled:hover:bg-white/5 disabled:opacity-40"
-                style={{ border: `1.5px solid ${active ? 'var(--acc)' : 'var(--bor)'}`, backgroundColor: active ? 'rgba(74,222,128,0.06)' : 'transparent' }}
-              >
-                <span className="block font-bold">
-                  {m.name}
-                  {m.id === 'review' && (
-                    <span className="ml-1.5 text-xs font-semibold" style={{ color: weakIds.length ? 'var(--warn)' : 'var(--txts)' }}>
-                      {weakIds.length}問
-                    </span>
-                  )}
-                </span>
-                <span className="mt-1 block text-xs leading-relaxed" style={{ color: 'var(--txts)' }}>
-                  {disabled ? 'まだ間違えた問題はありません' : m.desc}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+    <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          startFromSetup();
+        }}
+        className="box p-5 sm:p-7"
+      >
+        <fieldset>
+          <legend className="font-bold tracking-[0.1em]">一、出題の形式</legend>
+          <div className="mt-3 space-y-2">
+            {MODES.map((m) => {
+              const disabled = m.id === 'review' && weakIds.length === 0;
+              return (
+                <label
+                  key={m.id}
+                  className="flex cursor-pointer items-start gap-3 border border-line px-4 py-3 hover:bg-subtle has-checked:border-brand has-checked:bg-subtle has-disabled:cursor-not-allowed has-disabled:opacity-50 has-disabled:hover:bg-transparent"
+                >
+                  <input
+                    type="radio"
+                    name="mode"
+                    value={m.id}
+                    checked={mode === m.id}
+                    disabled={disabled}
+                    onChange={() => setMode(m.id)}
+                    className="mt-[0.45rem] size-4 shrink-0"
+                  />
+                  <span>
+                    <span className="font-bold">{m.name}</span>
+                    {m.id === 'review' && <span className="ml-2 text-sm text-warn">（{weakIds.length}問）</span>}
+                    <span className="block text-sm text-muted">{disabled ? 'まだ間違えた問題はありません' : m.desc}</span>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
 
         {mode !== 'review' && (
-          <>
-            <h2 className="mb-3 mt-7 text-sm font-bold">問題数</h2>
-            <div className="flex flex-wrap gap-2">
-              {[5, 10, 20, questions.length]
-                .filter((n, i, arr) => n <= questions.length && arr.indexOf(n) === i)
-                .map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setCount(n)}
-                    aria-pressed={count === n}
-                    className="rounded-lg px-4 py-2 text-sm font-semibold"
-                    style={{ border: `1.5px solid ${count === n ? 'var(--acc)' : 'var(--bor)'}`, color: count === n ? 'var(--acc)' : 'var(--txt)' }}
-                  >
-                    {n === questions.length ? `全問（${n}）` : `${n}問`}
-                  </button>
-                ))}
+          <fieldset className="mt-7">
+            <legend className="font-bold tracking-[0.1em]">二、問題数</legend>
+            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+              {countOptions.map((n) => (
+                <label key={n} className="inline-flex cursor-pointer items-center gap-2">
+                  <input type="radio" name="count" value={n} checked={count === n} onChange={() => setCount(n)} className="size-4" />
+                  {n === questions.length ? `全問（${n}）` : `${n}問`}
+                </label>
+              ))}
             </div>
-          </>
+          </fieldset>
         )}
 
         {mode === 'practice' && (
-          <>
-            <h2 className="mb-1 mt-7 text-sm font-bold">分野で絞り込む</h2>
-            <p className="mb-3 text-xs" style={{ color: 'var(--txts)' }}>
-              未選択ならすべての分野から出題します
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {exam.domains.map((d) => {
+          <fieldset className="mt-7">
+            <legend className="font-bold tracking-[0.1em]">三、分野</legend>
+            <p className="mt-1 text-sm text-muted">選ばなければ、すべての分野から出題します。</p>
+            <div className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
+              {set.domains.map((d) => {
                 const on = domains.includes(d.id);
                 const n = questions.filter((q) => q.domain === d.id).length;
                 return (
-                  <button
-                    key={d.id}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => setDomains(on ? domains.filter((x) => x !== d.id) : [...domains, d.id])}
-                    className="rounded-full px-3.5 py-1.5 text-xs font-semibold"
-                    style={{
-                      border: `1.5px solid ${on ? 'var(--acc)' : 'var(--bor)'}`,
-                      backgroundColor: on ? 'rgba(74,222,128,0.1)' : 'transparent',
-                      color: on ? 'var(--acc)' : 'var(--txt)',
-                    }}
-                  >
+                  <label key={d.id} className="inline-flex cursor-pointer items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="domain"
+                      value={d.id}
+                      checked={on}
+                      onChange={() => setDomains(on ? domains.filter((x) => x !== d.id) : [...domains, d.id])}
+                      className="size-4"
+                    />
                     {d.name}
-                    <span className="ml-1 opacity-60">{n}</span>
-                  </button>
+                    <span className="text-sm text-muted">（{n}問）</span>
+                  </label>
                 );
               })}
             </div>
-          </>
+          </fieldset>
         )}
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            onClick={startFromSetup}
-            disabled={plannedCount === 0}
-            className="rounded-xl px-7 py-3 text-base font-bold disabled:opacity-40"
-            style={{ backgroundColor: 'var(--acc)', color: 'var(--bg)' }}
-          >
+        <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-line pt-5">
+          <button type="submit" disabled={plannedCount === 0} className="btn btn-primary px-6">
             {plannedCount}問をはじめる
           </button>
           {mode === 'mock' && (
-            <span className="text-sm" style={{ color: 'var(--txts)' }}>
-              制限時間 {Math.round((plannedCount * MOCK_SECONDS_PER_QUESTION) / 60)} 分
-            </span>
+            <span className="text-sm text-muted">制限時間 {Math.round((plannedCount * MOCK_SECONDS_PER_QUESTION) / 60)} 分</span>
           )}
         </div>
-      </section>
+      </form>
 
-      <aside className="space-y-4">
-        <div className="rounded-2xl p-5 theme-card">
-          <h2 className="mb-3 text-sm font-bold">この試験の記録</h2>
-          <dl className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--surf2)' }}>
-              <dt className="text-[11px]" style={{ color: 'var(--txts)' }}>解いた問題</dt>
-              <dd className="text-xl font-bold tabular-nums">
-                {stat.answered}
-                <span className="text-xs font-normal" style={{ color: 'var(--txts)' }}>/{stat.total}</span>
+      <aside className="space-y-6 text-sm">
+        <section className="box p-5">
+          <h2 className="border-b border-ink pb-1.5 font-bold tracking-[0.1em]">この問題集の記録</h2>
+          <dl className="mt-3 space-y-1.5">
+            <div className="flex justify-between">
+              <dt className="text-muted">解いた問題</dt>
+              <dd className="tabular-nums">
+                {stat.answered} / {stat.total} 問
               </dd>
             </div>
-            <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--surf2)' }}>
-              <dt className="text-[11px]" style={{ color: 'var(--txts)' }}>正答率</dt>
-              <dd className="text-xl font-bold tabular-nums">{stat.answered ? `${Math.round(stat.accuracy * 100)}%` : '—'}</dd>
+            <div className="flex justify-between">
+              <dt className="text-muted">正答率</dt>
+              <dd className="tabular-nums">{stat.answered ? `${Math.round(stat.accuracy * 100)}%` : '未挑戦'}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-muted">苦手な問題</dt>
+              <dd className="tabular-nums">{weakIds.length}問</dd>
             </div>
           </dl>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--surf2)' }}>
-            <div className="h-full rounded-full" style={{ width: `${(stat.answered / Math.max(1, stat.total)) * 100}%`, backgroundColor: 'var(--acc)' }} />
-          </div>
-        </div>
-        <div className="rounded-2xl p-5 text-sm leading-relaxed theme-card">
-          <h2 className="mb-2 font-bold">出題分野</h2>
-          <ul className="space-y-1" style={{ color: 'var(--txts)' }}>
-            {exam.domains.map((d) => (
-              <li key={d.id}>・{d.name}</li>
-            ))}
-          </ul>
-        </div>
+        </section>
+        {sidebar}
       </aside>
     </div>
   );

@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
+/* ───────── 旧 SNS ページ（ダーク） ───────── */
 :root {
   --bg:   #0c1f12;
   --surf: #132a1a;
-  --surf2: #1a3523;
   --bor:  rgba(255,255,255,0.08);
-  --bor2: rgba(255,255,255,0.16);
   --acc:  #4ade80;
   --txt:  #e8f5ec;
   --txts: #7aad8a;
-  --ok:   #4ade80;
-  --ng:   #f87171;
-  --warn: #fbbf24;
-  --dbx:  #ff7a59;
-  --cld:  #e3a072;
+}
+
+/* ───────── 資格ドリル（クラシック） ───────── */
+:root {
+  --d-paper:        #fbf9f3;
+  --d-card:         #fffdf8;
+  --d-subtle:       #f3eee2;
+  --d-line:         #d8d0c0;
+  --d-line-strong:  #1f1c18;
+  --d-ink:          #1f1c18;
+  --d-muted:        #5d574e;
+  --d-brand:        #1c5b3a;
+  --d-brand-strong: #134229;
+  --d-ok:           #1c6b3a;
+  --d-ng:           #b3261e;
+  --d-warn:         #8a5a00;
+  --d-dbx:          #9a3b1b;
+  --d-cld:          #2c4a7a;
+  --d-serif: var(--font-noto-serif-jp), "Hiragino Mincho ProN", "Yu Mincho", YuMincho, serif;
 }
 
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--txt);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-paper: var(--d-paper);
+  --color-card: var(--d-card);
+  --color-subtle: var(--d-subtle);
+  --color-line: var(--d-line);
+  --color-line-strong: var(--d-line-strong);
+  --color-ink: var(--d-ink);
+  --color-muted: var(--d-muted);
+  --color-brand: var(--d-brand);
+  --color-brand-strong: var(--d-brand-strong);
+  --color-ok: var(--d-ok);
+  --color-ng: var(--d-ng);
+  --color-warn: var(--d-warn);
+  --color-dbx: var(--d-dbx);
+  --color-cld: var(--d-cld);
+
+  --font-sans: var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --font-serif: var(--d-serif);
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
@@ -29,7 +59,7 @@ body {
   font-family: var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
 }
 
-/* ユーティリティ */
+/* ユーティリティ（旧 SNS ページ） */
 .theme-card {
   background-color: var(--surf);
   border: 1px solid var(--bor);
@@ -42,21 +72,182 @@ body {
 .theme-input::placeholder { color: var(--txts); }
 .theme-input:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 2px rgba(74,222,128,0.15); }
 
-/* ドリル */
-.drill-grid-bg {
-  background-image:
-    linear-gradient(rgba(74,222,128,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74,222,128,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+/* ───────── 資格ドリル ───────── */
+
+/* ドリルのページでは body ごと紙の色にする */
+body:has(.drill) {
+  background-color: var(--d-paper);
+  color: var(--d-ink);
 }
 
-@keyframes drill-pop {
-  0% { transform: scale(0.96); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.drill {
+  color-scheme: light;
+  background-color: var(--d-paper);
+  color: var(--d-ink);
+  font-family: var(--d-serif);
+  font-size: 16px;
+  line-height: 1.85;
+  accent-color: var(--d-brand);
 }
-.drill-pop { animation: drill-pop 180ms ease-out; }
 
-@media (prefers-reduced-motion: reduce) {
-  .drill-pop { animation: none; }
+.drill :is(h1, h2, h3, h4) {
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+  word-break: auto-phrase;
+}
+.drill p {
+  text-wrap: pretty;
+}
+.drill :is(code, pre, kbd) {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.drill ::selection {
+  background-color: color-mix(in srgb, var(--d-brand) 18%, transparent);
+}
+.drill :focus-visible {
+  outline: 2px solid var(--d-brand);
+  outline-offset: 2px;
+}
+
+/* 罫線で囲んだ箱 */
+@utility box {
+  background-color: var(--d-card);
+  border: 1px solid var(--d-line);
+}
+
+/* ボタン：形だけを決め、見た目は btn-outline / btn-primary / btn-quiet で */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 0.9375rem;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 120ms, color 120ms, border-color 120ms;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+}
+@utility btn-outline {
+  border-color: var(--d-ink);
+  background-color: var(--d-card);
+  color: var(--d-ink);
+  &:hover:not(:disabled) {
+    background-color: var(--d-subtle);
+  }
+}
+@utility btn-primary {
+  border-color: var(--d-brand);
+  background-color: var(--d-brand);
+  color: #fffdf8;
+  &:hover:not(:disabled) {
+    background-color: var(--d-brand-strong);
+    border-color: var(--d-brand-strong);
+  }
+}
+@utility btn-quiet {
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--d-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  &:hover:not(:disabled) {
+    color: var(--d-ink);
+  }
+}
+
+/* 本文中のリンク */
+@utility link {
+  color: var(--d-brand);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  &:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* 枠で囲んだ小さなラベル（【公式】など） */
+@utility tag {
+  display: inline-block;
+  border: 1px solid currentColor;
+  padding: 0 0.45em;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* 上下を太い罫線で締める、論文風の表 */
+.drill table.ruled {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid var(--d-ink);
+  border-bottom: 2px solid var(--d-ink);
+}
+.drill table.ruled :is(thead th) {
+  border-bottom: 1px solid var(--d-ink);
+  padding: 0.55rem 0.75rem;
+  color: var(--d-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: left;
+  white-space: nowrap;
+}
+.drill table.ruled :is(tbody td, tbody th) {
+  border-top: 1px solid var(--d-line);
+  padding: 0.75rem;
+  vertical-align: top;
+  text-align: left;
+}
+.drill table.ruled tbody tr:first-child :is(td, th) {
+  border-top: 0;
+}
+
+.drill kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 0.4em;
+  border: 1px solid var(--d-line);
+  border-bottom-width: 2px;
+  background-color: var(--d-card);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.drill summary {
+  cursor: pointer;
+}
+
+.drill [popover] {
+  border: 1px solid var(--d-ink);
+  background-color: var(--d-card);
+  color: var(--d-ink);
+}
+.drill [popover]::backdrop {
+  background-color: rgb(31 28 24 / 0.18);
+}
+
+/* 採点結果の判子 */
+.drill .stamp {
+  display: inline-grid;
+  place-items: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  border: 4px double currentColor;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  rotate: -10deg;
 }

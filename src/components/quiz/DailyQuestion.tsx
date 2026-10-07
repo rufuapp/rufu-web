@@ -2,17 +2,18 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { getExam, TRACKS } from '@/content/exams';
+import { getQuestionSet } from '@/content/question-sets';
 import { QUESTIONS } from '@/content/questions';
+import { topicForDomain } from '@/content/catalog';
 import { isCorrect, pickDaily } from '@/lib/quiz/engine';
 import { localDate, recordAnswer } from '@/lib/quiz/progress';
 import { updateProgress, useIsClient } from '@/lib/quiz/store';
-
-const LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
+import { CHOICE_LABELS } from './style';
 
 function DailyBody({ today }: { today: string }) {
   const q = pickDaily(QUESTIONS, today)!;
-  const exam = getExam(q.examId)!;
+  const set = getQuestionSet(q.examId)!;
+  const topic = topicForDomain(set.id, q.domain);
   const [selected, setSelected] = useState<number[]>([]);
   const [revealed, setRevealed] = useState(false);
   const correct = revealed && isCorrect(q, selected);
@@ -25,71 +26,77 @@ function DailyBody({ today }: { today: string }) {
   };
 
   return (
-    <div className="rounded-2xl p-5 sm:p-7 theme-card">
-      <div className="mb-3 flex flex-wrap items-center gap-2 text-xs">
-        <span className="rounded-full px-2.5 py-0.5 font-bold" style={{ backgroundColor: 'var(--surf2)', color: 'var(--acc)' }}>
-          今日の1問・{today.replaceAll('-', '/')}
+    <div className="box p-5 sm:p-6">
+      <p className="flex items-baseline justify-between border-b border-ink pb-2">
+        <span className="font-bold tracking-[0.2em]">今日の一問</span>
+        <span className="text-xs text-muted tabular-nums">{today.replaceAll('-', '.')}</span>
+      </p>
+      <p className="mt-2 text-xs text-muted">
+        出典：
+        <Link href={`/question-sets/${set.id}`} className="link">
+          {set.title}
+        </Link>
+      </p>
+      <p id="daily-q" className="mt-3 leading-relaxed font-bold break-words">
+        {q.question}
+        <span className="ml-1 text-sm font-normal text-muted">
+          {q.type === 'multi' ? `（正しいものを${q.answer.length}つ選べ）` : '（1つ選べ）'}
         </span>
-        <span style={{ color: TRACKS[exam.track].accent }}>{exam.shortTitle}</span>
-      </div>
-      <p className="font-semibold leading-relaxed">{q.question}</p>
+      </p>
       {q.code && (
-        <pre className="mt-3 overflow-x-auto rounded-lg p-3 font-mono text-xs" style={{ backgroundColor: 'var(--bg)' }}>
+        <pre className="mt-3 overflow-x-auto border border-line bg-subtle p-3 text-xs leading-relaxed">
           <code>{q.code}</code>
         </pre>
       )}
-      {q.type === 'multi' && (
-        <p className="mt-1 text-xs" style={{ color: 'var(--txts)' }}>
-          正しいものを{q.answer.length}つ選択
-        </p>
-      )}
-      <ul className="mt-4 space-y-2">
+
+      <fieldset disabled={revealed} aria-labelledby="daily-q" className="mt-4 space-y-1.5">
         {q.choices.map((c, i) => {
           const sel = selected.includes(i);
           const ans = q.answer.includes(i);
-          const border = revealed ? (ans ? 'var(--ok)' : sel ? 'var(--ng)' : 'var(--bor)') : sel ? 'var(--acc)' : 'var(--bor)';
+          const state = revealed
+            ? ans
+              ? 'border-ok bg-ok/5'
+              : sel
+                ? 'border-ng bg-ng/5'
+                : 'border-line opacity-60'
+            : 'border-line hover:bg-subtle has-checked:border-brand has-checked:bg-subtle';
           return (
-            <li key={i}>
-              <button
-                type="button"
-                disabled={revealed}
-                aria-pressed={sel}
-                onClick={() =>
-                  setSelected(q.type === 'single' ? [i] : sel ? selected.filter((x) => x !== i) : [...selected, i])
-                }
-                className="flex w-full gap-3 rounded-xl px-4 py-2.5 text-left text-sm enabled:hover:bg-white/5"
-                style={{ border: `1.5px solid ${border}` }}
-              >
-                <span className="font-bold" style={{ color: 'var(--txts)' }}>
-                  {LABELS[i]}
-                </span>
-                <span className="flex-1">{c}</span>
-              </button>
-            </li>
+            <label key={i} className={`flex cursor-pointer items-start gap-2.5 border px-3 py-2 text-sm has-disabled:cursor-default ${state}`}>
+              <input
+                type={q.type === 'single' ? 'radio' : 'checkbox'}
+                name="daily"
+                checked={sel}
+                onChange={() => setSelected(q.type === 'single' ? [i] : sel ? selected.filter((x) => x !== i) : [...selected, i])}
+                className="mt-[0.4rem] size-3.5 shrink-0"
+              />
+              <span className="w-4 shrink-0 font-bold">{CHOICE_LABELS[i]}</span>
+              <span className="flex-1 break-words">{c}</span>
+            </label>
           );
         })}
-      </ul>
+      </fieldset>
+
       {revealed ? (
-        <div className="drill-pop mt-4 text-sm leading-relaxed">
-          <p className="font-bold" style={{ color: correct ? 'var(--ok)' : 'var(--ng)' }}>
-            {correct ? '◯ 正解！' : '✕ 不正解'}
-          </p>
-          <p className="mt-1" style={{ color: 'var(--txts)' }}>
+        <div className="mt-4 border-l-4 bg-subtle py-3 pr-3 pl-4 text-sm leading-relaxed" style={{ borderColor: correct ? 'var(--d-ok)' : 'var(--d-ng)' }}>
+          <p className={`font-bold ${correct ? 'text-ok' : 'text-ng'}`}>{correct ? '◯ 正解です' : '✕ 不正解です'}</p>
+          <p className="mt-1">
+            <span className="font-bold">【解説】</span>
             {q.explanation}
           </p>
-          <Link href={`/exams/${exam.id}`} className="mt-3 inline-block font-semibold" style={{ color: 'var(--acc)' }}>
-            {exam.shortTitle} をもっと解く →
-          </Link>
+          <p className="mt-2 space-x-4">
+            <Link href={`/question-sets/${set.id}`} className="link">
+              この問題集を解く
+            </Link>
+            {topic && (
+              <Link href={`/study/${topic.id}`} className="link">
+                学習ガイド「{topic.title}」
+              </Link>
+            )}
+          </p>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={submit}
-          disabled={selected.length === 0}
-          className="mt-4 rounded-xl px-5 py-2.5 text-sm font-bold disabled:opacity-40"
-          style={{ backgroundColor: 'var(--acc)', color: 'var(--bg)' }}
-        >
-          回答する
+        <button type="button" onClick={submit} disabled={selected.length === 0} className="btn btn-primary mt-4">
+          解答する
         </button>
       )}
     </div>
@@ -98,6 +105,9 @@ function DailyBody({ today }: { today: string }) {
 
 export function DailyQuestion() {
   const isClient = useIsClient();
-  if (!isClient) return <div className="h-80 animate-pulse rounded-2xl theme-card" aria-hidden />;
-  return <DailyBody today={localDate()} />;
+  return (
+    <div id="daily" className="scroll-mt-6">
+      {isClient ? <DailyBody today={localDate()} /> : <div className="box h-96" aria-hidden />}
+    </div>
+  );
 }

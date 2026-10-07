@@ -1,14 +1,15 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { ExamClient } from './ExamClient';
-import { getExam } from '@/content/exams';
+import { ExamClient, domainsFromParams } from './ExamClient';
+import { getQuestionSet } from '@/content/question-sets';
 import { questionsForExam } from '@/content/questions';
 import { STORAGE_KEY, loadProgress } from '@/lib/quiz/progress';
 
+let mockParams = new URLSearchParams();
 jest.mock('next/navigation', () => ({
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => mockParams,
 }));
 
-const exam = getExam('claude-api')!;
+const set = getQuestionSet('claude-api')!;
 const questions = questionsForExam('claude-api');
 
 function currentQuestion() {
@@ -16,32 +17,41 @@ function currentQuestion() {
   return questions.find((q) => q.question === text)!;
 }
 
-function choiceButton(label: string) {
-  return screen.getAllByRole('button').find((b) => b.getAttribute('aria-pressed') !== null && b.textContent?.includes(label))!;
+function choiceInputs() {
+  return [...screen.queryAllByRole('radio'), ...screen.queryAllByRole('checkbox')];
+}
+
+function choiceInput(text: string) {
+  const found = choiceInputs().find((el) =>
+    Array.from(el.closest('label')?.querySelectorAll('span') ?? []).some((s) => s.textContent === text),
+  );
+  if (!found) throw new Error(`選択肢が見つかりません: ${text}`);
+  return found;
 }
 
 beforeEach(() => {
+  mockParams = new URLSearchParams();
   window.localStorage.clear();
   window.scrollTo = jest.fn();
 });
 
 describe('ExamClient', () => {
   it('練習モードで正解すると解説が出て、最後に結果と記録が残る', () => {
-    render(<ExamClient exam={exam} questions={questions} />);
-    fireEvent.click(screen.getByRole('button', { name: '5問' }));
+    render(<ExamClient set={set} questions={questions} />);
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
     fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
 
     for (let i = 0; i < 5; i++) {
       const q = currentQuestion();
-      for (const a of q.answer) fireEvent.click(choiceButton(q.choices[a]));
-      fireEvent.click(screen.getByRole('button', { name: '回答する' }));
-      expect(screen.getByText('◯ 正解')).toBeInTheDocument();
+      for (const a of q.answer) fireEvent.click(choiceInput(q.choices[a]));
+      fireEvent.click(screen.getByRole('button', { name: '解答する' }));
+      expect(screen.getByText('正解です')).toBeInTheDocument();
       expect(screen.getByText(q.explanation)).toBeInTheDocument();
-      fireEvent.click(screen.getByRole('button', { name: i < 4 ? '次の問題 →' : '結果を見る' }));
+      fireEvent.click(screen.getByRole('button', { name: i < 4 ? '次の問題へ' : '結果を見る' }));
     }
 
     expect(screen.getByRole('img', { name: '正答率 100%' })).toBeInTheDocument();
-    expect(screen.getByText('合格ライン到達！')).toBeInTheDocument();
+    expect(screen.getByText('合格の目安（正答率 70%）に達しました。')).toBeInTheDocument();
 
     const p = loadProgress();
     expect(Object.keys(p.questions)).toHaveLength(5);
@@ -49,15 +59,15 @@ describe('ExamClient', () => {
   });
 
   it('間違えた問題は苦手克服モードで出題できる', () => {
-    render(<ExamClient exam={exam} questions={questions} />);
-    fireEvent.click(screen.getByRole('button', { name: '5問' }));
+    render(<ExamClient set={set} questions={questions} />);
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
     fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
 
     const q = currentQuestion();
     const wrong = q.choices.findIndex((_, i) => !q.answer.includes(i));
-    fireEvent.click(choiceButton(q.choices[wrong]));
-    fireEvent.click(screen.getByRole('button', { name: '回答する' }));
-    expect(screen.getByText('✕ 不正解')).toBeInTheDocument();
+    fireEvent.click(choiceInput(q.choices[wrong]));
+    fireEvent.click(screen.getByRole('button', { name: '解答する' }));
+    expect(screen.getByText('不正解です')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: '中断' }));
     fireEvent.click(screen.getByRole('button', { name: '中断する' }));
@@ -69,15 +79,37 @@ describe('ExamClient', () => {
     expect(currentQuestion().id).toBe(q.id);
   });
 
+  it('選択肢にフォーカスがあっても、数字キーで選んで Enter で解答できる', () => {
+    render(<ExamClient set={set} questions={questions} />);
+    fireEvent.click(screen.getByRole('radio', { name: '5問' }));
+    fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
+
+    const [first] = choiceInputs();
+    first.focus();
+    fireEvent.keyDown(first, { key: '1' });
+    expect(first).toBeChecked();
+    fireEvent.keyDown(first, { key: 'Enter' });
+    expect(screen.getByRole('status')).toHaveTextContent(currentQuestion().explanation);
+  });
+
+  it('URL の ?domain= で分野を選んだ状態から始められる', () => {
+    mockParams = new URLSearchParams('domain=tools,unknown');
+    render(<ExamClient set={set} questions={questions} />);
+    expect(screen.getByRole('checkbox', { name: /ツール利用/ })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /Messages API の基本/ })).not.toBeChecked();
+    fireEvent.click(screen.getByRole('button', { name: '3問をはじめる' }));
+    expect(currentQuestion().domain).toBe('tools');
+  });
+
   it('模試モードは時間切れで自動採点される', () => {
     jest.useFakeTimers();
     try {
-      render(<ExamClient exam={exam} questions={questions} />);
+      render(<ExamClient set={set} questions={questions} />);
       fireEvent.click(screen.getByRole('radio', { name: /模試/ }));
-      fireEvent.click(screen.getByRole('button', { name: '5問' }));
+      fireEvent.click(screen.getByRole('radio', { name: '5問' }));
       expect(screen.getByText('制限時間 10 分')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: '5問をはじめる' }));
-      expect(screen.queryByRole('button', { name: '回答する' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: '解答する' })).not.toBeInTheDocument();
 
       act(() => {
         jest.advanceTimersByTime(10 * 60 * 1000 + 1000);
@@ -89,5 +121,16 @@ describe('ExamClient', () => {
     } finally {
       jest.useRealTimers();
     }
+  });
+});
+
+describe('domainsFromParams', () => {
+  it('問題集にある分野だけを、重複なく取り出す', () => {
+    const params = new URLSearchParams('domain=tools,basics&domain=tools&domain=nope');
+    expect(domainsFromParams(params, set)).toEqual(['tools', 'basics']);
+  });
+
+  it('指定がなければ空', () => {
+    expect(domainsFromParams(new URLSearchParams(), set)).toEqual([]);
   });
 });

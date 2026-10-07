@@ -1,24 +1,28 @@
 export type TrackId = 'databricks' | 'claude';
 
+export type Level = '入門' | '中級' | '上級';
+
 export type Domain = {
   id: string;
   name: string;
 };
 
-export type Exam = {
+/** 問題集（rufu のオリジナル問題をまとめたもの） */
+export type QuestionSet = {
   id: string;
   track: TrackId;
   title: string;
   shortTitle: string;
-  level: '入門' | '中級' | '上級';
+  level: Level;
   summary: string;
-  /** 公式試験に対応する場合の名称（非公式検定なら null） */
-  officialName: string | null;
+  /** 関連する資格（certifications.ts の id） */
+  certificationIds: string[];
   domains: Domain[];
 };
 
 export type Question = {
   id: string;
+  /** 所属する問題集の id（保存済みの学習記録と互換のため examId のまま） */
   examId: string;
   domain: string;
   type: 'single' | 'multi';
@@ -28,6 +32,50 @@ export type Question = {
   /** choices のインデックス（0始まり） */
   answer: number[];
   explanation: string;
+};
+
+export type Resource = {
+  title: string;
+  url: string;
+  kind: '公式ドキュメント' | '公式サイト' | '公式コース' | '公式チュートリアル' | '仕様';
+  note?: string;
+};
+
+/** 資格（公式の認定資格） */
+export type Certification = {
+  id: string;
+  track: TrackId;
+  vendor: 'Databricks' | 'Anthropic';
+  /** 公式の正式名称 */
+  name: string;
+  /** 日本語での呼び方 */
+  nameJa: string;
+  level: Level;
+  summary: string;
+  description: string[];
+  audience: string[];
+  facts: { label: string; value: string }[];
+  /** 出題範囲（公式の分野名と配点。配点が公表されていなければ weight なし） */
+  outline: { name: string; nameJa: string; weight?: number; topicIds: string[] }[];
+  outlineNote?: string;
+  studyPlan: string[];
+  topicIds: string[];
+  officialUrl: string;
+  links: Resource[];
+};
+
+/** 学習内容（何を、何で学ぶか） */
+export type StudyTopic = {
+  id: string;
+  track: TrackId;
+  title: string;
+  summary: string;
+  intro: string[];
+  points: { heading: string; body: string }[];
+  terms: { term: string; desc: string }[];
+  resources: Resource[];
+  /** この内容を確かめられる問題集と分野 */
+  practice: { setId: string; domains: string[] }[];
 };
 
 export type QuizMode = 'practice' | 'mock' | 'review';
