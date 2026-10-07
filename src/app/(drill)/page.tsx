@@ -14,6 +14,8 @@ import {
 import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { QuestionSetTable } from '@/components/quiz/QuestionSetTable';
 import { SectionTitle } from '@/components/quiz/ui';
+import { TrendList } from '@/components/trends/TrendList';
+import { TREND_SOURCES, countSince, fetchTrends } from '@/lib/trends/fetch';
 import type { TrackId } from '@/lib/quiz/types';
 
 const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
@@ -27,33 +29,46 @@ const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
   },
 };
 
-// 序文の目次（章の並びと同じ順。情報を先に、問題集は最後）
-const CHAPTERS = [
-  {
-    href: '#certifications',
-    num: '第一章',
-    title: '資格一覧',
-    count: `${CERTIFICATIONS.length} 資格`,
-    body: '目指す資格の概要・試験の形式・出題範囲を確かめます。',
-  },
-  {
-    href: '#study',
-    num: '第二章',
-    title: '学習すべき内容',
-    count: `${STUDY_TOPICS.length} 項目`,
-    body: '分野ごとに押さえるべき点と、公式の教材を確かめます。',
-  },
-  {
-    href: '#question-sets',
-    num: '第三章',
-    title: '問題集一覧',
-    count: `${QUESTION_SETS.length} 冊・${QUESTIONS.length} 問`,
-    body: '解説付きの問題で理解を確かめ、間違えた問題は苦手克服で解き直します。',
-  },
-];
+// 公式の発表は1時間ごとに取り直す（TRENDS_REVALIDATE と同じ値。ルートの設定は定数で書く必要がある）
+export const revalidate = 3600;
 
-export default function TopPage() {
+const TOP_TREND_COUNT = 12;
+
+export default async function TopPage() {
   const ids = questionIdsBySet();
+  const { items: trends, failed, today } = await fetchTrends();
+
+  // 序文の目次（章の並びと同じ順。最新の動向が主で、資格と問題集はそれに付随する）
+  const CHAPTERS = [
+    {
+      href: '#trends',
+      num: '第一章',
+      title: '最新の動向',
+      count: `直近30日 ${countSince(trends, today, 30)} 件`,
+      body: 'Claude と Databricks の公式発表を、新しい順に確かめます。',
+    },
+    {
+      href: '#certifications',
+      num: '第二章',
+      title: '資格一覧',
+      count: `${CERTIFICATIONS.length} 資格`,
+      body: '目指す資格の概要・試験の形式・出題範囲を確かめます。',
+    },
+    {
+      href: '#study',
+      num: '第三章',
+      title: '学習すべき内容',
+      count: `${STUDY_TOPICS.length} 項目`,
+      body: '分野ごとに押さえるべき点と、公式の教材を確かめます。',
+    },
+    {
+      href: '#question-sets',
+      num: '第四章',
+      title: '問題集一覧',
+      count: `${QUESTION_SETS.length} 冊・${QUESTIONS.length} 問`,
+      body: '解説付きの問題で理解を確かめ、間違えた問題は苦手克服で解き直します。',
+    },
+  ];
 
   return (
     <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -61,12 +76,12 @@ export default function TopPage() {
       <section className="grid gap-10 py-10 md:grid-cols-[1.15fr_1fr] md:py-14">
         <div>
           <h1 className="text-2xl leading-relaxed sm:text-[1.75rem]">
-            FDE に必要な基礎を、
+            Claude と Databricks の今を、
             <br className="hidden sm:inline" />
-            学んで、解いて、確かめる。
+            追いかけて、学んで、確かめる。
           </h1>
           <p className="mt-5">
-            FDE（Forward Deployed Engineer）は、お客さまの現場に入り込み、データ基盤や AI を使って実際の課題を解決するエンジニアです。本サイトでは、その土台となる知識のうち、データ基盤の Databricks と生成 AI の Claude について、認定資格を道しるべにまとめています。学んだ内容は、解説付きのオリジナル問題集で確かめられます。登録は要りません。
+            FDE（Forward Deployed Engineer）は、お客さまの現場に入り込み、データ基盤や AI を使って実際の課題を解決するエンジニアです。本サイトでは、生成 AI の Claude と、データ基盤の Databricks の公式発表を1時間ごとに集めて、新しい順にまとめています。あわせて、認定資格の解説と、解説付きのオリジナル問題集で、基礎を身につけられます。登録は要りません。
           </p>
         </div>
         <nav aria-labelledby="toc-title" className="box self-start p-5 sm:p-6">
@@ -91,9 +106,28 @@ export default function TopPage() {
         </nav>
       </section>
 
-      {/* 第一章 資格一覧 */}
+      {/* 第一章 最新の動向 */}
+      <section id="trends" className="scroll-mt-6 py-10">
+        <SectionTitle num="第一章" title="最新の動向" en="Latest updates" />
+        <p className="mb-6">
+          Anthropic と Databricks の公式サイトから、発表を1時間ごとに集めています。見出しは原文のままで、リンク先は公式の記事です。
+        </p>
+        <TrendList items={trends.slice(0, TOP_TREND_COUNT)} />
+        {failed.length > 0 && trends.length > 0 && (
+          <p className="mt-3 text-sm text-muted">
+            ※ {failed.map((id) => TREND_SOURCES[id].name).join('・')}は、いま取得できていません。
+          </p>
+        )}
+        <p className="mt-4 text-right">
+          <Link href="/trends" className="link">
+            情報源ごとの一覧を見る →
+          </Link>
+        </p>
+      </section>
+
+      {/* 第二章 資格一覧 */}
       <section id="certifications" className="scroll-mt-6 py-10">
-        <SectionTitle num="第一章" title="資格一覧" en="Certifications" />
+        <SectionTitle num="第二章" title="資格一覧" en="Certifications" />
         {TRACK_ORDER.map((track) => (
           <div key={track} className="mb-12 last:mb-0">
             <h3 className="text-lg">
@@ -149,9 +183,9 @@ export default function TopPage() {
         ))}
       </section>
 
-      {/* 第二章 学習すべき内容 */}
+      {/* 第三章 学習すべき内容 */}
       <section id="study" className="scroll-mt-6 py-10">
-        <SectionTitle num="第二章" title="学習すべき内容" en="Study guide" />
+        <SectionTitle num="第三章" title="学習すべき内容" en="Study guide" />
         <p className="mb-8">
           資格の出題範囲をもとに、学ぶべき内容を項目ごとにまとめました。それぞれの項目に、押さえるべき点、重要な用語、公式の教材、確認の問題をそろえています。
         </p>
@@ -183,9 +217,9 @@ export default function TopPage() {
         </div>
       </section>
 
-      {/* 第三章 問題集一覧 */}
+      {/* 第四章 問題集一覧 */}
       <section id="question-sets" className="scroll-mt-6 py-10">
-        <SectionTitle num="第三章" title="問題集一覧" en="Question sets" />
+        <SectionTitle num="第四章" title="問題集一覧" en="Question sets" />
         <p className="mb-6">
           すべて解説付きのオリジナル問題です。練習（1問ごとに解説）、模試（制限時間つき）、苦手克服（間違えた問題だけ）の 3 つの形式で解けます。
         </p>

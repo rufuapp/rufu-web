@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const LINKS = [
+  { href: '/trends', label: '最新の動向', section: '/trends' },
   { href: '/#certifications', label: '資格一覧', section: '/certifications' },
   { href: '/#study', label: '学習ガイド', section: '/study' },
   { href: '/#question-sets', label: '問題集', section: '/question-sets' },
