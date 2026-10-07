@@ -8,7 +8,7 @@ import { BASICS_GROUPS, BASICS_TOPICS, basicsForGroup } from '@/content/basics';
 import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
-import { TIPS, TRENDS, countSince, todayInTokyo } from '@/lib/trends/sources';
+import { COMPARE_TRENDS, TIPS, TRENDS, TREND_SOURCES, countSince, todayInTokyo } from '@/lib/trends/sources';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 
 const TOP_TREND_COUNT = 12;
 const TOP_TIPS_COUNT = 6;
+const TOP_COMPARE_COUNT = 6;
 
 const EXAM_PARTS = [
   { href: '/exam#certifications', title: '資格一覧', count: `${CERTIFICATIONS.length} 資格`, body: '目指す資格の概要・試験の形式・出題範囲を確かめます。' },
@@ -107,6 +108,17 @@ export default function TopPage() {
             情報源ごとの一覧を見る →
           </Link>
         </p>
+
+        <h3 className="mt-12 border-l-4 border-ink pl-3 text-lg">比較対象の動き</h3>
+        <p className="mt-2 mb-4 text-sm text-muted">
+          Claude と比べる OpenAI・AWS・Google Cloud・Azure・NVIDIA、Databricks と比べる Snowflake・Palantir の公式発表です。
+        </p>
+        <TrendList items={COMPARE_TRENDS.slice(0, TOP_COMPARE_COUNT)} />
+        <p className="mt-4 text-right">
+          <Link href="/trends#compare" className="link">
+            比較対象の一覧を見る →
+          </Link>
+        </p>
       </section>
 
       {/* 第二章 技術 Tips */}
@@ -115,7 +127,7 @@ export default function TopPage() {
         <p className="mb-6">
           どんな Skill を作るとよいか、Claude Code や Databricks をどう使いこなすか。Zenn・Qiita・DevelopersIO の技術記事を毎日集め、AI（Claude）が短いまとめを付けています。記事は各サイトの書き手の方によるものです。
         </p>
-        <TrendList items={TIPS.slice(0, TOP_TIPS_COUNT)} />
+        <TrendList items={TIPS.filter((it) => TREND_SOURCES[it.source].theme !== 'compare').slice(0, TOP_TIPS_COUNT)} />
         <p className="mt-4 text-right">
           <Link href="/tips" className="link">
             テーマごとの一覧を見る →

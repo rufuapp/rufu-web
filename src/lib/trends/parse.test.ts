@@ -1,4 +1,4 @@
-import { decodeEntities, mergeTrends, parseAnthropicNews, parseAtom, parseClaudeBlog, parseRss, toIsoDate } from './parse';
+import { decodeEntities, mergeTrends, parseAnthropicNews, parseAtom, parseClaudeBlog, parseFeed, parseRss, toIsoDate } from './parse';
 
 describe('公式発表の読み取り', () => {
   it('文字参照と CDATA を戻す', () => {
@@ -30,6 +30,13 @@ describe('公式発表の読み取り', () => {
     expect(parseAtom(xml, 'qiita-claudecode')).toEqual([
       { source: 'qiita-claudecode', title: 'Claude Code & Skills', url: 'https://qiita.com/u/items/1', date: '2026-10-07' },
     ]);
+  });
+
+  it('RSS と Atom を見分けて読む', () => {
+    const atom = '<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>A</title><link rel="alternate" href="https://x/a"/><published>2026-10-06T01:00:00Z</published></entry></feed>';
+    const rss = '<rss><channel><item><title>B</title><link>https://x/b</link><pubDate>Tue, 06 Oct 2026 01:00:00 GMT</pubDate></item></channel></rss>';
+    expect(parseFeed(atom, 'nvidia-developer-blog').map((i) => i.url)).toEqual(['https://x/a']);
+    expect(parseFeed(rss, 'openai-news').map((i) => i.url)).toEqual(['https://x/b']);
   });
 
   it('Anthropic のニュース一覧から、日付と見出しを読み、同じ記事は1つにする', () => {

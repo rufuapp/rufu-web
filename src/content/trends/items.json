@@ -1,5 +1,197 @@
 [
   {
+    "source": "qiita-claudecode",
+    "title": "I Run Claude Code on $0/Month: Free LLM API Setup",
+    "url": "https://qiita.com/fastoolster/items/3cc07719d24229b00f02",
+    "date": "2026-10-07",
+    "titleJa": "Claude Codeを無料のLLM APIで月$0で運用する方法",
+    "summaryJa": "Google AI Studio、Groq、Cerebrasなどの無料LLM APIプロバイダーから API キーを取得し、環境変数ANTHROPIC_BASE_URLとAPIキーを設定することで、Claude Codeを月$0で運用できます。プロバイダーがOpenAI形式の場合はLiteLLMなどのプロキシで変換し、レート制限を尊重しながら複数プロバイダーを活用することで、コスト無しに開発を続けられます。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude mod で Claude Code に Clawd を住まわせた",
+    "url": "https://qiita.com/takiguchi-yu/items/f634c112377c492c9bce",
+    "date": "2026-10-07",
+    "titleJa": "Claude mod で Claude Code に Clawd を住まわせた",
+    "summaryJa": "Claude Code の mod 機能を使い、作業中にマスコット Clawd がプロンプト上をうろうろする mod「clawd-wander」を TypeScript で作成しました。mod は hook（イベント）ベースで画面や振る舞いをカスタマイズでき、ガードレール追加や作業の見える化など様々な応用が可能です。マーケットプレイス経由で mod を配布し、Claude Code を「使う」から「育てる」へ広げられます。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "「user cancelled MCP tool call」を切り分けて、機械作業をLLMから外した",
+    "url": "https://zenn.dev/kokotatan/articles/codex-exec-mcp-user-cancelled",
+    "date": "2026-10-07",
+    "titleJa": "「user cancelled MCP tool call」を切り分けて、機械作業をLLMから外した",
+    "summaryJa": "定時実行パイプラインで Codex 経由の MCP ツール呼び出しが「user cancelled」で失敗し、approval_policy の変更では回避できませんでした。tools/list は通り tools/call だけ失敗することから Codex 内の承認層が原因と推測されます。著者は問題を修理するのではなく、判断のない機械作業（文字起こし）をスクリプトに移行し、LLM には完成済みテキストのみを渡す設計に変更することで問題を根本解決しました。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AI活用の知見をClaude内に閉じ込めない — Claude Codeと実Chromeを『相乗り』させる",
+    "url": "https://zenn.dev/stock_inc/articles/claude-code-chrome-extension-web-output",
+    "date": "2026-10-07",
+    "titleJa": "AI活用の知見をClaude内に閉じ込めない — Claude Codeと実Chromeを『相乗り』させる",
+    "summaryJa": "Claude Code には内蔵の隔離ブラウザと実Chrome を操作する拡張の2系統があり、ログイン必須の社内サービスには実Chrome が向いています。Chrome拡張で list_connected_browsers、select_browser、tabs_context_mcp を順に呼び、URLを渡すだけで読み取り・書き戻しが可能です。ログイン認証はAIに行わせず、読み取りは即時、書き込み確定は人間の承認とすることで、安全に実ブラウザを操作できます。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "「システム構成図」は、絵でなくコードで書く",
+    "url": "https://zenn.dev/96logger/articles/719982d07b38e5",
+    "date": "2026-10-07",
+    "titleJa": "「システム構成図」は、絵でなくコードで書く",
+    "summaryJa": "システム構成図を人が手描きすると、描き手による差や線の複雑さによる誤解、コード更新との乖離が起きます。IceShore の ADL（Architecture Description Language）を使えば、Terraform などのコードからユースケース付きの構成図を自動生成でき、業務と構造の関連づけが可能です。ADL は行単位で diff 確認できるため Git 管理でき、IceShore の MCP を使えば AI に書かせることもできます。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "dotsとClaude Codeをつないでみた、試験運用中のコピペ用プロンプト",
+    "url": "https://zenn.dev/genkunjc/articles/dots-claude-code-hub-prompt",
+    "date": "2026-10-07",
+    "titleJa": "dotsとClaude Codeをつないでみた、試験運用中のコピペ用プロンプト",
+    "summaryJa": "OpenAI の dots（常時稼働エージェント）と Claude Code、Codex CLI を連携させ、24時間自動パイプラインを回す仕組みを提案しています。依頼ファイルを hub-out/ に置き、拾い役 hub_runner.py が Claude Code を無人起動、Codex が監査し、結果が dots に返るサイクルです。push や公開などの外向き操作は禁止し、並列数や使用モデル、タイムアウトは policy.json で dots が決定、人間が持つのは出費と権限の上限に限定します。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Decisions APIとJevを比較してみる",
+    "url": "https://zenn.dev/tkada/articles/f758587a326d83",
+    "date": "2026-10-07",
+    "titleJa": "Decisions APIとJevを比較してみる",
+    "summaryJa": "OpenAI の Decisions API を Jev と GPT-5.6-luna と比較しました。精度は Jev（99.0%）や GPT（98.5%）に及ばず Decisions（64.5%）、文脈ありでも Jev（93.5%）に劣ります。一方、Decisions は速度で Jev より優れ（中央値 301ms vs 615ms）、コストは Jev より高く GPT より安くなっています。Decisions には Jev にない画像入力機能があり、用途に応じてモデルを切り替えるのが最適です。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "OpenAI API のプロンプトエンジニアリング基礎",
+    "url": "https://zenn.dev/akinori901/articles/20260927-plan063",
+    "date": "2026-10-07",
+    "titleJa": "OpenAI API のプロンプトエンジニアリング基礎",
+    "summaryJa": "OpenAI API を使ったアプリケーションで回答がブレたり指示が無視されたりするのは、モデルの能力不足ではなく、暗黙の期待（形式や制約）をモデルが知らないためです。system メッセージで役割・制約を固定し、出力形式を具体的に指定、Few-shot で形式を学ばせ、temperature でランダム性を制御することで、安定した結果が得られます。JSON モード、usage 確認、プロンプトインジェクション対策を組み合わせることで実務品質の出力が実現できます。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Mistral Large 4登場：1.05T MoE・1M文脈・重み公開予定を公式情報で確認",
+    "url": "https://zenn.dev/k_kitamura/articles/mistral-large-4-overview",
+    "date": "2026-10-07",
+    "titleJa": "Mistral Large 4登場：1.05T MoE・1M文脈・重み公開予定を公式情報で確認",
+    "summaryJa": "Mistral AIが2026年10月6日に大型モデル「Mistral Large 4」を発表しました。1.05T MoEのパラメータ、1Mトークンのコンテキスト、画像入力対応を備え、特に長文・画像・エージェント用途と月末予定のモデル重み公開が注目点です。OpenAI上位モデルとの性能比較では業務分野によって差があり、導入前には実務データでの検証が推奨されています。"
+  },
+  {
+    "source": "qiita-openai",
+    "title": "Codex Day 2は4リリース＋フルリセットだった：Auto-review、API Tier、Meetings、Decisions APIを総まとめ",
+    "url": "https://qiita.com/sponge841841/items/6e6e95d6e0e5db588c9d",
+    "date": "2026-10-07",
+    "titleJa": "Codex Day 2は4リリース＋フルリセットだった：Auto-review、API Tier、Meetings、Decisions APIを総まとめ",
+    "summaryJa": "OpenAIの「28日間改善またはリセット」企画のDay 2では、Auto-reviewの無料化、OpenAI APIのTier簡略化、Meetingsプラグイン、Decisions API Public Betaという4つのリリースが発表されました。さらにコミュニティ投票の結果、リセットも実施され、改善とリセットの両方が行われました。Codexユーザー、API開発者、ChatGPT仕事利用者にそれぞれ異なる恩恵がもたらされます。"
+  },
+  {
+    "source": "qiita-openai",
+    "title": "AIの「これ実行していい？」を別のAIに任せていい？｜Codex Auto-review",
+    "url": "https://qiita.com/kinamocchi_tech/items/7daf99e120f452e91c7a",
+    "date": "2026-10-07",
+    "titleJa": "AIの「これ実行していい？」を別のAIに任せていい？｜Codex Auto-review",
+    "summaryJa": "Auto-reviewはCodexが決められた範囲の外に出ようとするときの判定を別のレビュー用AIに任せる仕組みで、ChatGPTでサインインしていればこの判定のコストがプラン利用量に含まれなくなりました。ただしOpenAI公式が「セキュリティの保証として扱うべきではない」と明記しており、サンドボックス設計や監視の代わりにはなりません。危ない行動の90.3%を止める一方、完全な防止ではないため、ケージの大きさを決める人間の判断が重要です。"
+  },
+  {
+    "source": "qiita-openai",
+    "title": "Codex の Auto-review が無料化、API キー認証では 404 で止まった",
+    "url": "https://qiita.com/kai_kou/items/5e836f81f21549eaec2d",
+    "date": "2026-10-07",
+    "titleJa": "Codex の Auto-review が無料化、API キー認証では 404 で止まった",
+    "summaryJa": "Codexの Auto-reviewは4月23日から存在する承認リクエストをレビューエージェントに任せる機能で、2026年10月6日からChatGPTでサインインしているユーザーなら無料で利用できるようになりました。設定は「approval_policy = on-request」と「approvals_reviewer = auto_review」の2行でシンプルで、CLI の --approve-for-me フラグでも試せます。ただしAPIキー認証環境ではレビュー用モデルが404になる可能性があり、使用前に動作確認が推奨されています。"
+  },
+  {
+    "source": "qiita-openai",
+    "title": "OpenAI APIの想定外課金を防ぐ｜Spend Limitを$5に設定してみた",
+    "url": "https://qiita.com/rakukotofactory/items/0f4fa2d7780df2a3ccbd",
+    "date": "2026-10-07",
+    "titleJa": "OpenAI APIの想定外課金を防ぐ｜Spend Limitを$5に設定してみた",
+    "summaryJa": "OpenAI APIの想定外課金を防ぐため、個人開発ではSpend Limitを$5に設定しました。Spend Alertは通知であってAPI停止ではなく、Hard Spend Limitが実際の制限機能であることなど、複数の制御メカニズムを正しく理解することが重要です。APIキー管理、コード配置、環境変数管理などのセキュリティ対策と組み合わせることで、より安全な運用が実現できます。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Microsoft FabricのOneLakeは何を解決するのか",
+    "url": "https://zenn.dev/dannyso16/articles/fabric-onelake-overview",
+    "date": "2026-10-07",
+    "titleJa": "Microsoft FabricのOneLakeは何を解決するのか",
+    "summaryJa": "Microsoft FabricのOneLakeはテナント単位で自動に用意されるデータレイクで、実体はADLS Gen2です。Delta形式を標準とし、Snowflake（Iceberg）やDatabricks（Unity Catalog）とデータをコピーなしで相互運用できます。AWS S3やGCSなどのマルチクラウドデータもショートカット機能で統一的に管理できますが、課金はAzureの従量ではなくFabricの容量消費で決まります。"
+  },
+  {
+    "source": "qiita-snowflake",
+    "title": "SPSS ModelerからSnowflakeへ鍵ペア認証で接続する",
+    "url": "https://qiita.com/spssfun2017/items/90eb93a1edbc203ba445",
+    "date": "2026-10-07",
+    "titleJa": "SPSS ModelerからSnowflakeへ鍵ペア認証で接続する",
+    "summaryJa": "SPSS ModelerからSnowflakeへ鍵ペア認証で接続するには、OpenSSLでRSA鍵ペアを生成し、公開鍵をSnowflakeユーザーに登録、秘密鍵をローカルに保管します。Snowflake Native ODBC DriverのDSNで PRIV_KEY_FILE を指定し、ODBC単体での接続テスト実施後にSPSS Modelerで利用します。秘密鍵の管理と権限制御がセキュリティ上の重要なポイントです。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+    "url": "https://openai.com/index/atlassian-partnership",
+    "date": "2026-10-07",
+    "titleJa": "AtlassianとOpenAIがパートナーシップを拡大し、企業知識をアクションへ変える",
+    "summaryJa": "AtlassianとOpenAIが企業知識をアクションに変えるためのパートナーシップを拡大しました。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Building a context-aware AI assistant on AgentCore and OpenClaw",
+    "url": "https://aws.amazon.com/blogs/machine-learning/building-a-context-aware-ai-assistant-on-agentcore-and-openclaw/",
+    "date": "2026-10-07",
+    "titleJa": "AgentCore と OpenClaw でコンテキスト認識型 AI アシスタントを構築する",
+    "summaryJa": "Amazon Bedrock の AgentCore と OpenClaw を組み合わせ、ユーザーの過去の会話を記憶し、コンテキストを保持する個人向けアシスタントを構築する方法を紹介しています。AgentCore memory により会話履歴を構造化メタデータで管理でき、Telegram や AWS EventBridge を経由した複数の入力方式に対応できます。CloudFormation テンプレート 1 つでデプロイでき、個人利用では月数ドル程度の従量課金で運用できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Responsible AI governance: How AWS positions customers to align with ISO/IEC 42005:2025",
+    "url": "https://aws.amazon.com/blogs/machine-learning/responsible-ai-governance-how-aws-positions-customers-to-align-with-iso-iec-420052025/",
+    "date": "2026-10-07",
+    "titleJa": "責任あるAIガバナンス：AWS が ISO/IEC 42005:2025 への準拠を支援する方法",
+    "summaryJa": "ISO/IEC 42005:2025 国際標準に準拠したAIガバナンスの実装方法を説明しています。AI system impact assessment プロセスを組織全体のリスク管理に統合する仕組みを詳説し、プライバシーやバイアスなどの影響を特定して組織の意思決定に反映させます。AWS は ISO/IEC 42001:2023 実装ガイドと Well-Architected Framework の Responsible AI Lens を提供し、顧客の準拠を支援しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Best practices for Amazon SageMaker HyperPod administration and governance",
+    "url": "https://aws.amazon.com/blogs/machine-learning/best-practices-for-amazon-sagemaker-hyperpod-administration-and-governance/",
+    "date": "2026-10-07",
+    "titleJa": "Amazon SageMaker HyperPod の管理とガバナンスのベストプラクティス",
+    "summaryJa": "複数のチームが Amazon SageMaker HyperPod クラスタを共有する場合の管理方法を解説しています。組織、プロジェクト、クラスタ、ワークロードの 4 つの制御レイヤーに分けて、各レイヤーで異なるアクセス制御と容量管理を設定する必要があります。SageMaker Unified Studio との統合により、MLチームはプロジェクトコンテキストから HyperPod にアクセスしながら、インフラチームが一元的に運用できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Manage Amazon SageMaker HyperPod Spaces directly from SageMaker Studio",
+    "url": "https://aws.amazon.com/blogs/machine-learning/manage-amazon-sagemaker-hyperpod-spaces-directly-from-sagemaker-studio/",
+    "date": "2026-10-07",
+    "titleJa": "SageMaker Studio から Amazon SageMaker HyperPod Spaces を直接管理する",
+    "summaryJa": "SageMaker Studio の UI から Amazon SageMaker HyperPod Spaces を作成・管理できるようになりました。データサイエンティストは CLI ツールを使わずにブラウザから JupyterLab と Code Editor 環境を起動でき、Spaces の開始・停止やリモート IDE への接続も可能です。IDE and Notebooks タブでワンクリック操作で Spaces を管理でき、開発環境の構築時間が大幅に短縮されます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Build a voice travel concierge with Amazon Bedrock AgentCore, Managed Knowledge Base and Nova Sonic",
+    "url": "https://aws.amazon.com/blogs/machine-learning/build-a-voice-travel-concierge-with-amazon-bedrock-agentcore-managed-knowledge-base-and-nova-sonic/",
+    "date": "2026-10-07",
+    "titleJa": "Amazon Bedrock AgentCore、Managed Knowledge Base、Nova Sonic を使用した音声旅行コンシェルジェの構築",
+    "summaryJa": "Amazon Bedrock AgentCore、Amazon Nova 2.5 Sonic、Amazon Bedrock Knowledge Bases を組み合わせ、音声対応の航空旅行コンシェルジェサービスを構築する方法を紹介しています。旅行者は音声で座席変更、遅延確認、食事設定の更新、ポリシー質問への回答、ライブエージェント接続が可能です。Model Context Protocol (MCP) でバックエンドと疎結合に接続し、AWS CDK でデプロイでき、オンデマンドでスケールします。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "How DOCA GPUNetIO Unifies GPU-Initiated Networking Across the NVIDIA Software Stack",
+    "url": "https://developer.nvidia.com/blog/doca-gpunetio-gda-ki-unified-gpu-networking/",
+    "date": "2026-10-07",
+    "titleJa": "DOCA GPUNetIO が NVIDIA ソフトウェアスタック全体の GPU 起動型ネットワーキングを統合する",
+    "summaryJa": "NVIDIA DOCA GPUNetIO は CUDA カーネルが CPU を経由せずに Ethernet、RDMA、Verbs、DMA 操作を直接制御するフレームワークを提供しています。NCCL、NVSHMEM、UCX/NIXL、Holoscan Sensor Bridge が個別の GDA-KI 実装ではなく共有の GPUNetIO 基盤を使用することで、コードの重複を減らし、機能改善を全ライブラリで共有できるようになりました。オープンソース版と DOCA SDK 完全版の 2 つの形式で提供されています。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "AICR v1.0: Open, stable, and verifiable GPU cluster configuration",
+    "url": "https://developer.nvidia.com/blog/aicr-v1-0-open-stable-and-verifiable-gpu-cluster-configuration/",
+    "date": "2026-10-07",
+    "titleJa": "AICR v1.0：オープン、安定、検証可能な GPU クラスタ構成",
+    "summaryJa": "NVIDIA AI Cluster Runtime (AICR) v1.0 は GPU 加速 Kubernetes クラスタの互換性のあるコンポーネント組み合わせをバージョン固定レシピとして提供します。Snapshot、Recipe、Bundle、Validation の 4 つの独立した機能でクラスタの状態、設定、デプロイアーティファクト、検証を管理し、署名付き検証証拠を公開しています。v1.0 は CLI、REST API、Go SDK、Helm、Argo CD、Flux などの公開インターフェース上で v1.x 互換性ポリシーの下で統合できます。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Control How Your GPU Shares Work with Green Contexts",
+    "url": "https://developer.nvidia.com/blog/control-how-your-gpu-shares-work-with-green-contexts/",
+    "date": "2026-10-07",
+    "titleJa": "Green Contexts で GPU のリソース共有を制御する",
+    "summaryJa": "CUDA 13.1 の Green Contexts により、単一プロセス内で SM やワークキューなどの GPU 実行リソースを明示的にパーティショニングできるようになりました。レイテンシに敏感なカーネルを専用 SM で実行することで、バルク ワークロードの完了を待つ必要がなくなり、Blackwell GPU で重要なカーネルのレイテンシを 0.140 ms から 0.007 ms に削減できます。Green Contexts はオプトインで既存アプリケーションに段階的に採用でき、ストリームベースの CUDA ワークフローを維持しながら実行リソースを細かく制御できます。"
+  },
+  {
     "source": "qiita-agentskills",
     "title": "源泉徴収の税額、式で出すと210円で、税額表だと250円だった【kurashi-skill Day 27】",
     "url": "https://qiita.com/Ichiropen/items/1b65e4637574474d5cbc",
@@ -150,6 +342,198 @@
     "date": "2026-10-07",
     "titleJa": "「Claude Codeに渡す前」の工程が抜けている — 曖昧な依頼を構造化タスクに変換する設計",
     "summaryJa": "人から来る曖昧な依頼を場所・意図・状態・再現の4類型に分け、環境から自動取得できる3つを埋め、意図だけ AI に聞き返させて固定スキーマの構造化タスクに落とします。曖昧度スコアで聞き返すかどうかを分岐し、MCP で Claude Code 側に提供する設計にしました。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "会社で鬱になったので、GPTとClaudeに会社を作らせて養ってもらうことにした",
+    "url": "https://zenn.dev/think_node/articles/003baefa035f7e",
+    "date": "2026-10-06",
+    "titleJa": "会社で鬱になったので、GPTとClaudeに会社を作らせて養ってもらうことにした",
+    "summaryJa": "GPTとClaudeに会社運営させて月50万円の純利益を3か月連続で生み出させるProject Tabulaという実験を開始。AI同士が直接会話でき、設計レビューから意思決定Kernel・テスト・資本ルール・API予算・検索基盤の技術選定まで実験環境を構築しました。試運転ではAI同士が自分たちで役割分担ルールを作ろうとする瞬間が見られましたが、本番の会社はまだ始まっておらず、現在の損益は赤字です。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Claudeの日記が警察へ。AIは鍵つきの日記帳じゃない",
+    "url": "https://zenn.dev/sugawara_ai/articles/ai-news-20261006",
+    "date": "2026-10-06",
+    "titleJa": "Claudeの日記が警察へ。AIは鍵つきの日記帳じゃない",
+    "summaryJa": "2026年10月6日のAIニュース5本を紹介。ChatGPTに画像生成時の横に広告が出るようになり、Claudeに書いた日記が警察に通報された事例、ChatGPTの文章に見えない透かし（textGrain）がEU顧客から段階導入される、米Reflectionが501B規模の公開AI Beamを発表、AIの単価は8割下がったのに利用量増で請求額は増えている実態を紹介しています。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "AI のモデルが提供終了しても、プラグインの管理画面は何も言っていませんでした",
+    "url": "https://zenn.dev/rapls/articles/c9b028dd59b32f",
+    "date": "2026-10-06",
+    "titleJa": "AI のモデルが提供終了しても、プラグインの管理画面は何も言っていませんでした",
+    "summaryJa": "WordPressプラグインRapls AI Chatbotで、提供終了したモデル（Claude Sonnet 4、Opus 4.1など）がエラーになっていたのに管理画面に警告が出ていなかった問題を報告。終了日つきの対応表を持ち送信時に後継に差し替える方式に改善し、保存値は書き換えずに差し替え内容を表示する設計にしました。予告された終了日は先に表に入れて警告を出し、定期的に各社の一覧を突き合わせることが重要です。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Agents APIのブラウザー操作を組み込む前に：サイト許可をPythonで点検する",
+    "url": "https://zenn.dev/aipha_euro/articles/253da0489fd31a",
+    "date": "2026-10-06",
+    "titleJa": "Agents APIのブラウザー操作を組み込む前に：サイト許可をPythonで点検する",
+    "summaryJa": "OpenAIがAgents APIにOpenAIホストのブラウザーを使うcomputer useを追加した際、サイトアクセス許可と操作ごとの承認は別の仕組みであることを解説。Pythonで承認要求の処理を検証するオフラインサンプルを示し、購入や削除など破壊的変更の場合は追加の制御が必要であることを説明しています。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "必要なToolだけをAgentに渡すことで46.9%のトークン消費を抑える方法",
+    "url": "https://zenn.dev/knowledgesense/articles/f053192a51613f",
+    "date": "2026-10-06",
+    "titleJa": "必要なToolだけをAgentに渡すことで46.9%のトークン消費を抑える方法",
+    "summaryJa": "Cursorが実運用で取り入れているAgent費用削減の工夫を紹介。システムプロンプトを66%削減し、ファイル読み込みの行番号を10行ごとに表示、ToolやMCPを動的ロードすることで、合計46.9%のトークン消費削減に成功しました。入力の削減とキャッシュ効率化により、同じ成果を少ないトークン数で実現できます。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "textGrainを読む：透かしの統計信号と検出結果の設計境界",
+    "url": "https://zenn.dev/tsukaima_kobo/articles/e39db83830a81c",
+    "date": "2026-10-06",
+    "titleJa": "textGrainを読む：透かしの統計信号と検出結果の設計境界",
+    "summaryJa": "OpenAIが発表したtextGrain（見えない透かし）について、生成と検出の提供条件の違いと、統計信号の性質を解説。透かしあり文章の検出率と陽性的中率は異なることを事前比率を変えたベイズ計算で示し、検出結果から作者判定や真偽は決められない設計上の限界を説明しています。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "「この処理も任せられる？」2026年のSnowflake Dynamic Tables主要アップデート",
+    "url": "https://zenn.dev/snowflakejp/articles/dynamic-tables-2026-use-cases",
+    "date": "2026-10-06",
+    "titleJa": "「この処理も任せられる？」2026年のSnowflake Dynamic Tables主要アップデート",
+    "summaryJa": "Snowflake Dynamic Tablesの2026年主要アップデート8件を紹介。SCHEDULER属性による外部からの更新、主キーによる変更追跡、Frozen RegionへのDML、カスタム増分更新、ADAPTIVE モード、近似集計の増分更新に対応し、実行タイミング・更新ロジック・データの届け方の選択肢が大幅に拡張されました。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowflake の AI_EXTRACT で文章から項目を取り出す",
+    "url": "https://zenn.dev/mochitec_tech/articles/0eef883ba3ca67",
+    "date": "2026-10-06",
+    "titleJa": "Snowflake の AI_EXTRACT で文章から項目を取り出す",
+    "summaryJa": "SnowflakeのAI_EXTRACT関数を使ってEC問い合わせから商品名・注文番号・症状・希望対応を抽出。キーと質問をオブジェクトで渡すと1回の呼び出しで複数項目を取り出でき、値をそろえたい場合は質問文に選択肢を書くことで精度が向上することを確認しました。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "❄️Snowflakeでdbtプロジェクトとメダリオンアーキテクチャをスペック駆動開発(SDD)で構築してみた❄️",
+    "url": "https://zenn.dev/acntechjp/articles/8af77730f127e8",
+    "date": "2026-10-06",
+    "titleJa": "❄️Snowflakeでdbtプロジェクトとメダリオンアーキテクチャをスペック駆動開発(SDD)で構築してみた❄️",
+    "summaryJa": "Snowflake上で「dbt projects on Snowflake」がGAになったことを受け、スペック駆動開発（SDD）と組み合わせてメダリオンアーキテクチャ（Bronze/Silver/Gold）のデータ連携基盤構築を仕組み化しました。Snowflakeに内蔵された「Cortex Code」を活用し、インプットMarkdownから spec.yml、設計書、DDL、dbtプロジェクトを自動生成するパイプラインを実装し、再現性と資産化を実現しています。6種類のインプットドキュメントと6つのAgentが役割分担して処理することで、Snowflake環境のみで完結した開発フローを構築しました。"
+  },
+  {
+    "source": "qiita-snowflake",
+    "title": "【備忘録】Snowflake SQL Tips集",
+    "url": "https://qiita.com/takeshi_Qiita/items/18f0a35a3b23f31bdabf",
+    "date": "2026-10-06",
+    "titleJa": "【備忘録】Snowflake SQL Tips集",
+    "summaryJa": "Snowflakeでのデータマート作成で実用的だった8つのSQL実装パターンを紹介しています。会計年度計算、有効期間判定のEXISTS活用、前年同月比の結合、VALUES句による対応表の埋め込み、実績ゼロ行の対応、UNPIVOT/CASE による横縦持ち変換、NULL・ゼロ除算対策、ウィンドウ関数での上位N%抽出など、実装方法とポイントが詳細に説明されています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "How Jump Trading is scaling quant research with ChatGPT",
+    "url": "https://openai.com/index/jump-trading",
+    "date": "2026-10-06",
+    "titleJa": "Jump TradingはChatGPTで定量分析研究をどのようにスケールしているか",
+    "summaryJa": "Jump Tradingという定量分析企業が、ChatGPTを活用して定量分析研究をスケール化している取り組みについて紹介しています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Sharing AI progress in mathematics",
+    "url": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+    "date": "2026-10-06",
+    "titleJa": "数学におけるAIの進展を共有する",
+    "summaryJa": "OpenAIが数学分野におけるAIの進展状況と成果について発表しています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Advancing computer use with Ironclad",
+    "url": "https://openai.com/index/advancing-computer-use-with-ironclad",
+    "date": "2026-10-06",
+    "titleJa": "Ironcladでコンピューター操作を進化させる",
+    "summaryJa": "Ironcladと協業してコンピューター操作能力を高度化させる取り組みについて紹介しています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Our approach to EU text provenance rules",
+    "url": "https://openai.com/index/eu-text-provenance",
+    "date": "2026-10-06",
+    "titleJa": "EUテキスト出所ルールへの当社のアプローチ",
+    "summaryJa": "OpenAIがEUのテキスト出所表示規則に対応するためのアプローチを説明しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Introducing GLM 5.3 on Amazon Bedrock",
+    "url": "https://aws.amazon.com/blogs/machine-learning/introducing-glm-5-3-on-amazon-bedrock/",
+    "date": "2026-10-06",
+    "titleJa": "Amazon BedrockonでGLM 5.3が利用可能に",
+    "summaryJa": "Z.ai（Zhipu AI）の753Bパラメータ混合専門家モデル「GLM 5.3」がAmazon Bedrock上で利用できるようになりました。コーディングと長時間Agenticタスクに最適化され、サイバーセキュリティ能力が特徴で、OpenAI互換API、プロンプトキャッシング、クロスリージョン推論などの機能を提供しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Supercharge regulated workloads with Claude Code and Amazon Bedrock",
+    "url": "https://aws.amazon.com/blogs/machine-learning/supercharge-regulated-workloads-with-claude-code-and-amazon-bedrock/",
+    "date": "2026-10-06",
+    "titleJa": "Claude Code と Amazon Bedrock で規制対象ワークロードを加速させる",
+    "summaryJa": "AWS GovCloud（US）で Claude Opus 5.5 と Claude Sonnet 5.5 が FedRAMP Class D、DoD Impact Level 認証付きで利用可能になり、コンプライアンス要件のある環境でのAI支援開発が可能になりました。Claude Code はコードベース全体の理解、複数ファイル編集、Git操作、外部ツール連携などができるAgenticコーディングツールであり、このソリューションでコンプライアンスを維持しながら開発タスクを加速できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "New agent skill: Amazon SageMaker optimized generative AI inference for your coding agent",
+    "url": "https://aws.amazon.com/blogs/machine-learning/new-agent-skill-amazon-sagemaker-optimized-generative-ai-inference-for-your-coding-agent/",
+    "date": "2026-10-06",
+    "titleJa": "Amazon SageMaker 最適化生成 AI 推論向けの新しいエージェントスキル",
+    "summaryJa": "Amazon SageMaker の aws-ai-ml スキルは、Model Context Protocol に対応するコーディングエージェント（Kiro、Claude Code、Codex など）を SageMaker 推論最適化の専門家に変えるツールキットです。エンドポイントのベンチマーク、デプロイ設定の推奨、パフォーマンス実行の比較、実行可能な SageMaker Python SDK v3 コード生成をエージェントに実行させることで、エンジニアが本番環境へのモデル展開を加速できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Making Amazon Quick enterprise-ready: Automated, auditable cross-account resource promotion",
+    "url": "https://aws.amazon.com/blogs/machine-learning/making-amazon-quick-enterprise-ready-automated-auditable-cross-account-resource-promotion/",
+    "date": "2026-10-06",
+    "titleJa": "Amazon Quick をエンタープライズ対応に：自動化された監査可能なクロスアカウントリソースプロモーション",
+    "summaryJa": "Amazon Quick のリソース（エージェント、アクションコネクタ、ナレッジベース、フロー、スペース）は Amazon Quick API でプログラマティックに管理でき、開発アカウントから本番アカウントへの自動プロモーションが可能になりました。Quick Resource Migrator という MCP サーバーがクロスアカウント間でリソースと権限を忠実にコピーし、すべての更新を S3 にバージョン管理されたバックアップとして保存することで、監査可能で再実行可能なプロモーションワークフローを実現します。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Agentic retrieval with LangChain and Amazon Bedrock Knowledge Bases",
+    "url": "https://aws.amazon.com/blogs/machine-learning/agentic-retrieval-with-langchain-and-amazon-bedrock-knowledge-bases/",
+    "date": "2026-10-06",
+    "titleJa": "LangChain と Amazon Bedrock Knowledge Bases を用いたエージェント的検索",
+    "summaryJa": "Amazon Bedrock Managed Knowledge Base は標準的な単一検索（Retrieve API）とマルチステップの計画ループ（AgenticRetrieveStream API）の 2 つの検索パスを提供します。エージェント的検索は質問を部分的なサブクエリに分解し、十分なエビデンスが得られるまで複数回の検索を実行することで、複数部分から構成される質問に対してより完全な回答を得ることができます。LangChain 統合を用いて両方の検索方法を実装し、トレースイベントから計画ステップを追跡できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Downgrading user roles in Amazon Quick",
+    "url": "https://aws.amazon.com/blogs/machine-learning/downgrading-user-roles-in-amazon-quick/",
+    "date": "2026-10-06",
+    "titleJa": "Amazon Quick でのユーザーロールのダウングレード",
+    "summaryJa": "Amazon Quick ではコンソールから Author から Reader への直接的なダウングレードができないため、手動削除・再作成方式、または AWS CLI を用いたステップ単位ダウングレード方式の 2 つのソリューションが提供されます。ダウングレード前にはリソース所有権の移譲が必須であり、最小権限の原則に基づいて適切なロール管理を行うことでセキュリティとコスト削減の両立が実現できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Evaluating multi-agent systems for explainability and helpfulness with Amazon Bedrock AgentCore",
+    "url": "https://aws.amazon.com/blogs/machine-learning/evaluating-multi-agent-systems-for-explainability-and-helpfulness-with-amazon-bedrock-agentcore/",
+    "date": "2026-10-06",
+    "titleJa": "Amazon Bedrock AgentCore で複数エージェントシステムを説明性と有用性で評価する",
+    "summaryJa": "Amazon Bedrock AgentCore Evaluations は、組み込み評価器とカスタム評価器の両方で複数エージェントシステムの品質を測定し、ヘルプフルネス、タスク成功、指示遵守など複数の品質次元にわたるエージェント動作を評価します。サプライチェーン計画の事例では、組み込み評価器による一般的な品質次元の評価と、カスタム評価器による制約充足や SQL 正確性などのビジネス固有の検証を組み合わせた評価フレームワークが示されています。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "Why Telecom Operators Are Building Their AI Strategy on Open Models",
+    "url": "https://blogs.nvidia.com/blog/telecom-operators-open-models/",
+    "date": "2026-10-06",
+    "titleJa": "通信事業者がオープンモデルを中心に AI 戦略を構築する理由",
+    "summaryJa": "89% の通信事業者がオープンソースモデルとソフトウェアが AI 戦略に重要であると回答し、オープンモデルはコスト削減だけでなく、検証可能性、通信業界固有のカスタマイズ、信頼性の高い AI、柔軟なデプロイ、ローカル化された AI サービス提供といった 5 つの戦略的価値を提供します。NVIDIA Nemotron ファミリーやその他のオープンモデルを基盤として、SoftBank、AT&T、Indosat Ooredoo Hutchison などが通信業界固有のモデルを開発し本番環境に展開しています。"
+  },
+  {
+    "source": "snowflake-blog",
+    "title": "AI Gateway for Advertising: Governed AI Agents | Snowflake",
+    "url": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-agents-in-advertising",
+    "date": "2026-10-06",
+    "titleJa": "AI Gateway for Advertising：統治されたエージェント | Snowflake",
+    "summaryJa": "Snowflake は AI Gateway for Advertising をプレビュー公開し、Meta と TikTok の Model Context Protocol 統合を通じて Cortex Agents を広告キャンペーン最適化のエージェントに変えました。エージェントはライブプラットフォームシグナル（配信、カタログヘルス、診断）と Snowflake 内の企業コンテキスト（ビジネス定義、履歴パフォーマンス）を組み合わせることで、クロスチャネルパフォーマンスを推論し、キャンペーンマネージャーの承認下で最適化アクションを実装できます。"
+  },
+  {
+    "source": "snowflake-builders-blog",
+    "title": "Can You Build Autonomous AI Agents in Snowflake?",
+    "url": "https://medium.com/snowflake/can-you-build-autonomous-ai-agents-in-snowflake-c251bab066cf?source=rss----34b6daafc07---4",
+    "date": "2026-10-06",
+    "titleJa": "Snowflake で自律的な AI エージェントを構築できるか？",
+    "summaryJa": "Snowflake プラットフォーム上で自律的に動作する AI エージェントの構築が可能であるかについて論じられています。"
   },
   {
     "source": "qiita-agentskills",
@@ -488,6 +872,102 @@
     "summaryJa": "DeepSeek V4 Flash (0731) は 2026 年 11 月 5 日に廃止される予定です。推奨される代替モデルは DeepSeek V4.1 Flash です。"
   },
   {
+    "source": "zenn-openai",
+    "title": "「うん」と言うたびに黙る音声AIが、GPT-Liveに替えたら劇的にリアルになった",
+    "url": "https://zenn.dev/toriken/articles/gpt-live-migration-from-realtime-api",
+    "date": "2026-10-05",
+    "titleJa": "「うん」と言うたびに黙る音声AIが、GPT-Liveに替えたら劇的にリアルになった",
+    "summaryJa": "Realtime APIからGPT-Liveへ移行した1on1練習アプリの技術記録です。相づちで会話が止まる問題がGPT-Liveで解決され、コスト面でも秒単位課金により安定しました。ターン検出や発話イベント生成などの処理は自分たちで作り直す必要がありました。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Kong KonnectのObservability機能でLLM利用料を可視化してみた",
+    "url": "https://zenn.dev/nttdata_tech/articles/f074a0b6d43973",
+    "date": "2026-10-05",
+    "titleJa": "Kong KonnectのObservability機能でLLM利用料を可視化してみた",
+    "summaryJa": "Kong KonnectのAI Gateway機能でOpenAI APIへのリクエストを中継し、Observability機能でダッシュボード化する方法を紹介しています。Consumer単位でAPIキーを設定することで、アプリケーション別のtoken使用量と利用料金を可視化できます。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Azure OpenAI Service を業務システムに組み込む際の設計ポイント",
+    "url": "https://zenn.dev/sidejob/articles/a775e65bb0eee18dd",
+    "date": "2026-10-05",
+    "titleJa": "Azure OpenAI Service を業務システムに組み込む際の設計ポイント",
+    "summaryJa": "既存業務システムへのAzure OpenAI Service組み込みで検討すべき設計論点を整理しています。モデル選定、レイテンシとタイムアウト設計、プロンプト管理、コスト監視など、設計段階での意思決定が本番運用の効率を大きく左右します。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowflake per-user quotas で作る、AI 利用コストの個人別上限と引き上げ申請の運用",
+    "url": "https://zenn.dev/finatext/articles/snowflake-ai-quota-escalation-tag",
+    "date": "2026-10-05",
+    "titleJa": "Snowflake per-user quotas で作る、AI 利用コストの個人別上限と引き上げ申請の運用",
+    "summaryJa": "per-user quotasを使ってAI機能の個人別上限管理を実装する方法を紹介しています。全ユーザーに一律ベース上限を設定し、タグで特定ユーザーのみ引き上げるデザインにより、申請・承認ベースのコスト制御が実現できます。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowflake の AI_SIMILARITY でしきい値を決める前に",
+    "url": "https://zenn.dev/mochitec_tech/articles/62dc0f6ec1db62",
+    "date": "2026-10-05",
+    "titleJa": "Snowflake の AI_SIMILARITY でしきい値を決める前に",
+    "summaryJa": "AI_SIMILARITY関数は-1から1の数値を返し、埋め込みのコサイン類似度に基づいています。肯定文と否定文が同程度の類似度を示す場合があり、モデルによって値の解釈が異なるため、実データで複数の対比を検証した後にしきい値を決める必要があります。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowflake の AI_CLASSIFY で文章を分類する",
+    "url": "https://zenn.dev/mochitec_tech/articles/37a9ebb9504431",
+    "date": "2026-10-05",
+    "titleJa": "Snowflake の AI_CLASSIFY で文章を分類する",
+    "summaryJa": "AI_CLASSIFY関数でラベルを指定して文章分類を行う方法を検証しています。ラベル名のみでは好意的なレビューを取りこぼしましたが、ラベルに説明を付けることで精度が向上し、20件中13件から18件に改善しました。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowpipe + Stream + Task とは？Snowflakeで「取り込み」と「加工」を自動化する基本パターン",
+    "url": "https://zenn.dev/fusic/articles/snowflake-snowpipe-task-intro",
+    "date": "2026-10-05",
+    "titleJa": "Snowpipe + Stream + Task とは？Snowflakeで「取り込み」と「加工」を自動化する基本パターン",
+    "summaryJa": "S3のファイルをSnowpipeで自動取り込み、Streamで差分を記録、Taskで加工処理を自動実行する構成を紹介しています。取り込みと加工を分離することで、失敗時の再処理が容易になり、課金体系も分離できるメリットがあります。"
+  },
+  {
+    "source": "qiita-snowflake",
+    "title": "Snowflake × Power BI 構成こそFabricを使う理由 ~ Fabric導入によるメリット3選 ~ Fabricを使わなくてはもったいない！",
+    "url": "https://qiita.com/ReijiOtake/items/bf3198d5f28df2273af9",
+    "date": "2026-10-05",
+    "titleJa": "Snowflake × Power BI 構成こそFabricを使う理由 ~ Fabric導入によるメリット3選 ~ Fabricを使わなくてはもったいない！",
+    "summaryJa": "Snowflake と Power BI の構成に Microsoft Fabric を組み合わせることで、Direct Lake モードによるパフォーマンス向上、ミラーリングと Iceberg 連携による既存資産の活用、SharePoint データとのシームレスな統合が実現できます。"
+  },
+  {
+    "source": "qiita-snowflake",
+    "title": "【Snowflake】公式ドキュメントを読み進めよう(Part 6)～Get started編⑥～",
+    "url": "https://qiita.com/coco_co/items/aabd61cb6bf6f0a2c1a9",
+    "date": "2026-10-05",
+    "titleJa": "【Snowflake】公式ドキュメントを読み進めよう(Part 6)～Get started編⑥～",
+    "summaryJa": "Snowflakeの管理者向け概念として、クラウドプラットフォーム（AWS、Google Cloud、Azure）とリージョンについて解説しています。1つのアカウントは1つのクラウドプラットフォームと1つのリージョンにのみ対応するため、DRの要件やコンプライアンス要件を考慮した選択が重要です。日本国内ではAWSが2つのリージョンを提供していますが、今後リージョン拡大が期待されています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Building advertising for the way people use AI",
+    "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+    "date": "2026-10-05",
+    "titleJa": "人々がAIを使う方法に対応した広告フォーマットと計測の構築",
+    "summaryJa": "ChatGPTで新たな広告フォーマットと計測方法が導入され、AIを利用する人々の実際の使い方に合わせた広告サービスが提供されます。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "From Scan to Treatment Plan, AI Helps Close Breast Cancer’s Deadliest Gaps",
+    "url": "https://blogs.nvidia.com/blog/ai-breast-cancer-startups/",
+    "date": "2026-10-05",
+    "titleJa": "乳がん治療の各段階でAIが貢献：検査から治療計画まで",
+    "summaryJa": "NVIDIA Inception プログラムに参加するスタートアップ企業が、乳がん治療の検査、リスク評価、治療計画の各段階でAIを活用しています。iSono Health の自動超音波システムと Whiterabbit.ai のAI技術により、スクリーニング時間を短縮し、診断精度を向上させ、治療方針決定の加速が実現しています。"
+  },
+  {
+    "source": "snowflake-builders-blog",
+    "title": "Confidently Wrong: I Let an AI Analyst Loose on Snowflake — With and Without a Semantic Model",
+    "url": "https://medium.com/snowflake/confidently-wrong-i-let-an-ai-analyst-loose-on-snowflake-with-and-without-a-semantic-model-3ac30c6fe10a?source=rss----34b6daafc07---4",
+    "date": "2026-10-05",
+    "titleJa": "確信を持ってしくじる：Semantic Model の有無でSnowflakeのAIアナリストを試す",
+    "summaryJa": "Snowflake上でAIアナリストをSemantic Model の有無で比較検証し、信頼性と正確性の違いを確認しています。"
+  },
+  {
     "source": "qiita-agentskills",
     "title": "国会で「宮沢賢治」は69回言及されていた。議事録79年分を検索できるAPI【kurashi-skill Day 25】",
     "url": "https://qiita.com/Ichiropen/items/a74823337f6f17087c0f",
@@ -688,6 +1168,62 @@
     "summaryJa": "Agent Bricks ドキュメントがコードでカスタムエージェントを構築、デプロイ、実行することに中心が置かれるようになりました。エージェント フレームワーク、エージェント サーバー、エージェント ランタイムの関係性や、DurableAgentServer と Agent Runtime の機能が説明されています。"
   },
   {
+    "source": "zenn-openai",
+    "title": "GPT-6.1 Solよりも OpenAIが発表した MentalHealthBench こそ重要では",
+    "url": "https://zenn.dev/syoshida07/articles/7b72ee6a9ccab8",
+    "date": "2026-10-04",
+    "titleJa": "GPT-6.1 Solよりも OpenAIが発表した MentalHealthBench こそ重要では",
+    "summaryJa": "OpenAI が発表した MentalHealthBench は、単なるメンタルヘルス評価ではなく、AIが人間とどのように関係を築くべきかを測定する評価フレームワークです。80名以上の心理学者・精神科医との協力で構築され、「正しい答え」ではなく「人間への影響」「主体性の尊重」などの振る舞いを評価対象としています。これはAIエージェント時代に向けて、人間に寄り添うAI評価の重要な第一歩です。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "Codexの利用枠、気づいたら溶けてませんか？ 画面の端で見張る「Codex Usage HUD」を無料公開しました",
+    "url": "https://zenn.dev/rainai/articles/3789f39738b9e9",
+    "date": "2026-10-04",
+    "titleJa": "Codexの利用枠、気づいたら溶けてませんか？ 画面の端で見張る「Codex Usage HUD」を無料公開しました",
+    "summaryJa": "著者が開発した Codex Usage HUD は、macOS の画面に常駐して Codex の利用枠の残りと現在の処理状況をリアルタイムで表示するツールです。F1マシンのLEDインジケーターのような設計で、異常な利用枠消費に人間が早く気づけることを目的としており、GitHub で無料公開されています。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "OpenAIのDotsとは：できること、話題になった理由、類似ツールとの使い分け、料金",
+    "url": "https://zenn.dev/gingakuwagata/articles/openai-dots-always-on-agent",
+    "date": "2026-10-04",
+    "titleJa": "OpenAIのDotsとは：できること、話題になった理由、類似ツールとの使い分け、料金",
+    "summaryJa": "OpenAI が DevDay 2026 で発表した Dots は、ChatGPT の会話を閉じたあとも継続して仕事をするAIエージェントです。複数の仕事を並行して進め、Slack や Teams 経由で連絡を受け取り、Pro プラン以上で利用できます。Meta の Muse や SpaceXAI の Grok Bot などの競合製品と比較すると、職場統合とコード開発機能に強みがあります。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "OpenAI DevDay 2026まとめ：GPT-6.1 Sol、Dots、Codex Cloud、MCP Eventsまで",
+    "url": "https://zenn.dev/sponge841841/articles/2026-09-30-openai-devday-2026",
+    "date": "2026-10-04",
+    "titleJa": "OpenAI DevDay 2026まとめ：GPT-6.1 Sol、Dots、Codex Cloud、MCP Eventsまで",
+    "summaryJa": "OpenAI は 2026年9月29日に DevDay 2026 を開催し、ChatGPT を「質問に答えるAI」から「継続的に仕事を任せる実行基盤」へ拡張する20件を超える発表を行いました。GPT-6.1 Sol による性能向上、Dots による常時稼働型エージェント、Codex のクラウド開発基盤への進化、Codex Code Review や Security Cloud の新機能が紹介されています。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "OpenAI安全担当が退職、自分で持てるAIも続々",
+    "url": "https://zenn.dev/sugawara_ai/articles/ai-news-20261004",
+    "date": "2026-10-04",
+    "titleJa": "OpenAI安全担当が退職、自分で持てるAIも続々",
+    "summaryJa": "2026年10月4日のAIニュースをまとめた記事です。ドイツのAleph Alphaが自社サーバーで動かせる「Kolibri」を公開し、OpenAIの安全担当が退職と同時に文化的な問題を指摘し、Amazon、ELYZA、Metaが各自、AIモデルやプロジェクトを発表しています。記事は、AIをどこで、誰のために動かすかというテーマで、性能よりもAIの置き場所の話が重要だと指摘しています。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "単一 API で全 AI モデルにアクセス？APIPod で開発効率を上げる方法",
+    "url": "https://zenn.dev/cnych/articles/eedd153299dcad",
+    "date": "2026-10-04",
+    "titleJa": "単一 API で全 AI モデルにアクセス？APIPod で開発効率を上げる方法",
+    "summaryJa": "APIPod は100種類以上のAIモデルを単一のAPIエンドポイントで利用できるAI APIアグリゲーションプラットフォームです。OpenAI SDK と完全互換で、既存コードの base_url を変更するだけで他のモデルに切り替えられます。99.9% の可用性、リアルタイムのコスト管理、自動フェイルオーバーなど、エンタープライズ級の機能を備えており、開発者が本来の価値創造に集中できる環境を提供します。"
+  },
+  {
+    "source": "zenn-openai",
+    "title": "GPT-6.1 SolのMulti-agent対応を読む：ツール実行と最終回答の境界をPythonで検証する",
+    "url": "https://zenn.dev/aipha_euro/articles/773fbb4d115e74",
+    "date": "2026-10-04",
+    "titleJa": "GPT-6.1 SolのMulti-agent対応を読む：ツール実行と最終回答の境界をPythonで検証する",
+    "summaryJa": "OpenAI が GPT-6.1 Sol で Responses API の Multi-agent 対応を実装しました。記事では、複数エージェントの協調時にツール実行と最終回答を正しく区別する必要性を説明し、出力を三つの経路に分ける設計と Python での検証方法を紹介しています。テストにより、欠落・重複した call_id の処理、未知の関数への対応、親・子エージェントからの複数呼び出しなど、複数の境界条件を確認しています。"
+  },
+  {
     "source": "qiita-databricks",
     "title": "MLflow 3.14の @mlflow.test で、エージェントの評価をpytestのテストにする",
     "url": "https://qiita.com/taka_yayoi/items/91e13561a4ef3751df37",
@@ -702,6 +1238,46 @@
     "date": "2026-10-04",
     "titleJa": "AIが作った画像・動画・音声を並べて見比べるビューアをOSSで公開【Claude Code】",
     "summaryJa": "著者は Claude Code などのエージェントが生成した画像・動画・音声を 1 つの窓に並べて見比べるための macOS 用ビューアを MIT ライセンスで公開しました。ズーム・重ね合わせ・背景切り替えなど操作機能を備えており、エージェント向けのスキルとしても提供されており、生成物の選別効率を高めます。"
+  },
+  {
+    "source": "openai-news",
+    "title": "A model guide for the GPT-6 family",
+    "url": "https://openai.com/index/practical-guide-building-gpt-6",
+    "date": "2026-10-03",
+    "titleJa": "GPT-6 ファミリーのモデルガイド",
+    "summaryJa": "OpenAI が GPT-6 ファミリーのモデルについてのガイドを公開しました。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Sweep thousands of leases for compliance using Amazon Quick and the Adjudicated Query pattern",
+    "url": "https://aws.amazon.com/blogs/machine-learning/sweep-thousands-of-leases-for-compliance-using-amazon-quick-and-the-adjudicated-query-pattern/",
+    "date": "2026-10-03",
+    "titleJa": "Amazon Quick と Adjudicated Query パターンで数千のリース契約をコンプライアンス確認する",
+    "summaryJa": "Amazon Quick と Adjudicated Query パターンを組み合わせることで、大量のリース契約のコンプライアンス確認が可能になりました。このパターンでは、ユーザーが Amazon Quick で自然言語で質問し、実際の合否判定は決定的なルールエンジンで行う設計により、信頼性と防御可能性を確保しています。検査漏れ防止のため、検査済み・違反・不明・判読不可の合計が検査対象数に等しいという不変量を保証しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Add secure Web Search to Claude Desktop with Amazon Bedrock AgentCore",
+    "url": "https://aws.amazon.com/blogs/machine-learning/add-secure-web-search-to-claude-desktop-with-amazon-bedrock-agentcore/",
+    "date": "2026-10-03",
+    "titleJa": "Amazon Bedrock AgentCore を使用して Claude Desktop にセキュアなウェブ検索を追加する",
+    "summaryJa": "Claude Desktop は AWS 内のウェブ検索機能を Amazon Bedrock AgentCore 経由で統合できるようになりました。ウェブ検索は MCP 互換で AWS インフラ内で完全に管理され、外部APIキーが不要でセキュアです。AWS IAM Identity Center から Amazon Cognito を経由して JWT ベースの認証を実施し、エンタープライズの ID ガバナンスに対応しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Fine-tune a search agent with multi-turn RL on Amazon SageMaker AI",
+    "url": "https://aws.amazon.com/blogs/machine-learning/fine-tune-a-search-agent-with-multi-turn-rl-on-amazon-sagemaker-ai/",
+    "date": "2026-10-03",
+    "titleJa": "Amazon SageMaker AI のマルチターン強化学習で検索エージェントを最適化する",
+    "summaryJa": "Amazon SageMaker AI のマルチターン強化学習（MTRL）により、検索エージェントをファインチューニングできるようになりました。マルチターン軌跡全体にわたってエージェントを最適化し、環境固有の動作を組み込むことで、小規模モデルで大規模モデル並みの信頼性と性能を実現できます。PPO や CISPO などのアルゴリズムとアジャイルなロールアウト収集により、大規模エンタープライズ検索環境での実用性が向上しています。"
+  },
+  {
+    "source": "palantir-blog",
+    "title": "Early Talent Hiring at Palantir",
+    "url": "https://blog.palantir.com/early-talent-hiring-at-palantir-c7388f1fdab7?source=rss----3c87dc14372f---4",
+    "date": "2026-10-03",
+    "titleJa": "Palantir のアーリータレント採用",
+    "summaryJa": "Palantir がアーリータレント採用プログラムについて述べています。"
   },
   {
     "source": "classmethod-claudecode",
@@ -742,6 +1318,118 @@
     "date": "2026-10-03",
     "titleJa": "【メモ】pstack (Claude Code 移植版pstack-claude) のスタック構成とオーケストレーションを読む",
     "summaryJa": "著者は Claude Code 用プラグイン pstack-claude の内部構成を詳しく分析しました。pstack は層状に積まれた指示書（セッションフック→poteto-mode→プレイブック→原則→子エージェント）とコードで構成され、何時間も継続して高難度な修正をこなします。元の Cursor 版との移植時の置き換え規則や、マルチエージェント運用での同じ進め方の徹底が詳述されています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Chatham scales its capital markets expertise with OpenAI",
+    "url": "https://openai.com/index/chatham-financial",
+    "date": "2026-10-02",
+    "titleJa": "Chatham が OpenAI で資本市場の専門知識を拡張",
+    "summaryJa": "Chatham Financial が OpenAI のテクノロジーを活用して、資本市場向けの専門知識を拡張しています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "The eternal complement",
+    "url": "https://openai.com/index/the-eternal-complement",
+    "date": "2026-10-02",
+    "titleJa": "The eternal complement",
+    "summaryJa": "記事の本文が取得できませんでした。"
+  },
+  {
+    "source": "openai-news",
+    "title": "How Albertsons Companies is reimagining retail from the inside out",
+    "url": "https://openai.com/index/albertsons-reimagining-retail",
+    "date": "2026-10-02",
+    "titleJa": "Albertsons Companies が小売を根本的に再想像する方法",
+    "summaryJa": "Albertsons Companies が内部から小売ビジネスを根本的に再構築しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Scaling cloud migrations with agentic AI on Amazon Bedrock AgentCore",
+    "url": "https://aws.amazon.com/blogs/machine-learning/scaling-cloud-migrations-with-agentic-ai-on-amazon-bedrock-agentcore/",
+    "date": "2026-10-02",
+    "titleJa": "Amazon Bedrock AgentCore でエージェント AI によるクラウドマイグレーションをスケール",
+    "summaryJa": "Amazon Bedrock AgentCore 上で動作する Intake Agent、IaC Agent、Migration Intelligence and Governance Agent、SRE Agent の4つのエージェントパターンにより、大規模なクラウドマイグレーションプログラムをスケールできます。このパターンは、Model Context Protocol（MCP）ツールを通じて組織固有のシステムに接続し、インフラストラクチャコード（IaC）の開発時間をアプリケーション当たり3～4週間から数分に短縮しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Serve live, governed data in AI-built apps with Amazon Quick",
+    "url": "https://aws.amazon.com/blogs/machine-learning/serve-live-governed-data-in-ai-built-apps-with-amazon-quick/",
+    "date": "2026-10-02",
+    "titleJa": "Amazon Quick で AI が構築したアプリにライブで統制されたデータを提供",
+    "summaryJa": "Amazon Quick の新機能「Live Data in Apps」により、自然言語で記述されたアプリが QuickSight の統制されたデータセットをリアルタイムで照会できるようになりました。アプリを開く度に SQL が再実行されるため、常に最新のデータが表示され、行レベルセキュリティと列レベルセキュリティが各ユーザーに自動適用されます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Build agent memory with NVIDIA NeMo Agent Toolkit and Amazon S3 Vectors",
+    "url": "https://aws.amazon.com/blogs/machine-learning/build-agent-memory-with-nvidia-nemo-agent-toolkit-and-amazon-s3-vectors/",
+    "date": "2026-10-02",
+    "titleJa": "NVIDIA NeMo Agent Toolkit と Amazon S3 Vectors でエージェントメモリを構築",
+    "summaryJa": "NVIDIA NeMo Agent Toolkit（NAT）の拡張可能なメモリモジュールに Amazon S3 Vectors をカスタムメモリプロバイダーとして実装することで、マルチエージェント AI システムの永続的なメモリレイヤーを構築できます。Amazon S3 Vectors はセマンティック検索、メタデータフィルタリング、強い一貫性、弾力的なスケーリングを提供し、Amazon EKS での本番運用に適しています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Uplifting conversion across the acquisition funnel with personalization using contextual bandits on AWS",
+    "url": "https://aws.amazon.com/blogs/machine-learning/uplifting-conversion-across-the-acquisition-funnel-with-personalization-using-contextual-bandits-on-aws/",
+    "date": "2026-10-02",
+    "titleJa": "AWS の文脈的バンディットを使用した顧客獲得ファネルでのパーソナライゼーションによるコンバージョン向上",
+    "summaryJa": "Amazon Payments が Amazon SageMaker AI 上で文脈的マルチアームバンディット（LinUCB アルゴリズム）を使用して、製品獲得ファネル全体のパーソナライゼーションを実現しました。7週間のオンラインテストで、顧客集団によっては最終ファネルコンバージョンで高い一桁の相対的なリフトが確認されています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Building ambient agents with Amazon Bedrock AgentCore: From event-driven signals to human-in-the-loop workflows",
+    "url": "https://aws.amazon.com/blogs/machine-learning/building-ambient-agents-with-amazon-bedrock-agentcore-from-event-driven-signals-to-human-in-the-loop-workflows/",
+    "date": "2026-10-02",
+    "titleJa": "Amazon Bedrock AgentCore でアンビエントエージェントを構築：イベント駆動シグナルから人間のループワークフローへ",
+    "summaryJa": "Amazon Bedrock AgentCore でアンビエントエージェント（環境エージェント）を構築できます。これらのエージェントは、ユーザーの入力を待つのではなく、S3 イベントやスケジュールされたタスクなどのイベントストリームに応答し、承認が必要な場合に単一の ask_human ツールで人間に一時停止します。AWS Lambda と Amazon DynamoDB を組み合わせることで、完全にサーバーレスなアンビエントエージェントプラットフォームを実現できます。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "NVIDIA DGX Spark 64GB Gives Developers More Ways to Build and Scale Local AI",
+    "url": "https://blogs.nvidia.com/blog/local-ai-dgx-spark-64gb-sync/",
+    "date": "2026-10-02",
+    "titleJa": "NVIDIA DGX Spark 64GB で開発者がローカル AI を構築・スケーリングする方法",
+    "summaryJa": "NVIDIA が 10 月 23 日から DGX Spark 64GB を複数のメーカー経由で利用可能にします。100 億パラメータまでのモデルをデバイス上で実行でき、NVIDIA Sync Cluster Assistant により複数ユニットをシームレスにクラスタリングしてワークロードをスケールさせることができます。開発者は初日からエージェント開発に必要なツールやランタイムを利用できます。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "How NVIDIA GPUs Help Accelerate OpenAI’s GPT-6 Astra Ultrafast",
+    "url": "https://blogs.nvidia.com/blog/gpus-openai-gpt-6-astra-ultrafast/",
+    "date": "2026-10-02",
+    "titleJa": "NVIDIA GPU が OpenAI の GPT-6 Astra Ultrafast を加速する仕組み",
+    "summaryJa": "NVIDIA Blackwell GPU 上で実行される GPT-6 Astra Ultrafast は、Astra Standard と比べて最大 8 倍高速なトークン生成を実現します。OpenAI は独自モデルを活用して推論最適化を継続し、コード生成やツール利用、対話的なアプリケーションにおいて開発者により迅速な応答をもたらします。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Build Applications on NVIDIA BlueField Faster with NVIDIA DOCA Agent Skills",
+    "url": "https://developer.nvidia.com/blog/build-applications-on-nvidia-bluefield-faster-with-nvidia-doca-agent-skills/",
+    "date": "2026-10-02",
+    "titleJa": "NVIDIA DOCA Agent Skills で NVIDIA BlueField アプリケーション開発を高速化",
+    "summaryJa": "NVIDIA DOCA Agent Skills は、AI エージェントに DOCA 開発の専門知識と検証済みの API シグネチャを提供します。65 個のプロンプト評価では、スキルなしの場合はチェックリスト達成が 19% にとどまるのに対し、スキルありの場合は 100% を達成しました。Go ベースの RDMA アプリケーション構築では手書きコードが 73%、ハードウェアコマンドが 46% 削減されました。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Build Local AI Apps with C++ and NVIDIA TensorRT RTX Samples",
+    "url": "https://developer.nvidia.com/blog/build-local-ai-apps-with-c-and-nvidia-tensorrt-rtx-samples/",
+    "date": "2026-10-02",
+    "titleJa": "C++ と NVIDIA TensorRT RTX Samples でローカル AI アプリを構築",
+    "summaryJa": "Do Inference Now (DIN) Deploy は、ONNX Runtime と NVIDIA TensorRT RTX 実行プロバイダを組み合わせたオープンソース C++ サンプル集です。音声認識、画像セグメンテーション、画像生成など複数のタスクに対応し、DGX Spark 上で 39 倍～206 倍のリアルタイム GPU 高速化を実現します。"
+  },
+  {
+    "source": "snowflake-builders-blog",
+    "title": "Converting Snowflake Native Tables to Iceberg — Part 1",
+    "url": "https://medium.com/snowflake/converting-snowflake-native-tables-to-iceberg-part-1-603fdb0fdcd1?source=rss----34b6daafc07---4",
+    "date": "2026-10-02",
+    "titleJa": "Snowflake Native Tables を Iceberg に変換する ─ Part 1",
+    "summaryJa": "Snowflake Native Tables を Apache Iceberg フォーマットに変換する方法について説明した記事の第 1 部です。"
+  },
+  {
+    "source": "snowflake-builders-blog",
+    "title": "From Snowflake CoWork to Customer Action",
+    "url": "https://medium.com/snowflake/from-snowflake-cowork-to-customer-action-c7c0ba38b774?source=rss----34b6daafc07---4",
+    "date": "2026-10-02",
+    "titleJa": "Snowflake CoWork から顧客アクションへ",
+    "summaryJa": "Snowflake CoWork から顧客による実装・活用への移行について述べた事例記事です。"
   },
   {
     "source": "classmethod-claudecode",
@@ -862,6 +1550,118 @@
     "date": "2026-10-02",
     "titleJa": "標準 ai_extract がより高品質な抽出を実現",
     "summaryJa": "ai_extract の標準（デフォルト）モードは新しいモデルチェックポイントを採用し、追加コストなしで2.3倍の高速化を実現しながら全体的な品質を向上させています。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Cortex AI FunctionsのResponse Cachingを実測",
+    "url": "https://zenn.dev/snowflakejp/articles/bb3a59f2070a6f",
+    "date": "2026-10-01",
+    "titleJa": "Cortex AI FunctionsのResponse Cachingを実測",
+    "summaryJa": "Snowflake の Cortex AI Functions における Response Caching 機能を実測した検証結果を報告しています。同一プロンプト 100 行実行時に課金は 8 回分（約 92% 削減）となり、キャッシュは並列処理単位ごとに効くことが判明しました。行ごとに異なる結果が必要な場合はプロンプトに一意値を含める工夫が必要です。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "Snowflakeにある顧客データの名寄せをSQLでゴリ押ししてみた話",
+    "url": "https://zenn.dev/syamashita/articles/798d4f3989422f",
+    "date": "2026-10-01",
+    "titleJa": "Snowflakeにある顧客データの名寄せをSQLでゴリ押ししてみた話",
+    "summaryJa": "大規模データ基盤において、複数システムから統合した顧客データの重複排除（名寄せ）を SQL のみで実施する方法を紹介しています。属性ルールベースクラスタリングとグラフ化による補正クラスタリングの 2 段階手法を採用し、DuckDB と Snowflake の実装例を示しながら、外部コンピューティングに頼らないシンプルで説明可能なロジックを実現しました。"
+  },
+  {
+    "source": "zenn-snowflake",
+    "title": "【イベント出展レポート】Snowflake World Tourに出展しました",
+    "url": "https://zenn.dev/nttdata_tech/articles/0db605fd2930c7",
+    "date": "2026-10-01",
+    "titleJa": "【イベント出展レポート】Snowflake World Tourに出展しました",
+    "summaryJa": "NTTデータのGleanチームはSnowflake World Tour Tokyoでエンタープライズ向けAIプラットフォーム・Gleanと、Snowflakeに蓄積されたデータを組み合わせたデモンストレーションを実施しました。構造化データと非構造化データを横断して活用することで、『何が起きているか』だけでなく『なぜ起きているのか』まで理解できるようになります。AI活用では企業固有のコンテキストをAIに適切に与えることが重要であり、Snowflakeのようなデータ基盤とGleanのような企業内情報を横断して活用する仕組みを組み合わせることで、その領域は今後さらに広がっていきます。"
+  },
+  {
+    "source": "openai-news",
+    "title": "The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+    "url": "https://openai.com/index/the-den-family-social",
+    "date": "2026-10-01",
+    "titleJa": "The DenがChatGPT Workで週に10～15時間を削減して成長",
+    "summaryJa": "The Denという企業がChatGPT Workを導入することで、週に10～15時間の業務時間を削減できるようになったことが紹介されています。"
+  },
+  {
+    "source": "gcp-ai-blog",
+    "title": "What’s new in AI infrastructure and orchestration in September",
+    "url": "https://cloud.google.com/blog/topics/ai-infrastructure/whats-new-in-ai-infrastructure-this-month/",
+    "date": "2026-10-01",
+    "titleJa": "9月のAIインフラストラクチャとオーケストレーションの新機能",
+    "summaryJa": "Google Cloudは9月、AIの大規模展開に対応するためインフラとオーケストレーション機能を大幅に強化しました。GKE Agent Substratで従来の10倍の高密度でサンドボックス実行が可能となり、GKE Pod snapshotsでAI推論スタートアップを89%削減できるほか、scale-to-zero機能やカスタムメトリクスに基づいたスケーリングに対応しました。Filestore agent volumes、M4N/Z4D VM ファミリー、新しいAlloyDB for PostgreSQLなどストレージとコンピュートを強化し、エージェントワークロードの実行を支援しています。"
+  },
+  {
+    "source": "gcp-ai-blog",
+    "title": "Empower your agents with the Google Cloud CLI remote MCP server",
+    "url": "https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-cli-remote-mcp-server-in-preview/",
+    "date": "2026-10-01",
+    "titleJa": "Google Cloud CLIリモートMCPサーバーでAIエージェントを強化",
+    "summaryJa": "Google CloudはGoogle Cloud CLIリモートMCPサーバーをプレビューで提供開始し、AIエージェントがgcloudおよびbqコマンドを安全に実行できるようになりました。ローカルCLIのインストールと依存関係管理が不要となり、Agent Identity、OAuth 2.0、IAMにより厳密なエンタープライズセキュリティが実現されます。エージェントはGoogle Cloudリソース管理やBigQuery操作を自然言語で実行でき、複雑なクラウド運用の自動化が可能になります。"
+  },
+  {
+    "source": "azure-blog",
+    "title": "Responsible infrastructure at hyperscale: Managing the full lifecycle of Azure hardware",
+    "url": "https://azure.microsoft.com/en-us/blog/responsible-infrastructure-at-hyperscale-managing-the-full-lifecycle-of-azure-hardware/",
+    "date": "2026-10-01",
+    "titleJa": "ハイパースケール環境での責任あるインフラ：Azureハードウェアのライフサイクル管理",
+    "summaryJa": "マイクロソフトがAzureハードウェアのライフサイクル全体を管理することで、ハイパースケール環境において責任あるインフラストラクチャを実現する方法についての記事です。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "Fall Into 25 New Games on GeForce NOW This October",
+    "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-october-2026-games-list/",
+    "date": "2026-10-01",
+    "titleJa": "10月のGeForce NOWで25の新作ゲームが登場",
+    "summaryJa": "10月にGeForce NOWに25の新作ゲームが追加され、CONTROL RessonantやThe Witcher 3: Wild Hunt - Remasteredなどがクラウドでプレイできるようになります。パフォーマンス・アルティメットメンバーは新しい報酬を獲得でき、Ultimate メンバーはGeForce RTX 5080クラスのパフォーマンスで高品質なゲーム体験が得られます。ユーザーはローカルハードウェアのアップグレードやゲームのインストール時間を短縮しながら、最新のゲームをクラウドで楽しむことができます。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "Productive, Durable, Fungible: How NVIDIA AI Factories Maximize Return on Investment",
+    "url": "https://blogs.nvidia.com/blog/productive-durable-fungible-ai-factories/",
+    "date": "2026-10-01",
+    "titleJa": "生産性、耐久性、汎用性：NVIDIA AIファクトリーが投資収益率を最大化する方法",
+    "summaryJa": "NVIDIA AIファクトリーは、獲得能力（収益性）、耐用年数（ハードウェアの経済寿命）、需要（ワークロード多様性）の3つの要素を最大化するよう設計されています。生産性面ではメガワットあたりのスループットが高く、トークンコストが低い一方、耐久性面ではNVIDIA GPU が数年後も経済的価値を維持し、汎用性面ではあらゆるタイプのAIおよび非AIワークロードを実行できます。継続的なソフトウェア最適化とCUDAプラットフォームの共通性により、既存ハードウェアを長期間活用できます。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "NVIDIA Opens Applications for 2027–2028 Graduate Fellowships With Awards Up to $60,000",
+    "url": "https://blogs.nvidia.com/blog/applications-open-graduate-fellowship-awards-2026/",
+    "date": "2026-10-01",
+    "titleJa": "NVIDIA、2027～2028年大学院フェローシップの応募開始、最大$60,000の奨学金",
+    "summaryJa": "NVIDIAは2027～2028年の大学院フェローシップの世界規模での応募を開始し、博士課程の学生にAI、機械学習、自動運転車、コンピュータグラフィックス、ロボティクス、医療、HPC関連分野での研究に対して最大$60,000の奨学金を提供します。申請締め切りは2026年10月30日で、2027年夏のNVIDIA研究所でのインターンシップが必須です。26年間続く本プログラムは2002年開始以来、220件以上の奨学金約800万ドルを授与してきました。"
+  },
+  {
+    "source": "nvidia-blog",
+    "title": "From Training to Production, NVIDIA and CoreWeave Close the Loop on Agentic AI",
+    "url": "https://blogs.nvidia.com/blog/coreweave-agentic-ai-vera-rubin/",
+    "date": "2026-10-01",
+    "titleJa": "訓練から本番まで、NVIDIA と CoreWeave がエージェント AI のサイクルを完成させる",
+    "summaryJa": "CoreWeave が NVIDIA Vera Rubin NVL72 システムの提供開始を発表し、Cognition が Devin AI の推論ワークロードで採用して GB200 NVL72 比で最大 4.8 倍のトークンスループットを実現しています。また AI CPU である NVIDIA Vera と、Weights & Biases・OpenPipe・marimo を統合した連続的なモデル・エージェント改善ツール「CoreWeave Forge」も発表されました。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Fine-Tuning NVIDIA Nemotron for Saudi Arabic Dialects, with a Path to Other Languages",
+    "url": "https://developer.nvidia.com/blog/fine-tuning-nvidia-nemotron-for-saudi-arabic-dialects-with-a-path-to-other-languages/",
+    "date": "2026-10-01",
+    "titleJa": "NVIDIA Nemotron を Saudi Arabic 方言向けに微調整する",
+    "summaryJa": "NVIDIA NeMo フレームワークを使用して、NVIDIA Nemotron 3.5 ASR を Saudi Najdi・Hijazi 方言に適応させるワークフローが紹介されています。133.7 時間の方言音声データで微調整すると単語誤り率が 55.05% から 29.96% に改善され、英語パフォーマンスも 11.04% から 10.42% に改善されます。この手法はリソース制限下での方言特化と既存言語の維持を両立させます。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Deploying an HSTU Generative Recommender with NVIDIA Dynamo-Triton",
+    "url": "https://developer.nvidia.com/blog/deploying-an-hstu-generative-recommender-with-nvidia-dynamo-triton/",
+    "date": "2026-10-01",
+    "titleJa": "NVIDIA Dynamo-Triton で HSTU 生成型レコメンダーを本番運用する",
+    "summaryJa": "NVIDIA Dynamo-Triton が HSTU（Hierarchical Sequential Transduction Unit）の生成型推薦モデルの推論をサポートします。PyTorch AOTI コンパイルと FlexKV ベースの KV キャッシングを組み合わせることで、ユーザー履歴の再計算を回避し、RTX PRO 6000 Blackwell GPU でバッチサイズ 8 時に 8 層モデルで最大 5.93 倍のレイテンシ低減を実現します。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Expanding AI Storage Access with NVIDIA cuObject and the NVIDIA SCADA Server SDK",
+    "url": "https://developer.nvidia.com/blog/expanding-ai-storage-access-with-nvidia-cuobject-and-the-nvidia-scada-server-sdk/",
+    "date": "2026-10-01",
+    "titleJa": "NVIDIA cuObject と NVIDIA SCADA Server SDK で AI ストレージアクセスを拡張する",
+    "summaryJa": "NVIDIA cuObject クライアント・サーバー ライブラリが一般提供開始され、GPU が CPU を経由せずにオブジェクトストレージにアクセスするための標準化された API と RDMA ワイヤプロトコルを提供します。xio-sig コンソーシアムが cuObject を追加し、Google Cloud や Microsoft が参加予定です。SCADA Server SDK により、ストレージプロバイダーが GPU 起動リクエストに応答するサーバーを構築でき、IBM Storage が IBM Storage Scale との統合プロトタイプを実証しています。"
   },
   {
     "source": "classmethod-claudecode",
