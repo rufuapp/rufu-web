@@ -175,7 +175,8 @@ function deployIfNeeded() {
   run('git', ['push']);
   run('vercel', ['pull', '--yes', '--environment=production']);
   run('vercel', ['build', '--prod']);
-  run('vercel', ['deploy', '--prebuilt', '--prod']);
+  // ファイルを1つにまとめて送り、Vercel 無料プランの1日あたりのアップロード数の上限にかかりにくくする
+  run('vercel', ['deploy', '--prebuilt', '--prod', '--archive=tgz']);
   writeFileSync(DEPLOYED_FILE, `${head}\n`);
   log('本番に反映しました。');
 }
