@@ -19,7 +19,7 @@ import type { TrackId } from '@/lib/quiz/types';
 const CERT_GROUP: Record<TrackId, { title: string; note: string }> = {
   databricks: {
     title: 'Databricks 認定資格',
-    note: 'Databricks 社の公式資格です。ここでは、rufu の問題集で練習できるアソシエイト（初級）の 4 資格を取り上げています。',
+    note: 'Databricks 社の公式資格です。ここでは、本サイトの問題集で練習できるアソシエイト（初級）の 4 資格を取り上げています。',
   },
   claude: {
     title: 'Claude 認定資格（Anthropic）',
@@ -47,7 +47,7 @@ export default function TopPage() {
             学んで、解いて、確かめる。
           </h1>
           <p className="mt-5">
-            rufu 資格ドリルは、Databricks と Claude の認定資格について、どんな資格なのか、何をもとに学べばよいのかをまとめた学習サイトです。学んだ内容は、解説付きのオリジナル問題集で確かめられます。登録は要りません。
+            本サイトでは、Databricks と Claude の認定資格について、どんな資格なのか、何をもとに学べばよいのかをまとめています。学んだ内容は、解説付きのオリジナル問題集で確かめられます。登録は要りません。
           </p>
           <h2 className="mt-8 text-sm font-bold tracking-[0.2em] text-muted">本サイトの使い方</h2>
           <ol className="mt-3 space-y-3">
