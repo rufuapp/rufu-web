@@ -18,7 +18,7 @@ export default function NotFound() {
           <Link href="/" className="btn btn-primary">
             トップへ戻る
           </Link>
-          <Link href="/#question-sets" className="btn btn-outline">
+          <Link href="/exam#question-sets" className="btn btn-outline">
             問題集一覧
           </Link>
         </div>

@@ -21,10 +21,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!set) return {};
   const description = `${set.title}（解説付き ${questionsForExam(id).length} 問）。${set.summary}`;
   return {
+    alternates: { canonical: `/question-sets/${set.id}` },
     title: set.title,
     description,
-    openGraph: { title: `${set.title} | ${SITE_NAME}`, description, type: 'website' },
-    twitter: { card: 'summary', title: `${set.title} | ${SITE_NAME}`, description },
+    openGraph: { title: `${set.title} | ${SITE_NAME}`, description, type: 'website', images: '/opengraph-image' },
+    twitter: { card: 'summary_large_image', title: `${set.title} | ${SITE_NAME}`, description, images: '/twitter-image' },
   };
 }
 
@@ -68,7 +69,7 @@ export default async function QuestionSetPage({ params }: { params: Promise<{ id
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/#question-sets', label: '問題集一覧' }, { label: set.title }]} />
+      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/exam#question-sets', label: '問題集一覧' }, { label: set.title }]} />
 
       <header className="mt-6 mb-8 border-b border-line pb-6">
         <p className="flex flex-wrap items-center gap-3">

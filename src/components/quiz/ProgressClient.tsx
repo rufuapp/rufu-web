@@ -26,7 +26,7 @@ export function ProgressClient() {
       <div className="box mt-8 px-6 py-12 text-center">
         <p className="text-lg font-bold">まだ記録がありません</p>
         <p className="mt-2 text-muted">問題を解くと、ここに正答率や苦手な分野が表示されます。</p>
-        <Link href="/#question-sets" className="btn btn-primary mt-6">
+        <Link href="/exam#question-sets" className="btn btn-primary mt-6">
           問題集を選ぶ
         </Link>
       </div>

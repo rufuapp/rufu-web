@@ -8,6 +8,7 @@ import { TRENDS, TREND_SOURCES, TREND_SOURCE_ORDER } from '@/lib/trends/sources'
 const PER_SOURCE = 20;
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/trends' },
   title: '最新の動向',
   description: 'Claude と Databricks の公式発表（ニュース・ブログ・リリースノート）を、情報源ごとに新しい順でまとめています。',
 };

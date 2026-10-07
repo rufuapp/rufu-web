@@ -19,10 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!cert) return {};
   const title = `${cert.nameJa}（${cert.name}）とは`;
   return {
+    alternates: { canonical: `/certifications/${cert.id}` },
     title,
     description: cert.summary,
-    openGraph: { title: `${title} | ${SITE_NAME}`, description: cert.summary, type: 'article' },
-    twitter: { card: 'summary', title: `${title} | ${SITE_NAME}`, description: cert.summary },
+    openGraph: { title: `${title} | ${SITE_NAME}`, description: cert.summary, type: 'article', images: '/opengraph-image' },
+    twitter: { card: 'summary_large_image', title: `${title} | ${SITE_NAME}`, description: cert.summary, images: '/twitter-image' },
   };
 }
 
@@ -37,7 +38,7 @@ export default async function CertificationPage({ params }: { params: Promise<{ 
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/#certifications', label: '資格一覧' }, { label: cert.nameJa }]} />
+      <Breadcrumb items={[{ href: '/', label: 'トップ' }, { href: '/exam#certifications', label: '資格一覧' }, { label: cert.nameJa }]} />
 
       <header className="mt-6 border-b border-line pb-6">
         <p className="flex flex-wrap items-center gap-3">
