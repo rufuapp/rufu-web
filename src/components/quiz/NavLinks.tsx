@@ -9,6 +9,7 @@ const LINKS = [
   { href: '/tips', label: '技術 Tips', sections: ['/tips'] },
   { href: '/basics', label: '基礎知識', sections: ['/basics'] },
   { href: '/handson', label: 'やってみた', sections: ['/handson'] },
+  { href: '/articles', label: '著者記事', sections: ['/articles'] },
   { href: '/exam', label: '資格対策', sections: ['/exam', '/certifications', '/study', '/question-sets'] },
   { href: '/progress', label: '学習記録', sections: ['/progress'] },
 ];

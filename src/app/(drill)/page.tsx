@@ -6,6 +6,7 @@ import { QUESTIONS } from '@/content/questions';
 import { STUDY_TOPICS } from '@/content/study-topics';
 import { BASICS_GROUPS, BASICS_TOPICS, basicsForGroup } from '@/content/basics';
 import { HANDSON_GUIDES } from '@/content/handson';
+import { getArticles } from '@/lib/articles';
 import { DailyQuestion } from '@/components/quiz/DailyQuestion';
 import { SectionTitle } from '@/components/quiz/ui';
 import { TrendList } from '@/components/trends/TrendList';
@@ -27,6 +28,7 @@ const EXAM_PARTS = [
 
 export default function TopPage() {
   const trends = TRENDS;
+  const articles = getArticles();
   const today = todayInTokyo();
 
   // 序文の目次（章の並びと同じ順。最新の動向が主で、資格と問題集はそれに付随する）
@@ -60,8 +62,15 @@ export default function TopPage() {
       body: '手順に沿って手を動かし、Claude と Databricks を実際に確かめます。',
     },
     {
-      href: '#exam',
+      href: '#articles',
       num: '第五章',
+      title: '著者記事',
+      count: `${articles.length} 本`,
+      body: '著者が気になったことを調べて書いた記事を読みます。',
+    },
+    {
+      href: '#exam',
+      num: '第六章',
       title: '資格対策',
       count: `${CERTIFICATIONS.length} 資格・${QUESTIONS.length} 問`,
       body: '資格の解説・学習ガイド・問題集で、資格の取得を目指します。',
@@ -194,9 +203,30 @@ export default function TopPage() {
         </ul>
       </section>
 
-      {/* 第五章 資格対策 */}
+      {/* 第五章 著者記事 */}
+      <section id="articles" className="scroll-mt-16 py-10">
+        <SectionTitle num="第五章" title="著者記事" en="Articles" />
+        <ul className="divide-y divide-line border-y border-ink">
+          {articles.slice(0, 3).map((a) => (
+            <li key={a.slug} className="py-4">
+              <p className="text-xs text-muted tabular-nums">{a.date.replaceAll('-', '.')}</p>
+              <Link href={`/articles/${a.slug}`} className="link mt-1 inline-block font-bold">
+                {a.title}
+              </Link>
+              <span className="mt-1 block text-sm leading-relaxed text-muted">{a.summary}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-right">
+          <Link href="/articles" className="link">
+            著者記事の一覧を見る →
+          </Link>
+        </p>
+      </section>
+
+      {/* 第六章 資格対策 */}
       <section id="exam" className="scroll-mt-16 py-10">
-        <SectionTitle num="第五章" title="資格対策" en="Certifications" />
+        <SectionTitle num="第六章" title="資格対策" en="Certifications" />
         <p className="mb-6">Databricks と Claude の認定資格の解説、資格の出題範囲にもとづく学習ガイド、解説付きのオリジナル問題集をまとめています。</p>
         <ul className="grid gap-4 sm:grid-cols-3">
           {EXAM_PARTS.map((part) => (

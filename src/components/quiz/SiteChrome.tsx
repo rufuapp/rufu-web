@@ -68,6 +68,11 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
+            <Link href="/articles" className="hover:underline">
+              著者記事
+            </Link>
+          </li>
+          <li>
             <Link href="/exam" className="hover:underline">
               資格対策
             </Link>
