@@ -184,13 +184,13 @@ await server.connect(new StdioServerTransport());`,
   {
     id: 'databricks-ai-query',
     track: 'databricks',
-    title: 'ai_query で、テーブルの文章を Claude に一括で分類させる',
-    summary: 'お問い合わせの文章が入ったテーブルに対して、SQL だけで Claude に分類と要約をさせる。',
+    title: 'ai_query で、テーブルの文章を生成 AI に一括で分類させる',
+    summary: 'お問い合わせの文章が入ったテーブルに対して、SQL だけで生成 AI（Claude が使える環境なら Claude）に分類させる。',
     level: '入門',
     minutes: 20,
     verified: {
-      status: 'untested',
-      note: '公式ドキュメント（2026年10月7日時点）に沿って作成しました。本サイトではまだ実際の環境で試していません。試した結果は追記していきます。',
+      status: 'tested',
+      note: '2026年10月8日に Databricks（Free Edition、サーバーレスの SQL ウェアハウス）で、Llama 4 Maverick のエンドポイントを使って手順どおりに動くことを確かめました。試した環境には Claude のエンドポイントがなかったため、Claude での動作はまだ確かめていません。',
     },
     goal: ['ai_query の書き方が分かる', 'SQL だけで、生成 AI による大量のデータ処理ができることを確かめる'],
     prerequisites: [
@@ -202,10 +202,10 @@ await server.connect(new StdioServerTransport());`,
     steps: [
       {
         title: '練習用のテーブルを作る',
-        body: ['SQL エディタで、お問い合わせを3件入れたテーブルを作ります。main.default の部分は、書き込めるカタログとスキーマに置き換えます。'],
+        body: ['SQL エディタで、お問い合わせを3件入れたテーブルを作ります。workspace.default の部分は、書き込めるカタログとスキーマに置き換えます（Free Edition では workspace カタログが使えます）。'],
         code: [
           {
-            content: `CREATE OR REPLACE TABLE main.default.inquiries AS
+            content: `CREATE OR REPLACE TABLE workspace.default.inquiries AS
 SELECT * FROM VALUES
   (1, 'ログインしようとすると、パスワードが違うと表示されます。'),
   (2, '請求書の宛名を会社名に変更したいです。'),
@@ -215,9 +215,10 @@ AS t(id, body);`,
         ],
       },
       {
-        title: '使えるモデルの名前を確かめる',
+        title: '使えるモデルのエンドポイント名を確かめる',
         body: [
-          '基盤モデルのエンドポイントは「system.ai.モデル名」の形で用意されています。使える Claude のモデルと正しい名前は、ワークスペースの Serving の画面で確かめます。以下の例の system.ai.claude-opus-5 は、公式の一覧に載っていた名前の例です。',
+          'ワークスペースの Serving の画面で、使えるモデルのエンドポイント名を確かめます。試した環境では databricks-llama-4-maverick のような名前でした。ai_query には、この画面に出ている名前をそのまま渡します。',
+          'Claude のエンドポイントがある環境では、以下の例の名前を、その Claude のエンドポイント名に置き換えてください。使えるモデルは、ワークスペースの種類や地域によって違います。',
         ],
       },
       {
@@ -229,21 +230,22 @@ AS t(id, body);`,
   id,
   body,
   ai_query(
-    'system.ai.claude-opus-5',
+    'databricks-llama-4-maverick',
     '次のお問い合わせを「アカウント」「請求」「性能」「その他」のどれか1つに分類し、分類名だけを答えてください。\\n\\n' || body
   ) AS category
-FROM main.default.inquiries;`,
+FROM workspace.default.inquiries;`,
           },
         ],
       },
     ],
-    check: ['category の列に、行ごとの分類（例: 1 はアカウント、2 は請求、3 は性能）が入る'],
+    check: ['category の列に、行ごとの分類が入る。試したときの実際の結果は、1 がアカウント、2 が請求、3 が性能でした'],
     pitfalls: [
+      'エンドポイントは Serving の画面に出ている名前で指定します。試した環境では、system.ai.モデル名 の形で指定するとエラー（INTERNAL_ERROR）になりました。',
       'SQL Classic のウェアハウスでは使えません。Pro かサーバーレスを使います。',
       '行の数だけモデルを呼ぶので、大きなテーブルでいきなり試すと費用がかさみます。まず LIMIT で件数を絞ります。',
       '答えの形をそろえたいときは、responseFormat で構造化した出力を指定できます（Databricks Runtime 15.4 以上）。',
     ],
-    cleanup: ['DROP TABLE main.default.inquiries; で練習用のテーブルを削除します。'],
+    cleanup: ['DROP TABLE workspace.default.inquiries; で練習用のテーブルを削除します。'],
     resources: [
       { title: 'ai_query 関数', url: 'https://docs.databricks.com/aws/en/sql/language-manual/functions/ai_query', kind: '公式ドキュメント' },
       { title: 'Databricks で使えるモデル', url: 'https://docs.databricks.com/aws/en/machine-learning/model-serving/foundation-model-overview', kind: '公式ドキュメント' },
@@ -257,11 +259,15 @@ FROM main.default.inquiries;`,
     level: '入門',
     minutes: 20,
     verified: {
-      status: 'untested',
-      note: '公式ドキュメント（2026年10月7日時点）に沿って作成しました。本サイトではまだ実際の環境で試していません。試した結果は追記していきます。',
+      status: 'tested',
+      note: '2026年10月8日に Databricks（Free Edition）で確かめました。権限は、ワークスペースで作ったグループには付けられず、アカウントのグループ（試したときは account users）には付けられました。2人目の利用者がいない環境だったため、「読めて、書けない」ことの確認はまだです。',
     },
     goal: ['カタログ・スキーマ・テーブルの3階層と、権限の関係が分かる', 'テーブルを読ませるのに必要な権限の組み合わせを確かめる'],
-    prerequisites: ['Unity Catalog が使える Databricks のワークスペース', 'カタログを作る権限（メタストアの CREATE CATALOG）', '権限を付ける相手のグループ（例: analysts）'],
+    prerequisites: [
+      'Unity Catalog が使える Databricks のワークスペース',
+      'カタログを作る権限（メタストアの CREATE CATALOG）',
+      '権限を付ける相手の、アカウントのグループ（例: analysts）。ワークスペースの中だけで作ったグループは使えません',
+    ],
     steps: [
       {
         title: 'カタログとスキーマを作る',
@@ -279,6 +285,7 @@ SELECT * FROM VALUES ('2026-09', 1200), ('2026-10', 1350) AS t(month, amount);`,
         title: 'グループに読み取りの権限を付ける',
         body: [
           'テーブルを読むには、テーブルの SELECT だけでなく、親のカタログの USE CATALOG と、スキーマの USE SCHEMA も必要です。権限は個人ではなくグループに付けると、人の入れ替わりに強くなります。',
+          '権限を付けられるのは、アカウントのグループです。手元で試すだけなら、最初からある account users（アカウントの全員）に付けても確かめられます。',
         ],
         code: [
           {
@@ -294,8 +301,9 @@ GRANT SELECT ON TABLE sales_dev.reports.monthly TO \`analysts\`;`,
         code: [{ content: 'SHOW GRANTS ON TABLE sales_dev.reports.monthly;' }],
       },
     ],
-    check: ['analysts のグループに SELECT が付いていると表示される', 'analysts のメンバーが、テーブルを読めて、書き込めない'],
+    check: ['SHOW GRANTS の結果に、analysts の SELECT が表示される（試したときは account users | SELECT | TABLE | sales_dev.reports.monthly と表示されました）', 'analysts のメンバーが、テーブルを読めて、書き込めない'],
     pitfalls: [
+      'ワークスペースの管理画面で作ったグループ（ワークスペースのローカルなグループ）に GRANT すると、「Could not find principal with name …」（PRINCIPAL_DOES_NOT_EXIST）のエラーになります。Unity Catalog の権限は、アカウントのグループに付けます。試したときに実際に出たエラーです。',
       'SELECT だけを付けても、USE CATALOG と USE SCHEMA がないと読めません。いちばん多いつまずきです。',
       'スキーマやカタログに SELECT を付けると、その中のすべてのテーブル（後から作るものも含む）に効きます。範囲を意識して付けます。',
     ],
