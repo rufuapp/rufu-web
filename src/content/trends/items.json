@@ -1,5 +1,21 @@
 [
   {
+    "source": "qiita-claudecode",
+    "title": "Claude Code のカスタムスラッシュコマンド(.claude/commands)を自作する実装手順 — !`cmd` が展開されない・$1 と $ARGUMENTS の分割・サブディレクトリで名前が衝突、3つのハマりどころ【2026】",
+    "url": "https://qiita.com/yureki_lab/items/4c677da1c146932070a7",
+    "date": "2026-10-09",
+    "titleJa": "Claude Code のカスタムスラッシュコマンド(.claude/commands)を自作する実装手順 — !`cmd` が展開されない・$1 と $ARGUMENTS の分割・サブディレクトリで名前が衝突、3つのハマりどころ【2026】",
+    "summaryJa": ".claude/commands/ に Markdown ファイルを置くと、/ファイル名 でカスタムコマンドを呼び出せることを手順付きで解説しています。!`cmd` によるシェル実行には frontmatter の allowed-tools で Bash を許可する必要があり、位置引数 $1 $2 は空白区切りのため自由文は $ARGUMENTS で受けることが推奨されています。さらに、サブディレクトリはコマンド名の名前空間にならないため、ファイル名に接頭辞を付けて衝突を避けるとまとめています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "[ODC]MCP機能がリリースされたので試してみる",
+    "url": "https://qiita.com/jyunji_watanabe/items/a80548bf7bc52fb05604",
+    "date": "2026-10-09",
+    "titleJa": "[ODC]MCP機能がリリースされたので試してみる",
+    "summaryJa": "ODC の MCP 機能を Claude Code から利用するため、OutSystems の Claude Code プラグインを marketplace 経由で導入し、テナントのホスト名を指定して接続する手順を紹介しています。接続後は認証用 URL でサインインすると、直近に Publish された App の確認や Library の Consumer 数の集計などができたことが報告されています。一方で、参照の逆引きは Entity 参照に限られる場合があること、ODC Studio の画面イメージは取得できないことなど、制限も記録されています。"
+  },
+  {
     "source": "databricks-blog",
     "title": "Announcing Workday Data Connect federation in Unity Catalog",
     "url": "https://www.databricks.com/blog/announcing-workday-data-connect-federation-unity-catalog",
@@ -150,6 +166,14 @@
     "date": "2026-10-09",
     "titleJa": "Snowflake Decision: Cortex AI Functions の意思決定モデル",
     "summaryJa": "Snowflake Decision は、AI_COMPLETE から呼び出せる意思決定モデル（プライベートプレビュー）で、分類・スコアリング・はい／いいえの確率判定などの大量処理を想定しています。サポートチケットのルーティングや感情スコアの例では、1 回の呼び出しで部署の選択、怒りのスコア、緊急性の判定を同時に返しています。同社は、29 のベンチマークで 72 モデル中最高の品質スコア 57.63 を記録したと述べています。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "How Block orchestrates Claude Fable across thousands of pull requests",
+    "url": "https://claude.com/resources/articles/how-block-orchestrates-claude-fable-across-thousands-of-pull-requests",
+    "date": "2026-10-08",
+    "titleJa": "Block が数千件のプルリクエストにわたって Claude Fable をどのように統括しているか",
+    "summaryJa": "Block の Bradley Axen 氏が、Claude Fable 5 が全社規模のコード移行を複数セッションにまたがって統括し、設計作業を担う一方で、個々の編集やテストは Opus や Sonnet などの小型モデルに振り分けていると語っています。大規模な移行では 1 件の移行で Fable が統括したプルリクエストを 1,000 件マージした例が挙げられています。作業基盤には、オープンソースの協働ワークスペース Buzz を使っていると説明されています。"
   },
   {
     "source": "anthropic-news",
@@ -918,6 +942,22 @@
     "date": "2026-10-08",
     "titleJa": "SnowflakeがAWSニュージーランド地域でNZISM Restrictedアセスメント完了",
     "summaryJa": "SnowflakeはAWSオークランド地域でニュージーランド情報セキュリティマニュアル（NZISM）Restrictedレベルの独立した第三者アセスメントを完了し、政府の厳密なセキュリティ要件に適合していることを確認しました。これにより、政府機関は長時間の監査を省略し、認可取得を迅速化できるようになります。ISO 42001認証により、AI機能についても安全性と信頼性が保証されています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "AI-powered analytics: Building data visualizations with natural language vs. SQL",
+    "url": "https://www.databricks.com/blog/ai-powered-analytics-building-data-visualizations-natural-language-vs-sql",
+    "date": "2026-10-07",
+    "titleJa": "AI によるアナリティクス：自然言語と SQL によるデータ可視化の構築",
+    "summaryJa": "自然言語による可視化クエリが期待ほど成果を上げなかった理由は、AI ツールに業務コンテキストが不足していたことにあると説明されています。信頼できる回答には、ガバナンスされたデータ、共通の指標定義、回答の出所を検証できる仕組みが必要だとしています。Databricks の Genie Ontology は、利用頻度や認証状態などに基づく authority score で文脈を評価し、ユーザーが閲覧できる範囲の文脈だけを提供すると紹介されています。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Scale Bitwise-Deterministic Pretraining with NVIDIA Megatron Core",
+    "url": "https://developer.nvidia.com/blog/scale-bitwise-deterministic-pretraining-with-nvidia-megatron-core/",
+    "date": "2026-10-07",
+    "titleJa": "NVIDIA Megatron Core でビット単位で決定的な事前学習をスケールさせる",
+    "summaryJa": "Megatron-LM の PR #7262 では、ランクごとの順序付きテンソルフィンガープリントを記録して、非決定性の発生箇所を特定する手法が提案されています。Nemotron の 3 つのワークロードで最適化を行った結果、2,432 GPU で決定性のオーバーヘッドを約 2% に抑えつつ、800 ステップにわたってビット単位の決定性を維持できたと報告されています。grouped-GEMM の出力スロットの分離や固定の reduction 順序といったカーネルレベルの変更により、並列性を保ったまま決定的な結果を得ています。"
   },
   {
     "source": "databricks-release-notes",
@@ -3752,6 +3792,22 @@
     "summaryJa": "Unity Gateway の system.ai_gateway.usage システムテーブルが、コーディングエージェントのセッションメタデータと呼び出し元情報を記録するようになりました。プロンプトキャッシュに書き込まれたトークンやファイル・ウェブ検索数など、新しいトークン詳細フィールドが追加されています。"
   },
   {
+    "source": "snowflake-blog",
+    "title": "AI in M&A: Accelerating Due Diligence and Integration",
+    "url": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-in-m-a-accelerating-due-diligence-and-integration",
+    "date": "2026-09-26",
+    "titleJa": "M&A における AI：デューデリジェンスと統合の加速",
+    "summaryJa": "M&A では、データの品質やアクセスしやすさが取引の価値評価やリスク判断、実行速度に直結すると述べられています。統合された管理可能なデータ・AI プラットフォームを使うことで、取引前のデューデリジェンスを効率化し、取引後の統合や分離を収益を生む取り組みに変えられると説明されています。記事では、Accenture と Snowflake の協業による生命科学企業の買収事例も紹介されています。"
+  },
+  {
+    "source": "snowflake-blog",
+    "title": "Customer Journey Observability: From Impact to Root Cause",
+    "url": "https://www.snowflake.com/content/snowflake-site/global/en/blog/customer-journey-observability-impact-root-cause",
+    "date": "2026-09-26",
+    "titleJa": "カスタマージャーニー・オブザーバビリティ：影響把握から根本原因特定まで",
+    "summaryJa": "Capital One が Observe by Snowflake で実装した、顧客の行動の流れ（カスタマージャーニー）グラフを起点に障害を調べる手法が紹介されています。顧客の操作から、サービス、オペレーション、トレース、ログへと順にdrill down して根本原因を確認する流れが、例を使って説明されています。AI SRE はこの観測コンテキストグラフをたどり、根拠付きの原因分析を出力すると記載されています。"
+  },
+  {
     "source": "gcp-ai-blog",
     "title": "Best practices guide for customizing Gemini models via Reinforcement Learning (RL)",
     "url": "https://cloud.google.com/blog/topics/developers-practitioners/best-practices-guide-for-customizing-gemini-models/",
@@ -3782,6 +3838,62 @@
     "date": "2026-09-26",
     "titleJa": "Claude Code v2.1.282〜v2.1.283 の主要アップデート - /doctor prompt-audit の追加と auto mode の既定化",
     "summaryJa": "Claude Code v2.1.282〜v2.1.283のアップデートでは、プロンプトの古い書き方を監査する /doctor prompt-audit が追加され、管理者向けにモデルを制限する managed settings（deniedModels、availableModelsMatch）が実装されました。セキュリティ修正も11件含まれており、特に権限ルールや Windows 環境での削除制限に関する改善が行われています。"
+  },
+  {
+    "source": "openai-news",
+    "title": "Wayfair boosts catalog accuracy and support speed with OpenAI",
+    "url": "https://openai.com/index/wayfair",
+    "date": "2026-09-25",
+    "titleJa": "Wayfair、OpenAI でカタログの正確性とサポート対応の速さを向上",
+    "summaryJa": "本文を取得できなかったため、見出しから、Wayfair が OpenAI を活用してカタログの正確性とサポート対応の速さを高めたことが分かります。"
+  },
+  {
+    "source": "gcp-ai-blog",
+    "title": "Power your agents: Gemini 3.8 Live with Live Avatar is now generally available",
+    "url": "https://cloud.google.com/blog/products/ai-machine-learning/gemini-3-8-live-with-live-avatar-is-now-generally-available/",
+    "date": "2026-09-25",
+    "titleJa": "エージェントを強化: Gemini 3.8 Live with Live Avatar が一般提供開始",
+    "summaryJa": "Gemini Enterprise で Gemini 3.8 Live with Live Avatar が一般提供となったと発表されています。ネイティブな音声対話、バックグラウンドでのツール呼び出し、97 言語への対応、カメラ映像や画面共有のライブ理解などを、ウェブやモバイル、キオスクの対話型ビデオエージェントで利用できます。US/EU エンドポイント、プロビジョニングスループット、エンタープライズ向けコンプライアンスにも対応しており、カスタムアバターは許可リスト制で提供されます。"
+  },
+  {
+    "source": "azure-blog",
+    "title": "Ship agents faster with expanded model choice, voice agents, and continuous optimization",
+    "url": "https://azure.microsoft.com/en-us/blog/ship-agents-faster-with-expanded-model-choice-voice-agents-and-continuous-optimization/",
+    "date": "2026-09-25",
+    "titleJa": "拡張されたモデル選択、音声エージェント、継続的な最適化でエージェントをより速く出荷",
+    "summaryJa": "本文は取得できなかったため、見出しから、モデル選択肢の拡大、音声エージェント、継続的な最適化を扱う Microsoft Foundry 関連の記事であることのみ分かります。"
+  },
+  {
+    "source": "azure-foundry-blog",
+    "title": "Control where your hosted agent connects with network egress in Foundry Agent Service",
+    "url": "https://devblogs.microsoft.com/foundry/egress-controls-hosted-agent/",
+    "date": "2026-09-25",
+    "titleJa": "Foundry Agent Service のネットワーク egress でホステッドエージェントの接続先を制御する",
+    "summaryJa": "ネットワーク egress 制御はプレビュー段階で、本番利用は想定されていないと明記されています。請求書エージェントを例に、宛先ルールをエージェントコードの外に置き、許可された FQDN のみを Allow、既定動作を Deny とするポリシーを ARM REST API と Python SDK で設定する手順が示されています。まず Audit モードで実際の呼び出しを観測し、許可・拒否それぞれの宛先でテストして境界を確認する流れです。"
+  },
+  {
+    "source": "azure-foundry-blog",
+    "title": "From Chatbots to Automated Agents: Routines in Microsoft Foundry Are Now Generally Available",
+    "url": "https://devblogs.microsoft.com/foundry/from-chatbots-to-automated-assistants-routines-in-microsoft-foundry-are-now-generally-available/",
+    "date": "2026-09-25",
+    "titleJa": "チャットボットから自動化エージェントへ: Microsoft Foundry の Routines が一般提供開始",
+    "summaryJa": "Foundry Agent Service の Routines が一般提供となり、タイマー（一回実行）、定期実行、GitHub の issue や Teams チャンネルの新規メッセージといったイベントによって、エージェントを管理された形で起動できます。実行履歴や認証情報、監査ログはプロジェクト内で管理されます。起動者の ID（OAuth などユーザー認証のツール向け）またはエージェント自身の Microsoft Entra ID の ID（キーやマネージド ID の場合）を選べ、エージェントが自身の作業を継続するための Reminder ツール（プレビュー）も紹介されています。"
+  },
+  {
+    "source": "nvidia-developer-blog",
+    "title": "Efficient MoE Training for Biological Foundation Models",
+    "url": "https://developer.nvidia.com/blog/efficient-moe-training-for-biological-foundation-models/",
+    "date": "2026-09-25",
+    "titleJa": "生物学基盤モデルのための効率的な MoE 学習",
+    "summaryJa": "NVIDIA Transformer Engine の GroupedLinear で複数の expert の GEMM を 1 回の grouped 演算にまとめ、MXFP8 でメモリ使用量を削減し、TE Sequential API により GroupedLinear、ScaledSwiGLU、ルーティング重みのスケーリングを 1 つのカーネルに融合する手法を解説しています。8 基の NVIDIA B200 での学習ベンチマークでは、BioNeMo レシピが Hugging Face ベースラインの最大 2.21 倍のスループットを示したと書かれています。融合された MXFP8 GroupedMLP カーネルには Blackwell GPU が必要です。"
+  },
+  {
+    "source": "snowflake-blog",
+    "title": "Kimi K3 on Snowflake Cortex AI",
+    "url": "https://www.snowflake.com/content/snowflake-site/global/en/blog/kimi-k3-cortex-ai",
+    "date": "2026-09-25",
+    "titleJa": "Snowflake Cortex AI で Kimi K3 を利用可能に",
+    "summaryJa": "Moonshot AI のオープンウェイトモデル Kimi K3 が、Snowflake Cortex AI でプライベートプレビューとして利用できるようになったと発表されています。現時点では Cortex AI Functions（AI_COMPLETE など）と Cortex Inference から呼び出せ、Snowflake CoCo、Cortex Agents、CoWork への対応は今後の予定です。OpenAI SDK から Cortex REST API の Chat Completions 形式で呼び出す例も示されており、Moonshot は既存セッションからの切り替えではなく新しいセッションでの利用を推奨しています。"
   },
   {
     "source": "classmethod-claudecode",
