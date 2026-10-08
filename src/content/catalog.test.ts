@@ -99,3 +99,24 @@ describe('やってみた', () => {
     }
   });
 });
+
+describe('資格ごとの押さえる論点', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { EXAM_POINT_SETS } = require('./exam-points') as typeof import('./exam-points');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { getBasicsTopic } = require('./basics') as typeof import('./basics');
+
+  it.each(EXAM_POINT_SETS.map((s) => [s.certId, s] as const))('%s の論点がそろい、参照先が存在する', (_, s) => {
+    const cert = getCertification(s.certId);
+    expect(cert).toBeDefined();
+    const areas = cert!.outline.map((o) => o.nameJa);
+    expect(new Set(s.points.map((p) => p.id)).size).toBe(s.points.length);
+    for (const p of s.points) {
+      expect(areas).toContain(p.area);
+      expect(p.keyPoints.length).toBeGreaterThan(0);
+      expect(p.misconceptions.length).toBeGreaterThan(0);
+      for (const id of p.basicsIds) expect(getBasicsTopic(id)).toBeDefined();
+      for (const r of p.resources) expect(r.url).toMatch(/^https:\/\//);
+    }
+  });
+});

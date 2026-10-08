@@ -5,6 +5,7 @@ import { CERTIFICATIONS, FACTS_CHECKED_ON, getCertification } from '@/content/ce
 import { getStudyTopic } from '@/content/study-topics';
 import { questionIdsBySet, questionSetsForCertification, topicsForCertification } from '@/content/catalog';
 import { SITE_NAME } from '@/content/site';
+import { examPointsFor } from '@/content/exam-points';
 import { Breadcrumb, ExternalLink, ResourceList, SubTitle, TrackLabel } from '@/components/quiz/ui';
 
 export function generateStaticParams() {
@@ -35,6 +36,7 @@ export default async function CertificationPage({ params }: { params: Promise<{ 
   const sets = questionSetsForCertification(cert.id);
   const ids = questionIdsBySet();
   const hasWeights = cert.outline.some((o) => o.weight !== undefined);
+  const points = examPointsFor(cert.id);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
@@ -53,6 +55,12 @@ export default async function CertificationPage({ params }: { params: Promise<{ 
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_300px]">
         <div className="min-w-0 [&>h3:first-child]:mt-0">
+          {points && (
+            <Link href={`/certifications/${cert.id}/points`} className="box mb-8 block p-5 hover:border-ink">
+              <span className="font-bold">この資格で押さえる論点（{points.points.length}）</span>
+              <span className="mt-1 block text-sm text-muted">試験に向けて押さえておきたい知識を、論点ごとに、覚えること・解説・よくある誤解でまとめています。</span>
+            </Link>
+          )}
           <SubTitle>どのような資格か</SubTitle>
           {cert.description.map((p) => (
             <p key={p} className="mt-3">

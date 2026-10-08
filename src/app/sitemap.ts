@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { BASICS_TOPICS } from '@/content/basics';
 import { CERTIFICATIONS } from '@/content/certifications';
+import { EXAM_POINT_SETS } from '@/content/exam-points';
 import { HANDSON_GUIDES } from '@/content/handson';
 import { getArticles } from '@/lib/articles';
 import { QUESTION_SETS } from '@/content/question-sets';
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.9,
     })),
+    ...EXAM_POINT_SETS.map((s) => ({ url: `${BASE_URL}/certifications/${s.certId}/points`, changeFrequency: 'monthly' as const, priority: 0.8 })),
     ...STUDY_TOPICS.map((t) => ({
       url: `${BASE_URL}/study/${t.id}`,
       changeFrequency: 'monthly' as const,
