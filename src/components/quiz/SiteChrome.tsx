@@ -63,6 +63,11 @@ export function SiteFooter() {
             </Link>
           </li>
           <li>
+            <Link href="/advanced" className="hover:underline">
+              応用知識
+            </Link>
+          </li>
+          <li>
             <Link href="/handson" className="hover:underline">
               やってみた
             </Link>

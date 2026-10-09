@@ -12,6 +12,8 @@ export type BasicsTopic = {
   sections: { heading: string; body: string[] }[];
   /** 現場でそのまま使える確認項目（任意） */
   checklist?: string[];
+  /** あわせて読む（サイト内の別のページ） */
+  seeAlso?: { href: string; title: string }[];
   resources: Resource[];
 };
 
@@ -727,35 +729,38 @@ export const BASICS_TOPICS: BasicsTopic[] = [
   {
     id: 'databricks-ontobricks',
     group: 'databricks',
-    title: 'OntoBricks でナレッジグラフを作る',
-    summary: 'Unity Catalog のテーブルを、オントロジーにもとづくナレッジグラフにする Databricks Labs のツール。AI エージェントからは MCP で使える。',
+    title: 'OntoBricks とは',
+    summary: 'Unity Catalog のテーブルを、オントロジーにもとづくナレッジグラフにする Databricks Labs のツール。正式な製品ではない。',
     intro: [
-      'OntoBricks は、Unity Catalog のテーブルを、たどって調べられるナレッジグラフ（もの同士の関係を網の目で表したデータ）に変えるツールです。Databricks Labs のプロジェクトで、Databricks の正式な製品ではありません。',
+      'OntoBricks は、Unity Catalog のテーブルを、たどって調べられるナレッジグラフ（もの同士の関係を網の目で表したデータ）に変えるツールです。Databricks Labs のプロジェクトとして、GitHub で公開されています。',
     ],
     sections: [
       {
-        heading: '何ができるか',
+        heading: '何をするツールか',
         body: [
-          'オントロジーを画面で設計し（業界の標準のオントロジーを取り込むこともできます）、テーブルの列との対応づけを作り、ナレッジグラフとして保存します。対応づけの SQL は、LLM が書くのを手伝います。',
-          'グラフの上で推論や検証を行い、自動で作られる GraphQL の API で問い合わせられます。MCP にも対応していて、Claude Desktop などの AI エージェントから、業務の意味を持ったデータとして使えます。',
+          '「顧客」「契約」「製品」のような業務の概念と、その関係（オントロジー）を定義し、それを Unity Catalog のテーブルに結びつけて、ナレッジグラフを作ります。できたグラフは、画面でたどって見たり、AI エージェントから MCP で使ったりできます。',
+          'ワークスペースの中に Databricks Apps として置いて使います。',
         ],
       },
       {
-        heading: '使われている標準と、保存先',
+        heading: '正式な製品ではない',
         body: [
-          'オントロジーは OWL・RDFS、テーブルとの対応づけは R2RML、推論と検証は OWL 2 RL・SWRL・SHACL といった W3C などの標準にもとづいています。問い合わせには SPARQL と GraphQL を使います。',
-          'グラフの保存先は、業務のまとまりごとに選べます。既定は Lakebase（Postgres）で、Delta のテーブル、Neo4j、保存しない（オントロジーだけ）からも選べます。Databricks Apps として、ワークスペースの中に置いて使います。',
+          'Databricks Labs のプロジェクトは、試すために公開されているもので、Databricks による正式なサポートや SLA はありません（README の記載）。ライセンスは Databricks License です。お客さまに紹介するときは、この点を最初に伝えます。',
         ],
       },
       {
-        heading: '使うときの注意',
+        heading: 'Genie Ontology との使い分け',
         body: [
-          'Databricks Labs のプロジェクトは、試すために公開されているもので、Databricks による正式なサポートや SLA はありません（README の記載）。ライセンスは Databricks License です。本番の業務に使う前に、サポートの体制とライセンスの条件を確かめます。',
-          'Genie にデータの質問をさせたいだけなら、まず公式の Genie Ontology と Unity Catalog のセマンティクスを検討し、関係をたどる複雑な問い合わせや、業界の標準のオントロジーが必要な場面で OntoBricks を検討する、という順番が考えやすいと思います。',
+          'Genie にデータの質問を正しく答えさせたいだけなら、まず Databricks の正式な機能である Genie Ontology と、Unity Catalog のセマンティクス（メトリクスビュー・Pages・Domains）を検討します。',
+          'もの同士の関係を何段もたどる問い合わせや、業界の標準のオントロジー（金融・医療・製造など）を使いたい場面で、OntoBricks を検討する、という順番が考えやすいと思います。',
         ],
       },
     ],
-    checklist: ['正式なサポートがないことを、お客さまと共有したか', 'Genie Ontology で足りないかを先に検討したか', 'グラフの保存先を、業務のまとまりごとに決めたか'],
+    checklist: ['正式なサポートがないことを、お客さまと共有したか', 'Genie Ontology で足りないかを先に検討したか'],
+    seeAlso: [
+      { href: '/advanced/ontobricks-knowledge-graph', title: '応用知識：OntoBricks でナレッジグラフを作る' },
+      { href: '/basics/databricks-genie-ontology', title: '基礎知識：オントロジーで AI に業務の意味を伝える（Genie Ontology）' },
+    ],
     resources: [{ title: 'databrickslabs/ontobricks（GitHub）', url: 'https://github.com/databrickslabs/ontobricks', kind: '公式サイト' }],
   },
   {

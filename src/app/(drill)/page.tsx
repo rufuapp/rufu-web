@@ -178,6 +178,10 @@ export default function TopPage() {
           <Link href="/basics" className="link">
             基礎知識の一覧を見る →
           </Link>
+          <span className="mx-3 text-muted">｜</span>
+          <Link href="/advanced" className="link">
+            応用知識を見る →
+          </Link>
         </p>
       </section>
 
