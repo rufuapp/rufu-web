@@ -18,6 +18,7 @@ export function TopicView({ topic, topics, section }: { topic: BasicsTopic; topi
         <p className="flex flex-wrap items-center gap-3">
           <span className="text-xs font-bold tracking-[0.18em] text-muted">{group.name}</span>
           <span className="tag text-muted">{section.name}</span>
+          {topic.status && <span className="tag text-warn">{topic.status}</span>}
         </p>
         <h1 className="mt-3 text-3xl">{topic.title}</h1>
         <p className="mt-4 text-lg leading-relaxed">{topic.summary}</p>
@@ -75,7 +76,7 @@ export function TopicView({ topic, topics, section }: { topic: BasicsTopic; topi
           )}
 
           <SubTitle>公式の情報</SubTitle>
-          <p className="mb-3 text-sm text-muted">{BASICS_CHECKED_ON}時点の公式の情報をもとにしています。内容は更新されることがあるため、最新の版を確かめてください。</p>
+          <p className="mb-3 text-sm text-muted">{topic.checkedOn ?? BASICS_CHECKED_ON}時点の公式の情報をもとにしています。内容は更新されることがあるため、最新の版を確かめてください。</p>
           <ResourceList resources={topic.resources} />
         </article>
 

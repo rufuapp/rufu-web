@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ADVANCED_TOPICS } from '@/content/advanced';
-import { BASICS_CHECKED_ON, BASICS_GROUPS } from '@/content/basics';
+import { BASICS_GROUPS } from '@/content/basics';
 import { Breadcrumb, SubTitle } from '@/components/quiz/ui';
 
 export const metadata: Metadata = {
@@ -21,9 +21,9 @@ export default function AdvancedPage() {
           <Link href="/basics" className="link">
             基礎知識
           </Link>
-          を押さえた後に読む、作り方や仕組みに踏み込んだ内容をまとめています。
+          を押さえた後に読む、作り方や仕組みに踏み込んだ内容や、まだ正式な提供前の新しい機能をまとめています。新しい機能には「パブリックプレビュー」「ベータ版」などの状態を付けています。
         </p>
-        <p className="mt-3 text-sm text-muted">{BASICS_CHECKED_ON}時点の公式の情報をもとにしています。お客さまに伝える前に、公式の情報を確かめてください。</p>
+        <p className="mt-3 text-sm text-muted">各項目に、公式の情報で確かめた日を書いています。新しい機能は変わりやすいので、お客さまに伝える前に公式の情報を確かめてください。</p>
       </header>
 
       {groups.map((g) => (
@@ -37,6 +37,7 @@ export default function AdvancedPage() {
                   <Link href={`/advanced/${t.id}`} className="link font-bold">
                     {t.title}
                   </Link>
+                  {t.status && <span className="tag ml-2 align-middle text-xs text-warn">{t.status}</span>}
                   <span className="mt-0.5 block text-sm leading-relaxed text-muted">{t.summary}</span>
                 </span>
               </li>
