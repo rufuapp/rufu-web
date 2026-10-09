@@ -6,12 +6,18 @@ export type BasicsGroup = 'claude' | 'databricks' | 'fde';
 export type BasicsTopic = {
   id: string;
   group: BasicsGroup;
+  /** 正式な提供前の機能などの状態（応用知識で使う） */
+  status?: 'パブリックプレビュー' | 'ベータ版' | 'Labs（サポートなし）';
+  /** 公式の情報で確かめた日（省略すると BASICS_CHECKED_ON） */
+  checkedOn?: string;
   title: string;
   summary: string;
   intro: string[];
   sections: { heading: string; body: string[] }[];
   /** 現場でそのまま使える確認項目（任意） */
   checklist?: string[];
+  /** あわせて読む（サイト内の別のページ） */
+  seeAlso?: { href: string; title: string }[];
   resources: Resource[];
 };
 
@@ -263,6 +269,9 @@ export const BASICS_TOPICS: BasicsTopic[] = [
       },
     ],
     checklist: ['CLAUDE.md にコマンドと決まりを書いたか', '禁止したい操作を permissions で止めたか', '整形やテストをフックで自動化したか', 'チームの Skill とサブエージェントをリポジトリで共有したか'],
+    seeAlso: [
+      { href: '/advanced/databricks-omnigent', title: '新しい動き（応用知識）：Omnigent でエージェントを束ねる' },
+    ],
     resources: [
       { title: '設定ファイル（Settings）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
       { title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' },
@@ -368,6 +377,9 @@ export const BASICS_TOPICS: BasicsTopic[] = [
       },
     ],
     checklist: ['ワークフローで足りないかを先に検討したか', 'エージェントに与える権限を絞ったか', '人が確認する段階を設けたか', '費用と時間の上限を決めたか'],
+    seeAlso: [
+      { href: '/advanced/databricks-omnigent', title: '新しい動き（応用知識）：Omnigent でエージェントを束ねる' },
+    ],
     resources: [
       { title: 'Building Effective AI Agents（Anthropic）', url: 'https://www.anthropic.com/engineering/building-effective-agents', kind: '公式サイト' },
       { title: 'Agent SDK の概要', url: `${CLAUDE_DOCS}/agent-sdk/overview`, kind: '公式ドキュメント' },
@@ -616,6 +628,9 @@ export const BASICS_TOPICS: BasicsTopic[] = [
       },
     ],
     checklist: ['用途に合う SQL ウェアハウスの種類を選んだか', 'ダッシュボードの共有範囲を権限で管理したか', 'Genie に用語の意味と問い合わせの例を登録したか'],
+    seeAlso: [
+      { href: '/advanced/databricks-genie-ontology', title: '新しい動き（応用知識）：オントロジーで AI に業務の意味を伝える（Genie Ontology）' },
+    ],
     resources: [
       { title: 'SQL ウェアハウス', url: `${DBX_DOCS}/compute/sql-warehouse/`, kind: '公式ドキュメント' },
       { title: 'ダッシュボード', url: `${DBX_DOCS}/dashboards/`, kind: '公式ドキュメント' },
@@ -647,6 +662,10 @@ export const BASICS_TOPICS: BasicsTopic[] = [
       },
     ],
     checklist: ['モデルの呼び出しを Unity Gateway で管理したか', '検索の元データと同期させたか', 'トレースと評価で品質を測る仕組みがあるか'],
+    seeAlso: [
+      { href: '/advanced/databricks-genie-ontology', title: '新しい動き（応用知識）：Genie Ontology' },
+      { href: '/advanced/databricks-ontobricks', title: '新しい動き（応用知識）：OntoBricks とは' },
+    ],
     resources: [
       { title: 'Databricks で使えるモデル', url: `${DBX_DOCS}/machine-learning/model-serving/foundation-model-overview`, kind: '公式ドキュメント' },
       { title: 'AI Search', url: `${DBX_DOCS}/vector-search/vector-search`, kind: '公式ドキュメント' },

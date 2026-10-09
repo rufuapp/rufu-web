@@ -120,3 +120,23 @@ describe('資格ごとの押さえる論点', () => {
     }
   });
 });
+
+describe('応用知識', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { ADVANCED_TOPICS } = require('./advanced') as typeof import('./advanced');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { BASICS_GROUPS, BASICS_TOPICS } = require('./basics') as typeof import('./basics');
+
+  it('ID が基礎知識とも重複せず、公式の情報へのリンクがあり、あわせて読むの先が存在する', () => {
+    const ids = [...BASICS_TOPICS, ...ADVANCED_TOPICS].map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const pages = new Set([...BASICS_TOPICS.map((t) => `/basics/${t.id}`), ...ADVANCED_TOPICS.map((t) => `/advanced/${t.id}`)]);
+    for (const t of [...BASICS_TOPICS, ...ADVANCED_TOPICS]) {
+      for (const s of t.seeAlso ?? []) expect(pages.has(s.href)).toBe(true);
+    }
+    for (const t of ADVANCED_TOPICS) {
+      expect(BASICS_GROUPS.map((g) => g.id)).toContain(t.group);
+      for (const r of t.resources) expect(r.url).toMatch(/^https:\/\//);
+    }
+  });
+});

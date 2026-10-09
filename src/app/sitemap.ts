@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { ADVANCED_TOPICS } from '@/content/advanced';
 import { BASICS_TOPICS } from '@/content/basics';
 import { CERTIFICATIONS } from '@/content/certifications';
 import { EXAM_POINT_SETS } from '@/content/exam-points';
@@ -15,6 +16,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/tips`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/basics`, changeFrequency: 'monthly', priority: 0.9 },
     ...BASICS_TOPICS.map((b) => ({ url: `${BASE_URL}/basics/${b.id}`, changeFrequency: 'monthly' as const, priority: 0.8 })),
+    { url: `${BASE_URL}/advanced`, changeFrequency: 'monthly', priority: 0.8 },
+    ...ADVANCED_TOPICS.map((t) => ({ url: `${BASE_URL}/advanced/${t.id}`, changeFrequency: 'monthly' as const, priority: 0.7 })),
     { url: `${BASE_URL}/exam`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/handson`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE_URL}/articles`, changeFrequency: 'weekly', priority: 0.9 },
