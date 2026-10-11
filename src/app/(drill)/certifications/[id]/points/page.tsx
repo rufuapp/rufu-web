@@ -115,7 +115,7 @@ export default async function ExamPointsPage({ params }: { params: Promise<{ id:
               ))}
             </ul>
 
-            <SubTitle>関連する基礎知識</SubTitle>
+            {p.basicsIds.length > 0 && <SubTitle>関連する基礎知識</SubTitle>}
             <ul className="space-y-1">
               {p.basicsIds.map((bid) => {
                 const b = getBasicsTopic(bid);
