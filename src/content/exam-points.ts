@@ -31,7 +31,7 @@ const CLAUDE_DOCS = 'https://platform.claude.com/docs/en';
 export const EXAM_POINT_SETS: ExamPointSet[] = [
   {
     certId: 'claude-certified-developer-foundations',
-    checkedOn: '2026年10月8日（論点 1〜5）と10月11日（論点 6〜10）',
+    checkedOn: '2026年10月8日〜11日',
     points: [
       {
         id: 'tool-description',
@@ -55,12 +55,14 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
       },
       {
         id: 'batch-limits',
-        title: 'Message Batches API の2つの期限（処理は 24 時間、結果は 29 日間）',
+        title: 'Message Batches API の2つの期限（処理は 24 時間、結果は 29 日間）と、custom_id での照合',
         area: 'Claude API',
         keyPoints: [
           '処理には最大 24 時間かかることがある（多くは 1 時間以内に終わる）',
           '24 時間以内に処理が終わらなかったリクエストは期限切れになる',
           '結果は作成から 29 日間取得できる（処理の期限とは別）',
+          '結果は入力の順に返るとは限らないので、リクエストごとに付ける custom_id で照合する',
+          '結果はバッチの処理が終わってから取得する（1件ずつ流れてくるわけではない）',
           '料金は通常の半額',
         ],
         explanation: [
@@ -70,6 +72,8 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         misconceptions: [
           '「1 時間で必ず終わる」: 多くは 1 時間以内に終わりますが、保証ではありません。上限は 24 時間です。',
           '「処理と結果の保持は同じ 24 時間（または同じ 29 日間）」: 処理の上限は 24 時間、結果の取得期間は 29 日間で、別の制限です。',
+          '「結果は送った順に返るので、配列の位置で照合できる」: 公式ドキュメントでは、結果はどの順でも返りうるとされています。custom_id で照合します。',
+          '「料金が高くなる」: Batch は通常の約半額です。',
         ],
         basicsIds: ['claude-cost-optimization'],
         resources: [{ title: 'Batch 処理（Batch processing）', url: `${CLAUDE_DOCS}/build-with-claude/batch-processing`, kind: '公式ドキュメント' }],
@@ -250,6 +254,103 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           { title: '成功の基準と評価の作り方', url: `${CLAUDE_DOCS}/test-and-evaluate/develop-tests`, kind: '公式ドキュメント' },
           { title: 'モデルの提供終了の予定（Model deprecations）', url: `${CLAUDE_DOCS}/about-claude/model-deprecations`, kind: '公式ドキュメント' },
         ],
+      },
+      {
+        id: 'claude-md-sharing',
+        title: 'チームの決まりはコミットする CLAUDE.md に、個人の上書きはコミットしないファイルに',
+        area: 'エージェント開発',
+        keyPoints: [
+          'プロジェクトの CLAUDE.md（./CLAUDE.md か ./.claude/CLAUDE.md）をコミットすると、全員が同じ決まりを使える',
+          '個人の、そのプロジェクトだけの指示は CLAUDE.local.md に書き、.gitignore に入れる',
+          'すべてのプロジェクトに効かせたい個人の好みは ~/.claude/CLAUDE.md',
+          '設定（settings）も同じで、共有は .claude/settings.json、個人は .claude/settings.local.json（コミットしない）',
+        ],
+        explanation: [
+          '同じリポジトリなのに人によって Claude の動きが違うときは、共有の決まりがリポジトリに入っていないことがよくあります。チームの決まりはプロジェクトの CLAUDE.md に書いてコミットし、個人の上書きは自分の手元だけにあるファイルに置きます。',
+          'Claude Code は、自分で作った .claude/settings.local.json を git の対象から外します。手で作ったときは、自分で .gitignore に足します。',
+        ],
+        misconceptions: [
+          '「個人の settings.local.json をコミットする」: 個人の上書きが全員に公開され、非公開にしたいという目的に反します。',
+          '「衝突を避けるため、CLAUDE.md を git から外す」: 共有の決まりがチームに行き渡らず、動きのばらつきが直りません。',
+          '「共有の決まりを、各自の ~/.claude/CLAUDE.md に書く」: 人ごとに内容がずれ、ばらつきの原因そのものになります。',
+        ],
+        basicsIds: ['claude-code-for-teams'],
+        resources: [
+          { title: 'CLAUDE.md とメモリ（Claude Code）', url: 'https://code.claude.com/docs/en/memory', kind: '公式ドキュメント' },
+          { title: '設定ファイル（Claude Code）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'pin-model-id',
+        title: '本番では、指す先が変わらないモデル ID を指定する',
+        area: 'Claude API',
+        keyPoints: [
+          '本番では、特定のスナップショットを指すモデル ID を指定し、新しいモデルが出ても動きが変わらないようにする',
+          '公式ドキュメントでは、すべてのモデル ID は固定のスナップショットとされ、4.6 世代以降は日付のない ID も固定',
+          '新しいモデルへの切り替えは、評価で確かめてから、意図したときに ID を書き換える',
+        ],
+        explanation: [
+          '「最新のモデル」を指す呼び名に頼ると、新しいモデルが出たときに、本番の動きが予告なく変わるおそれがあります。動きを安定させたいなら、どのモデルを使うかを ID で固定します。',
+          'Claude の API では、4.6 世代より前のモデルのエイリアス（別名）は、日付の付いた ID を指す便利な呼び名です。本番の設定では、どの ID を指しているかを確かめたうえで、固定の ID を使うのが確実です。',
+        ],
+        misconceptions: [
+          '「最新のモデルを指す呼び名を使えば、自動で改善される」: 自動で切り替わることこそが、動きが変わる原因になります。',
+          '「Batch API を通すと安定する」: Batch は急がない処理を安く行う仕組みで、動きの安定とは関係ありません。',
+          '「effort を上げると安定する」: effort は考える深さと費用の調整で、モデルの切り替えによる変化への対策ではありません。',
+        ],
+        basicsIds: ['claude-models-and-pricing', 'fde-production-checklist'],
+        resources: [
+          { title: 'モデルの概要（Models overview）', url: `${CLAUDE_DOCS}/about-claude/models/overview`, kind: '公式ドキュメント' },
+          { title: 'モデルの提供終了の予定（Model deprecations）', url: `${CLAUDE_DOCS}/about-claude/model-deprecations`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'claude-code-config-layers',
+        title: 'Claude Code の要件は、強制か・秘密か・助言かで置き場所を決める',
+        area: 'エージェント開発',
+        keyPoints: [
+          '必ず人の承認を待たせたい操作 → フック（PreToolUse で ask や deny を返す）。確実に効く',
+          'チームで同じ権限をそろえる → コミットする .claude/settings.json の permissions',
+          'API キーなどの秘密 → 環境変数で渡し、コンテキストに読み込まれるファイルには書かない',
+          'コーディングの決まり → CLAUDE.md（モデルへの助言）',
+        ],
+        explanation: [
+          '公式ドキュメントでは、CLAUDE.md は「強制される設定ではなく、文脈として扱われる」と説明されています。Claude がどう判断するかに関係なく止めたい操作は、フックで止めます。PreToolUse のフックは、ツールの実行を止めたり（deny・終了コード 2）、人の確認を求めたり（ask）できます。',
+          'CLAUDE.md や Skill のファイルはコンテキストに読み込まれるので、秘密の情報を書くと、モデルの入出力に流れ出るおそれがあります。',
+        ],
+        misconceptions: [
+          '「4つの要件を全部 CLAUDE.md に書く」: CLAUDE.md は助言なので、権限や承認を確実に守らせることはできません。',
+          '「承認とキーを settings.local.json に書く」: 個人用のファイルなのでチームで共有できず、キーを書くのも危険です。',
+          '「承認とキーを Skill のファイルに置く」: 承認は設定（フック）側の仕組みで、Skill に置いたキーはコンテキストに読み込まれます。',
+        ],
+        basicsIds: ['claude-code-for-teams'],
+        resources: [
+          { title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' },
+          { title: '設定ファイル（Claude Code）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
+          { title: 'CLAUDE.md とメモリ（Claude Code）', url: 'https://code.claude.com/docs/en/memory', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'sdk-thin-wrapper',
+        title: 'SDK に移しても、使える機能や結果のぶれは変わらない',
+        area: 'Claude API',
+        keyPoints: [
+          'SDK は同じ API（HTTP と JSON）を包んだもので、型・再試行・ストリーミングの扱いなどを楽にする',
+          'API にない機能やモデルの能力を、SDK が足すことはない',
+          'どのプラットフォーム（Amazon Bedrock など）でどの機能が使えるかは、プラットフォーム側で決まる',
+          '結果のぶれ（非決定性）も、SDK にしたからといってなくならない',
+        ],
+        explanation: [
+          'REST の API を直接呼ぶのと SDK を使うのとで、送っている中身は同じです。SDK に移すと書きやすく、間違えにくくなりますが、できることそのものは変わりません。',
+          '出力のぶれ方は、モデルと送るパラメータで決まり、REST でも SDK でも同じです。',
+        ],
+        misconceptions: [
+          '「SDK にすると、REST では使えなかったツールが使えるようになる」: 使える機能は API とプラットフォームの提供内容で決まります。',
+          '「SDK は独自の非公開の通信方式を使う」: 同じ HTTP と JSON の API を呼んでいます。',
+          '「SDK がサンプリングを固定するので、結果が毎回同じになる」: SDK は結果のぶれをなくしません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'SDK・CLI・ライブラリ（Claude Platform Docs）', url: `${CLAUDE_DOCS}/api/client-sdks`, kind: '公式ドキュメント' }],
       },
     ],
   },
