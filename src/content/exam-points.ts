@@ -264,15 +264,18 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           '個人の、そのプロジェクトだけの指示は CLAUDE.local.md に書き、.gitignore に入れる',
           'すべてのプロジェクトに効かせたい個人の好みは ~/.claude/CLAUDE.md',
           '設定（settings）も同じで、共有は .claude/settings.json、個人は .claude/settings.local.json（コミットしない）',
+          'チームで使うプラグインや権限・フックも、コミットする .claude/settings.json に書く。API キーなどの秘密はどのファイルにもコミットしない',
         ],
         explanation: [
           '同じリポジトリなのに人によって Claude の動きが違うときは、共有の決まりがリポジトリに入っていないことがよくあります。チームの決まりはプロジェクトの CLAUDE.md に書いてコミットし、個人の上書きは自分の手元だけにあるファイルに置きます。',
           'Claude Code は、自分で作った .claude/settings.local.json を git の対象から外します。手で作ったときは、自分で .gitignore に足します。',
+          '公式ドキュメントでは、.claude/settings.json は「チームの権限・フック・プラグイン」を置く場所とされています。チーム全員に同じプラグインを使わせたいなら、ここに書いてコミットします。',
         ],
         misconceptions: [
           '「個人の settings.local.json をコミットする」: 個人の上書きが全員に公開され、非公開にしたいという目的に反します。',
           '「衝突を避けるため、CLAUDE.md を git から外す」: 共有の決まりがチームに行き渡らず、動きのばらつきが直りません。',
           '「共有の決まりを、各自の ~/.claude/CLAUDE.md に書く」: 人ごとに内容がずれ、ばらつきの原因そのものになります。',
+          '「チームのプラグインの設定を、各自に手で入れてもらう」: 入れ忘れや違いが出ます。コミットする .claude/settings.json に書けば、全員に同じ設定が届きます。',
         ],
         basicsIds: ['claude-code-for-teams'],
         resources: [
@@ -317,6 +320,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         explanation: [
           '公式ドキュメントでは、CLAUDE.md は「強制される設定ではなく、文脈として扱われる」と説明されています。Claude がどう判断するかに関係なく止めたい操作は、フックで止めます。PreToolUse のフックは、ツールの実行を止めたり（deny・終了コード 2）、人の確認を求めたり（ask）できます。',
           'CLAUDE.md や Skill のファイルはコンテキストに読み込まれるので、秘密の情報を書くと、モデルの入出力に流れ出るおそれがあります。',
+          'フックそのものは settings.json の hooks に登録します。CLAUDE.md に「〇〇の前に確認すること」と自然な言葉で書いても、フックにはなりません。',
         ],
         misconceptions: [
           '「4つの要件を全部 CLAUDE.md に書く」: CLAUDE.md は助言なので、権限や承認を確実に守らせることはできません。',
@@ -443,6 +447,76 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         ],
         basicsIds: ['claude-code-for-teams'],
         resources: [{ title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'agent-sdk-query',
+        title: 'Agent SDK は、Claude Code と同じエージェントのループを自分のプログラムから動かす',
+        area: 'エージェント開発',
+        keyPoints: [
+          'Claude Agent SDK は、Claude Code を動かしているのと同じツール・エージェントのループ・コンテキストの管理を提供する',
+          'ツールの実行と結果の戻しは SDK が行うので、ループを自分で書かなくてよい',
+          'Python では query()（1回ごとに新しいセッション。単発の仕事向け）と ClaudeSDKClient（同じセッションで会話を続ける。割り込みもできる）がある',
+        ],
+        explanation: [
+          '公式ドキュメントでは、Agent SDK は「Claude Code を動かしているのと同じツール、エージェントのループ、コンテキストの管理」を提供すると説明されています。Messages API を直接使う場合と違い、tool_use を受けて実行し tool_result を戻す繰り返しを、SDK が受け持ちます。',
+          'Python の SDK の公式ページには、query() と ClaudeSDKClient の比較表があります。query() は既定で毎回新しいセッションを作り、ClaudeSDKClient は同じセッションを使い続けます。チャットのように、次の動きが Claude の答えで変わる場合は ClaudeSDKClient が勧められています。',
+        ],
+        misconceptions: [
+          '「Agent SDK を使っても、ツールを実行するループは自分で書く」: ループは SDK が回します。自分で書くのは Messages API を直接使う場合です。',
+          '「query() で会話がそのまま続く」: Python の query() は既定で毎回新しいセッションです。続けるなら continue_conversation や resume、または ClaudeSDKClient を使います。',
+        ],
+        basicsIds: ['claude-agent-design'],
+        resources: [
+          { title: 'Agent SDK の概要', url: 'https://code.claude.com/docs/en/agent-sdk/overview', kind: '公式ドキュメント' },
+          { title: 'Agent SDK（Python）', url: 'https://code.claude.com/docs/en/agent-sdk/python', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'bedrock-model-ids',
+        title: 'Amazon Bedrock では、使う入口によってクライアントとモデル ID の書き方が違う',
+        area: 'Claude API',
+        keyPoints: [
+          '新しい「Claude in Amazon Bedrock」（Opus 4.7 以降）: AnthropicBedrockMantle クライアント、ID は anthropic. で始まる（例: anthropic.claude-opus-5-5）',
+          '従来の Bedrock の入口（InvokeModel・Converse。Opus 4.6 以前）: AnthropicBedrock クライアント、ID は推論プロファイル（global. や us. で始まる）',
+          '従来の入口でプロファイルの付かない ID を指定すると、「オンデマンドのスループットに対応していない」という 400 エラーになる',
+          '新しい入口では、構造化出力・Batch・サーバー側のツールなど、使えない機能がある',
+        ],
+        explanation: [
+          'Bedrock で Claude を使うときは、Anthropic の API と同じ ID をそのまま書いても動きません。どの入口を使うかで、クライアントの種類とモデル ID の形を合わせます。',
+          '従来の入口では、リージョンをまたいで処理を振り分ける推論プロファイル（global. や us. などの接頭辞）を ID として指定します。',
+          '使える機能は入口ごとに違うので、Anthropic の API で使えた機能が Bedrock でも使えるかは、公式ドキュメントの対応表で確かめます。',
+        ],
+        misconceptions: [
+          '「Anthropic の API と同じモデル ID を Bedrock でも使える」: 入口ごとに決まった形（anthropic. や推論プロファイル）があります。',
+          '「400 エラーは権限の不足が原因」: 従来の入口では、推論プロファイルを指定していないことが原因のことがあります。',
+        ],
+        basicsIds: ['claude-models-and-pricing'],
+        resources: [{ title: 'Amazon Bedrock の Claude', url: `${CLAUDE_DOCS}/build-with-claude/claude-in-amazon-bedrock`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'context-window-overflow',
+        title: 'コンテキストウィンドウを超えたとき: 入力だけで超えたらエラー、出力の途中なら止まる',
+        area: 'Claude API',
+        keyPoints: [
+          '入力だけでコンテキストウィンドウを超えると、どのモデルでも 400 の invalid_request_error（prompt is too long）になる',
+          'Claude 4.5 以降では、入力と max_tokens の合計が超えていても受け付け、上限に達したら stop_reason が model_context_window_exceeded で止まる',
+          'それより前のモデルでは、入力と max_tokens の合計が超えると検証エラーになる',
+          '長い会話には、サーバー側の要約（compaction。4.6 以降のベータで、自分で有効にする）や、古いツールの結果を消す context editing を使う',
+        ],
+        explanation: [
+          'エラーになるのか、途中で止まるのかは、何が上限を超えたかとモデルの世代で決まります。入力そのものが入り切らないなら、どのモデルでも受け付けられません。',
+          '会話が長くなる用途では、上限に当たってから慌てるのではなく、compaction や context editing で古い部分を減らすように設計しておきます。compaction は自動では有効にならず、リクエストで指定して使います。',
+        ],
+        misconceptions: [
+          '「上限を超えたら、API が古い部分を自動で切り捨てる」: 何もしなければ切り捨てられません。compaction や context editing は、自分で有効にする機能です。',
+          '「入力と max_tokens の合計が超えたら、どのモデルでも必ずエラー」: Claude 4.5 以降では受け付け、上限で止まります（stop_reason: model_context_window_exceeded）。',
+        ],
+        basicsIds: ['claude-context-management'],
+        resources: [
+          { title: 'コンテキストウィンドウ（Context windows）', url: `${CLAUDE_DOCS}/build-with-claude/context-windows`, kind: '公式ドキュメント' },
+          { title: '要約（Compaction）', url: `${CLAUDE_DOCS}/build-with-claude/compaction`, kind: '公式ドキュメント' },
+          { title: 'コンテキストの編集（Context editing）', url: `${CLAUDE_DOCS}/build-with-claude/context-editing`, kind: '公式ドキュメント' },
+        ],
       },
     ],
   },
