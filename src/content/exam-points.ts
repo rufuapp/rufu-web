@@ -31,7 +31,7 @@ const CLAUDE_DOCS = 'https://platform.claude.com/docs/en';
 export const EXAM_POINT_SETS: ExamPointSet[] = [
   {
     certId: 'claude-certified-developer-foundations',
-    checkedOn: '2026年10月8日（論点 1〜5）と10月11日（論点 6〜10）',
+    checkedOn: '2026年10月8日〜11日',
     points: [
       {
         id: 'tool-description',
@@ -55,12 +55,14 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
       },
       {
         id: 'batch-limits',
-        title: 'Message Batches API の2つの期限（処理は 24 時間、結果は 29 日間）',
+        title: 'Message Batches API の2つの期限（処理は 24 時間、結果は 29 日間）と、custom_id での照合',
         area: 'Claude API',
         keyPoints: [
           '処理には最大 24 時間かかることがある（多くは 1 時間以内に終わる）',
           '24 時間以内に処理が終わらなかったリクエストは期限切れになる',
           '結果は作成から 29 日間取得できる（処理の期限とは別）',
+          '結果は入力の順に返るとは限らないので、リクエストごとに付ける custom_id で照合する',
+          '結果はバッチの処理が終わってから取得する（1件ずつ流れてくるわけではない）',
           '料金は通常の半額',
         ],
         explanation: [
@@ -70,6 +72,8 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         misconceptions: [
           '「1 時間で必ず終わる」: 多くは 1 時間以内に終わりますが、保証ではありません。上限は 24 時間です。',
           '「処理と結果の保持は同じ 24 時間（または同じ 29 日間）」: 処理の上限は 24 時間、結果の取得期間は 29 日間で、別の制限です。',
+          '「結果は送った順に返るので、配列の位置で照合できる」: 公式ドキュメントでは、結果はどの順でも返りうるとされています。custom_id で照合します。',
+          '「料金が高くなる」: Batch は通常の約半額です。',
         ],
         basicsIds: ['claude-cost-optimization'],
         resources: [{ title: 'Batch 処理（Batch processing）', url: `${CLAUDE_DOCS}/build-with-claude/batch-processing`, kind: '公式ドキュメント' }],
@@ -249,6 +253,269 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         resources: [
           { title: '成功の基準と評価の作り方', url: `${CLAUDE_DOCS}/test-and-evaluate/develop-tests`, kind: '公式ドキュメント' },
           { title: 'モデルの提供終了の予定（Model deprecations）', url: `${CLAUDE_DOCS}/about-claude/model-deprecations`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'claude-md-sharing',
+        title: 'チームの決まりはコミットする CLAUDE.md に、個人の上書きはコミットしないファイルに',
+        area: 'エージェント開発',
+        keyPoints: [
+          'プロジェクトの CLAUDE.md（./CLAUDE.md か ./.claude/CLAUDE.md）をコミットすると、全員が同じ決まりを使える',
+          '個人の、そのプロジェクトだけの指示は CLAUDE.local.md に書き、.gitignore に入れる',
+          'すべてのプロジェクトに効かせたい個人の好みは ~/.claude/CLAUDE.md',
+          '設定（settings）も同じで、共有は .claude/settings.json、個人は .claude/settings.local.json（コミットしない）',
+          'チームで使うプラグインや権限・フックも、コミットする .claude/settings.json に書く。API キーなどの秘密はどのファイルにもコミットしない',
+        ],
+        explanation: [
+          '同じリポジトリなのに人によって Claude の動きが違うときは、共有の決まりがリポジトリに入っていないことがよくあります。チームの決まりはプロジェクトの CLAUDE.md に書いてコミットし、個人の上書きは自分の手元だけにあるファイルに置きます。',
+          'Claude Code は、自分で作った .claude/settings.local.json を git の対象から外します。手で作ったときは、自分で .gitignore に足します。',
+          '公式ドキュメントでは、.claude/settings.json は「チームの権限・フック・プラグイン」を置く場所とされています。チーム全員に同じプラグインを使わせたいなら、ここに書いてコミットします。',
+        ],
+        misconceptions: [
+          '「個人の settings.local.json をコミットする」: 個人の上書きが全員に公開され、非公開にしたいという目的に反します。',
+          '「衝突を避けるため、CLAUDE.md を git から外す」: 共有の決まりがチームに行き渡らず、動きのばらつきが直りません。',
+          '「共有の決まりを、各自の ~/.claude/CLAUDE.md に書く」: 人ごとに内容がずれ、ばらつきの原因そのものになります。',
+          '「チームのプラグインの設定を、各自に手で入れてもらう」: 入れ忘れや違いが出ます。コミットする .claude/settings.json に書けば、全員に同じ設定が届きます。',
+        ],
+        basicsIds: ['claude-code-for-teams'],
+        resources: [
+          { title: 'CLAUDE.md とメモリ（Claude Code）', url: 'https://code.claude.com/docs/en/memory', kind: '公式ドキュメント' },
+          { title: '設定ファイル（Claude Code）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'pin-model-id',
+        title: '本番では、指す先が変わらないモデル ID を指定する',
+        area: 'Claude API',
+        keyPoints: [
+          '本番では、特定のスナップショットを指すモデル ID を指定し、新しいモデルが出ても動きが変わらないようにする',
+          '公式ドキュメントでは、すべてのモデル ID は固定のスナップショットとされ、4.6 世代以降は日付のない ID も固定',
+          '新しいモデルへの切り替えは、評価で確かめてから、意図したときに ID を書き換える',
+        ],
+        explanation: [
+          '「最新のモデル」を指す呼び名に頼ると、新しいモデルが出たときに、本番の動きが予告なく変わるおそれがあります。動きを安定させたいなら、どのモデルを使うかを ID で固定します。',
+          'Claude の API では、4.6 世代より前のモデルのエイリアス（別名）は、日付の付いた ID を指す便利な呼び名です。本番の設定では、どの ID を指しているかを確かめたうえで、固定の ID を使うのが確実です。',
+        ],
+        misconceptions: [
+          '「最新のモデルを指す呼び名を使えば、自動で改善される」: 自動で切り替わることこそが、動きが変わる原因になります。',
+          '「Batch API を通すと安定する」: Batch は急がない処理を安く行う仕組みで、動きの安定とは関係ありません。',
+          '「effort を上げると安定する」: effort は考える深さと費用の調整で、モデルの切り替えによる変化への対策ではありません。',
+        ],
+        basicsIds: ['claude-models-and-pricing', 'fde-production-checklist'],
+        resources: [
+          { title: 'モデルの概要（Models overview）', url: `${CLAUDE_DOCS}/about-claude/models/overview`, kind: '公式ドキュメント' },
+          { title: 'モデルの提供終了の予定（Model deprecations）', url: `${CLAUDE_DOCS}/about-claude/model-deprecations`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'claude-code-config-layers',
+        title: 'Claude Code の要件は、強制か・秘密か・助言かで置き場所を決める',
+        area: 'エージェント開発',
+        keyPoints: [
+          '必ず人の承認を待たせたい操作 → フック（PreToolUse で ask や deny を返す）。確実に効く',
+          'チームで同じ権限をそろえる → コミットする .claude/settings.json の permissions',
+          'API キーなどの秘密 → 環境変数で渡し、コンテキストに読み込まれるファイルには書かない',
+          'コーディングの決まり → CLAUDE.md（モデルへの助言）',
+        ],
+        explanation: [
+          '公式ドキュメントでは、CLAUDE.md は「強制される設定ではなく、文脈として扱われる」と説明されています。Claude がどう判断するかに関係なく止めたい操作は、フックで止めます。PreToolUse のフックは、ツールの実行を止めたり（deny・終了コード 2）、人の確認を求めたり（ask）できます。',
+          'CLAUDE.md や Skill のファイルはコンテキストに読み込まれるので、秘密の情報を書くと、モデルの入出力に流れ出るおそれがあります。',
+          'フックそのものは settings.json の hooks に登録します。CLAUDE.md に「〇〇の前に確認すること」と自然な言葉で書いても、フックにはなりません。',
+        ],
+        misconceptions: [
+          '「4つの要件を全部 CLAUDE.md に書く」: CLAUDE.md は助言なので、権限や承認を確実に守らせることはできません。',
+          '「承認とキーを settings.local.json に書く」: 個人用のファイルなのでチームで共有できず、キーを書くのも危険です。',
+          '「承認とキーを Skill のファイルに置く」: 承認は設定（フック）側の仕組みで、Skill に置いたキーはコンテキストに読み込まれます。',
+        ],
+        basicsIds: ['claude-code-for-teams'],
+        resources: [
+          { title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' },
+          { title: '設定ファイル（Claude Code）', url: 'https://code.claude.com/docs/en/settings', kind: '公式ドキュメント' },
+          { title: 'CLAUDE.md とメモリ（Claude Code）', url: 'https://code.claude.com/docs/en/memory', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'sdk-thin-wrapper',
+        title: 'SDK に移しても、使える機能や結果のぶれは変わらない',
+        area: 'Claude API',
+        keyPoints: [
+          'SDK は同じ API（HTTP と JSON）を包んだもので、型・再試行・ストリーミングの扱いなどを楽にする',
+          'API にない機能やモデルの能力を、SDK が足すことはない',
+          'どのプラットフォーム（Amazon Bedrock など）でどの機能が使えるかは、プラットフォーム側で決まる',
+          '結果のぶれ（非決定性）も、SDK にしたからといってなくならない',
+        ],
+        explanation: [
+          'REST の API を直接呼ぶのと SDK を使うのとで、送っている中身は同じです。SDK に移すと書きやすく、間違えにくくなりますが、できることそのものは変わりません。',
+          '出力のぶれ方は、モデルと送るパラメータで決まり、REST でも SDK でも同じです。',
+        ],
+        misconceptions: [
+          '「SDK にすると、REST では使えなかったツールが使えるようになる」: 使える機能は API とプラットフォームの提供内容で決まります。',
+          '「SDK は独自の非公開の通信方式を使う」: 同じ HTTP と JSON の API を呼んでいます。',
+          '「SDK がサンプリングを固定するので、結果が毎回同じになる」: SDK は結果のぶれをなくしません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'SDK・CLI・ライブラリ（Claude Platform Docs）', url: `${CLAUDE_DOCS}/api/client-sdks`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'agent-loop',
+        title: 'エージェントのループの1回分は「送る → ツールか答えか → 実行 → 結果を戻す」',
+        area: 'エージェント開発',
+        keyPoints: [
+          '今のコンテキスト（会話の履歴・ツールの定義）をモデルに送る',
+          'モデルは、ツールを使う（tool_use）か、最終的な答えを返すかを決める',
+          'ツールを使うなら実行し、その結果（tool_result）をコンテキストに足して、次の判断に戻す',
+          'ツールを使わない最終的な答え（stop_reason が end_turn）が返ったら、ループを終える',
+        ],
+        explanation: [
+          'Claude Agent SDK や Claude Code のエージェントは、このループを繰り返して仕事を進めます。公式ドキュメントでも、ツールの結果は毎回 Claude に戻され、次の判断の材料になると説明されています。',
+          'ツールを使うかどうかは、モデルが答えを作るときに決めます。アプリ側は、モデルが tool_use を返したときに、そのツールを実行します。',
+        ],
+        misconceptions: [
+          '「待っているツールを先に実行し、まとめてモデルに渡す」: ツールは、モデルが tool_use を返した後に実行します。',
+          '「最終的な答えを受け取ってから、ツールが必要だったかを判断する」: 必要かどうかは、モデルが答えを作るときに決めます。',
+          '「ループが終わってからツールを実行する」: ツールはループの中で実行し、結果をモデルに戻します。',
+        ],
+        basicsIds: ['claude-agent-design', 'claude-tool-design'],
+        resources: [
+          { title: 'エージェントのループの仕組み（Agent SDK）', url: `${CLAUDE_DOCS}/agent-sdk/agent-loop`, kind: '公式ドキュメント' },
+          { title: 'ツールの使い方（Tool use）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/overview`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'business-rule-validation',
+        title: 'スキーマは形しか守らない。業務のルールは、生成の後にコードで確かめる',
+        area: 'Claude API',
+        keyPoints: [
+          '構造化出力（スキーマ）が保証するのは、型・必須の項目・決められた値の形など「形」まで',
+          '「閉じた口座が有効になっている」のような業務のルールに合っているかは、スキーマでは分からない',
+          '生成の後に、コードで業務のルールを確かめ、合わなければ違反の内容を添えてもう一度頼む',
+        ],
+        explanation: [
+          '公式ドキュメントでは、構造化出力はスキーマに合った応答を保証する仕組みと説明されています。保証されるのは形であって、中身が業務として正しいかどうかではありません。',
+          'もっともらしいけれど業務のルールに反する答えは、コードで確実に見つけられます。見つけたら、どのルールに反したかを伝えて、もう一度生成させます。',
+        ],
+        misconceptions: [
+          '「スキーマの確認に通ったのだから、正しい」: 形が正しくても、中身が正しいとは限りません。',
+          '「例を変える・増やす」: 改善はしても確率的で、違反を確実に見つける仕組みにはなりません。',
+          '「effort を上げて、モデル自身に確かめさせる」: 確実な検出にはならず、費用も増えます。',
+        ],
+        basicsIds: ['claude-evals'],
+        resources: [{ title: '構造化出力（Structured outputs）', url: `${CLAUDE_DOCS}/build-with-claude/structured-outputs`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'one-shot',
+        title: '1つの例で形が決まるなら、例は1つ（ワンショット）でよい',
+        area: 'エージェント開発',
+        keyPoints: [
+          '出力の形（書式）は、言葉で説明するより、例を見せるほうが正確に伝わる',
+          '1つの標準的な例で形が完全に決まるなら、例は1つで足りる',
+          'いくつもの型や、まれで境界的な場合があるときに、複数の例（マルチショット）が役に立つ',
+        ],
+        explanation: [
+          '公式ドキュメントでは、例は出力の形・口調・構造を導く、最も確実な方法の一つと説明されています。一方で、新しい情報を持たない例を増やしても、トークンが増えるだけで、例に引きずられやすくもなります。',
+          '例の数は、伝えたいことに必要な分だけにします。形が1つに決まるならワンショット、いろいろな型があるなら、違いの分かる複数の例を用意します。',
+        ],
+        misconceptions: [
+          '「例は付けずに指示だけにする（ゼロショット）」: 書式は例で示したほうが確実で、指示だけではあいまいさが残りやすくなります。',
+          '「同じ形の例を5つ付ける」: 新しい情報がなく、冗長です。',
+          '「繰り返し試して直す」: プロンプトを作る進め方の話で、例の数の選び方の答えではありません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'プロンプトのベストプラクティス（例の使い方）', url: `${CLAUDE_DOCS}/build-with-claude/prompt-engineering/claude-prompting-best-practices`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'hook-decisions',
+        title: 'フックは実行の前（PreToolUse）で止める。deny は必ず止める、ask は承認を挟む',
+        area: 'エージェント開発',
+        keyPoints: [
+          '確実に制御したい操作は、プロンプトではなくフックで扱う',
+          'PreToolUse はツールの実行の前に動く。PostToolUse は実行の後なので、防ぐことはできない',
+          'PreToolUse が返せる判断は allow・deny・ask・defer の4つ',
+          'deny: 人の判断なしに必ず止める（絶対に実行させない操作に使う）',
+          'ask: 人の承認を挟む（審査すれば実行してよい操作に使う）',
+          'defer: フックは判断せず、ふだんの許可の流れ（設定の権限など）に任せる',
+        ],
+        explanation: [
+          '自動で動くエージェントが、審査の必要な決済のツールを呼んでしまうなら、そのツールに対して ask を返す PreToolUse のフックを足します。そのツールだけを承認待ちにでき、ほかの自動化はそのまま残せます。',
+          '本番のデータを元に戻せない形で消すコマンドのように、どんな場合でも進めてはいけない操作には deny を返します。ask では、人が承認すると実行できてしまいます。',
+        ],
+        misconceptions: [
+          '「システムプロンプトに大きな字で警告を書く」: 助言にすぎず、モデルが従う保証はありません。',
+          '「すべてのツールで自動モードをやめる」: 正しい自動化まで失われ、最初に取る最小の対策ではありません。',
+          '「PostToolUse で後から取り消す」: 実行の後に動くので、決済はもう行われています。取り消せるとも限りません。',
+          '「絶対に止めたい操作に ask や defer を使う」: ask は人が承認すれば、defer はふだんの許可の流れ次第で、実行されることがあります。',
+        ],
+        basicsIds: ['claude-code-for-teams'],
+        resources: [{ title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'agent-sdk-query',
+        title: 'Agent SDK は、Claude Code と同じエージェントのループを自分のプログラムから動かす',
+        area: 'エージェント開発',
+        keyPoints: [
+          'Claude Agent SDK は、Claude Code を動かしているのと同じツール・エージェントのループ・コンテキストの管理を提供する',
+          'ツールの実行と結果の戻しは SDK が行うので、ループを自分で書かなくてよい',
+          'Python では query()（1回ごとに新しいセッション。単発の仕事向け）と ClaudeSDKClient（同じセッションで会話を続ける。割り込みもできる）がある',
+        ],
+        explanation: [
+          '公式ドキュメントでは、Agent SDK は「Claude Code を動かしているのと同じツール、エージェントのループ、コンテキストの管理」を提供すると説明されています。Messages API を直接使う場合と違い、tool_use を受けて実行し tool_result を戻す繰り返しを、SDK が受け持ちます。',
+          'Python の SDK の公式ページには、query() と ClaudeSDKClient の比較表があります。query() は既定で毎回新しいセッションを作り、ClaudeSDKClient は同じセッションを使い続けます。チャットのように、次の動きが Claude の答えで変わる場合は ClaudeSDKClient が勧められています。',
+        ],
+        misconceptions: [
+          '「Agent SDK を使っても、ツールを実行するループは自分で書く」: ループは SDK が回します。自分で書くのは Messages API を直接使う場合です。',
+          '「query() で会話がそのまま続く」: Python の query() は既定で毎回新しいセッションです。続けるなら continue_conversation や resume、または ClaudeSDKClient を使います。',
+        ],
+        basicsIds: ['claude-agent-design'],
+        resources: [
+          { title: 'Agent SDK の概要', url: 'https://code.claude.com/docs/en/agent-sdk/overview', kind: '公式ドキュメント' },
+          { title: 'Agent SDK（Python）', url: 'https://code.claude.com/docs/en/agent-sdk/python', kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'bedrock-model-ids',
+        title: 'Amazon Bedrock では、使う入口によってクライアントとモデル ID の書き方が違う',
+        area: 'Claude API',
+        keyPoints: [
+          '新しい「Claude in Amazon Bedrock」（Opus 4.7 以降）: AnthropicBedrockMantle クライアント、ID は anthropic. で始まる（例: anthropic.claude-opus-5-5）',
+          '従来の Bedrock の入口（InvokeModel・Converse。Opus 4.6 以前）: AnthropicBedrock クライアント、ID は推論プロファイル（global. や us. で始まる）',
+          '従来の入口でプロファイルの付かない ID を指定すると、「オンデマンドのスループットに対応していない」という 400 エラーになる',
+          '新しい入口では、構造化出力・Batch・サーバー側のツールなど、使えない機能がある',
+        ],
+        explanation: [
+          'Bedrock で Claude を使うときは、Anthropic の API と同じ ID をそのまま書いても動きません。どの入口を使うかで、クライアントの種類とモデル ID の形を合わせます。',
+          '従来の入口では、リージョンをまたいで処理を振り分ける推論プロファイル（global. や us. などの接頭辞）を ID として指定します。',
+          '使える機能は入口ごとに違うので、Anthropic の API で使えた機能が Bedrock でも使えるかは、公式ドキュメントの対応表で確かめます。',
+        ],
+        misconceptions: [
+          '「Anthropic の API と同じモデル ID を Bedrock でも使える」: 入口ごとに決まった形（anthropic. や推論プロファイル）があります。',
+          '「400 エラーは権限の不足が原因」: 従来の入口では、推論プロファイルを指定していないことが原因のことがあります。',
+        ],
+        basicsIds: ['claude-models-and-pricing'],
+        resources: [{ title: 'Amazon Bedrock の Claude', url: `${CLAUDE_DOCS}/build-with-claude/claude-in-amazon-bedrock`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'context-window-overflow',
+        title: 'コンテキストウィンドウを超えたとき: 入力だけで超えたらエラー、出力の途中なら止まる',
+        area: 'Claude API',
+        keyPoints: [
+          '入力だけでコンテキストウィンドウを超えると、どのモデルでも 400 の invalid_request_error（prompt is too long）になる',
+          'Claude 4.5 以降では、入力と max_tokens の合計が超えていても受け付け、上限に達したら stop_reason が model_context_window_exceeded で止まる',
+          'それより前のモデルでは、入力と max_tokens の合計が超えると検証エラーになる',
+          '長い会話には、サーバー側の要約（compaction。4.6 以降のベータで、自分で有効にする）や、古いツールの結果を消す context editing を使う',
+        ],
+        explanation: [
+          'エラーになるのか、途中で止まるのかは、何が上限を超えたかとモデルの世代で決まります。入力そのものが入り切らないなら、どのモデルでも受け付けられません。',
+          '会話が長くなる用途では、上限に当たってから慌てるのではなく、compaction や context editing で古い部分を減らすように設計しておきます。compaction は自動では有効にならず、リクエストで指定して使います。',
+        ],
+        misconceptions: [
+          '「上限を超えたら、API が古い部分を自動で切り捨てる」: 何もしなければ切り捨てられません。compaction や context editing は、自分で有効にする機能です。',
+          '「入力と max_tokens の合計が超えたら、どのモデルでも必ずエラー」: Claude 4.5 以降では受け付け、上限で止まります（stop_reason: model_context_window_exceeded）。',
+        ],
+        basicsIds: ['claude-context-management'],
+        resources: [
+          { title: 'コンテキストウィンドウ（Context windows）', url: `${CLAUDE_DOCS}/build-with-claude/context-windows`, kind: '公式ドキュメント' },
+          { title: '要約（Compaction）', url: `${CLAUDE_DOCS}/build-with-claude/compaction`, kind: '公式ドキュメント' },
+          { title: 'コンテキストの編集（Context editing）', url: `${CLAUDE_DOCS}/build-with-claude/context-editing`, kind: '公式ドキュメント' },
         ],
       },
     ],
