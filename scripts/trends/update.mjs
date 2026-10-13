@@ -183,17 +183,30 @@ function run(cmd, a) {
   execFileSync(cmd, a, { cwd: ROOT, stdio: 'inherit' });
 }
 
+/** 失敗したら待ってやり直す（朝はネットワークがつながる前に動くことがあり、フォントの取得などで失敗するため） */
+function runWithRetry(cmd, a, { tries = 3, waitSec = 180 } = {}) {
+  for (let i = 1; ; i++) {
+    try {
+      return run(cmd, a);
+    } catch (e) {
+      if (i >= tries) throw e;
+      log(`失敗しました（${i}/${tries} 回目）。${waitSec} 秒待ってやり直します。`);
+      execFileSync('sleep', [String(waitSec)]);
+    }
+  }
+}
+
 /** まだ本番に出していないコミットがあれば、push してデプロイする */
 function deployIfNeeded() {
   if (NO_DEPLOY || NO_GIT) return log('--no-deploy または --no-git のため、push とデプロイはしません。');
   const head = git('rev-parse', 'HEAD');
   const deployed = existsSync(DEPLOYED_FILE) ? readFileSync(DEPLOYED_FILE, 'utf8').trim() : '';
   if (head === deployed) return log('本番は最新です。');
-  run('git', ['push']);
-  run('vercel', ['pull', '--yes', '--environment=production']);
-  run('vercel', ['build', '--prod']);
+  runWithRetry('git', ['push']);
+  runWithRetry('vercel', ['pull', '--yes', '--environment=production']);
+  runWithRetry('vercel', ['build', '--prod']);
   // ファイルを1つにまとめて送り、Vercel 無料プランの1日あたりのアップロード数の上限にかかりにくくする
-  run('vercel', ['deploy', '--prebuilt', '--prod', '--archive=tgz']);
+  runWithRetry('vercel', ['deploy', '--prebuilt', '--prod', '--archive=tgz']);
   writeFileSync(DEPLOYED_FILE, `${head}\n`);
   log('本番に反映しました。');
 }
