@@ -22,7 +22,7 @@ describe('DELETE /api/account', () => {
     jest.clearAllMocks();
     mockedAdminClient.mockReturnValue({
       auth: { admin: { deleteUser: mockDeleteUser } },
-    } as ReturnType<typeof createAdminClient>);
+    } as unknown as ReturnType<typeof createAdminClient>);
   });
 
   it('未認証の場合は 401 を返す', async () => {

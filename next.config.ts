@@ -15,6 +15,16 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // すべてのページに付ける基本の防御（ほかのサイトの枠に入れさせない・型の推測をさせない・送る参照元を絞る）
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: STAGING_HOSTS }],
