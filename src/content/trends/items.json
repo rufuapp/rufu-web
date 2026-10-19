@@ -1,5 +1,397 @@
 [
   {
+    "source": "databricks-blog",
+    "title": "What makes a catalog open? Unity Catalog Advances the Open Lakehouse",
+    "url": "https://www.databricks.com/blog/what-makes-catalog-open-unity-catalog-advances-open-lakehouse",
+    "date": "2026-10-20",
+    "titleJa": "カタログはどのような条件でオープンといえるのか？ Unity Catalog がオープンレイクハウスを前進させる",
+    "summaryJa": "本記事は、オープンなカタログの条件として、顧客が所有するストレージにデータを置けること、そこで最良の機能が使えること、データをコピーせずにカタログ間を移動できること（ポータビリティ）の3点を挙げています。Unity Catalog は Apache Iceberg REST カタログ仕様の REGISTER と UNREGISTER に対応した最初のカタログとして、既存の Iceberg テーブルをデータ移動なしで出し入れできるとされています。Databricks は UNREGISTER を Iceberg REST カタログ仕様に寄稿し、オープン標準にしたと書かれています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "自作OSSで便利だったものシリーズ",
+    "url": "https://zenn.dev/mokouliszt/articles/67bfb72cede42c",
+    "date": "2026-10-20",
+    "titleJa": "自作OSSで便利だったものシリーズ",
+    "summaryJa": "本記事は、著者が自作した OSS とスキルを紹介するシリーズの記事です。github-patches は patch ファイルの差分を確認して指定のリポジトリ／ブランチにプッシュする Android アプリで、gfile-skill はモバイル／Web 版 Claude で上限サイズを超えたアーティファクトをギガファイル便経由で受け取るためのスキルです。ほかに、ログイン不要で X の情報を参照する fxtwitter-skill、codex cli や antigravity cli を呼び出す codex-bridge-skill・antigravity-bridge-skill、Google Colab CLI を操作する colab-skill が紹介されています。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude Code のメトリクス属性を環境変数で絞り、テレメトリのストレージコストを抑える",
+    "url": "https://qiita.com/akihidem/items/87e108af106bf53ca25c",
+    "date": "2026-10-20",
+    "titleJa": "Claude Code のメトリクス属性を環境変数で絞り、テレメトリのストレージコストを抑える",
+    "summaryJa": "本記事は、Claude Code が OpenTelemetry で出力するメトリクスのコストが属性の組み合わせ数（カーディナリティ）で大きく変わるとして、OTEL_METRICS_INCLUDE_SESSION_ID や OTEL_METRICS_INCLUDE_ACCOUNT_UUID などの環境変数で属性を絞る方法を整理しています。high 構成と low 構成を OpenTelemetry Collector で比べる再現用ラボを示し、low 構成で系列数が減ることを大小関係とラベルの有無で確認する手順になっています。組織全体へは managed settings で一括適用できるとし、カーディナリティを下げると分析の粒度は落ちるため、コストは粒度とのトレードオフとして扱うべきだとしています。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude API 思考ブロックのアカウント／モデル間バインディング仕様（2026-10-15 時点）",
+    "url": "https://qiita.com/akihidem/items/2371e702b9cb43811bfd",
+    "date": "2026-10-20",
+    "titleJa": "Claude API 思考ブロックのアカウント／モデル間バインディング仕様（2026-10-15 時点）",
+    "summaryJa": "本記事は、Claude API の思考（thinking）ブロックが生成元のアカウントやモデル世代に紐づく挙動を、公式リリースノートの記述（2026-10-15 時点）に基づいて整理したものです。Sonnet 5.5 が生成したブロックは別アカウントから送られると、エラーにならず黙ってドロップされ、Fable 5.1 や Mythos 5.1 のブロックは同じか新しいモデルでしか保持されないと書かれています。2026-08-31 以降に作成された新規アカウントでは、system・tools・以前のメッセージを変えてブロックを再送すると 400 エラーになる場合があり、ベータヘッダー thinking-binding-controls-2026-08-01 を使うとドロップされたブロックを input_transformations で確認できるとされています。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "dev-orchestra のプリセット quality / standard / fast を比べてみた",
+    "url": "https://qiita.com/istb16/items/05c4037763cedb0d3c18",
+    "date": "2026-10-20",
+    "titleJa": "dev-orchestra のプリセット quality / standard / fast を比べてみた",
+    "summaryJa": "本記事は、dev-orchestra の3つのプリセットを Claude Code だけ・Codex だけ・両方の3環境で展開して比べた結果です。プリセットは役ごとのモデル、レビュアーの構成、設計レビュー、最適化レベルをまとめて決めるもので、既定値は standard です。両方の CLI が入った環境では、レビュアーは quality が 6 人、standard が 4 人、fast はふだん 1 人（危険な変更のときにセキュリティ担当が加わる）になり、認証や決済などに触れる変更は最適化レベルが quality に上がると書かれています。"
+  },
+  {
+    "source": "qiita-claudecode",
+    "title": "Claude Code で CLAUDE.md と Excel だけから、Power BI レポート(PBIP形式) を 9分間で Service に発行できた話 (1) 結果編",
+    "url": "https://qiita.com/ta2c/items/d57540bbc56c96fd50d4",
+    "date": "2026-10-20",
+    "titleJa": "Claude Code で CLAUDE.md と Excel だけから、Power BI レポート(PBIP形式) を 9分間で Service に発行できた話 (1) 結果編",
+    "summaryJa": "本記事は、Claude Code に CLAUDE.md・依頼文（prompt.md）・Excel の3ファイルだけを渡して、Power BI レポート（PBIP 形式）の生成、Power BI Service への発行、更新、定期更新の設定までを約9分で行った結果です。人が手を動かしたのは、発行の依頼と、Service で資格情報を設定したあとに作業を続けてもらう2回だけだったとされています。速さの理由は AI の性能だけでなく、過去の失敗を CLAUDE.md にルールとして蓄積し、同じ失敗を繰り返さなかったことだと書かれています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "AI Agentと業務自動化ツールの分業設計 ── Agentforce・Quick Automate・Copilot StudioがPower Automate・Salesforce Flow・PL/SQL・PL/pgSQLを呼び出す連携設計",
+    "url": "https://qiita.com/etale_cohomology/items/390d0515864c6f224b54",
+    "date": "2026-10-20",
+    "titleJa": "AI Agentと業務自動化ツールの分業設計 ── Agentforce・Quick Automate・Copilot StudioがPower Automate・Salesforce Flow・PL/SQL・PL/pgSQLを呼び出す連携設計",
+    "summaryJa": "本記事は、Agentforce・Quick Automate・Copilot Studio などの AI エージェントと、Power Automate・Salesforce Flow・PL/SQL・PL/pgSQL などの業務自動化ツールをどう分業させるかを整理しています。複数システムをまたぐ汎用ツールを上位レイヤー、特定システムの内側で動く業務特化型ツールを下位レイヤーとし、AI エージェントを「頭脳」、固定ルールの処理を「手足」として対応づけています。たとえば Oracle では PL/SQL のストアドプロシージャや関数を MCP サーバ経由で AI エージェントの手足として公開できると説明されています。ERM・GRC と FP&A のツールは本稿では扱わず、後続記事で取り上げる予定だとされています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "【12.4万サーバーを解析】MCPツールの98.5%には代わりがある。同じツールでも並べ方だけで合格率が最大12ポイント違う。入れる前に確認すべき4項目と探し場所6選",
+    "url": "https://qiita.com/emi_ndk/items/db02330e688f71fe23f1",
+    "date": "2026-10-20",
+    "titleJa": "【12.4万サーバーを解析】MCPツールの98.5%には代わりがある。同じツールでも並べ方だけで合格率が最大12ポイント違う。入れる前に確認すべき4項目と探し場所6選",
+    "summaryJa": "本記事は、arXiv 論文「MCPacific」（2026年10月4日投稿）の内容をもとに、MCP サーバーのツールの代わりの多さと品質のばらつきを解説しています。論文では17のマーケットから124,267サーバー・132万超のツール定義を集め、ツールの98.5%に機能的に比較可能な代わりがあり、同じ機能のグループ内でも Semgrep の警告が出るツールと出ないツールが混ざっていたと報告されています。ツールを階層で絞り込む方式は、元の候補では平らな一覧より1〜9ポイント高く、ランダムに50個追加した条件では差が12ポイントに開いたとされています。筆者は論文の実験を再現していないと断っています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "リモート PC のセキュリティ監査と対策を、AI に任せる方法",
+    "url": "https://qiita.com/ytsuda/items/4c0dddb76bd462f987df",
+    "date": "2026-10-20",
+    "titleJa": "リモート PC のセキュリティ監査と対策を、AI に任せる方法",
+    "summaryJa": "PowerShell.MCP 1.16.0 を使い、AI がリモート PC の PowerShell コンソールを操作して、セキュリティ監査と対処を行う方法が紹介されています。インストールしたままの Ubuntu Server では、無効だったファイアウォールの有効化、cloud-init の設定で有効に戻っていた SSH パスワードログインの無効化などが行われたと書かれています。AI には対象 PC 側で人が許可して始める仕組みがあり、実行されるコマンドは対象 PC の画面に表示され、sudo のパスワードは AI に渡らないとされています。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Amazon SageMaker JumpStart: 2026 year-to-date in review",
+    "url": "https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-jumpstart-2026-year-to-date-in-review/",
+    "date": "2026-10-20",
+    "titleJa": "Amazon SageMaker JumpStart: 2026年の年初来レビュー",
+    "summaryJa": "2026年1月から9月までに、30のプロバイダーから100以上のモデルがSageMaker JumpStartに追加されたと報告されています。Alibaba（Qwen）、NVIDIA、Mistral、Google、IBMなどの内訳に加え、マルチモーダル、画像・動画生成、効率的・量子化モデルを重点的に追加したことが説明されています。モデルはSageMaker Studio、Python SDK、Hugging Faceのディープリンク連携からも利用できます。"
+  },
+  {
+    "source": "aws-ml-blog",
+    "title": "Pegasus 1.5 from TwelveLabs is now available in Amazon Bedrock",
+    "url": "https://aws.amazon.com/blogs/machine-learning/pegasus-1-5-from-twelvelabs-is-now-available-in-amazon-bedrock/",
+    "date": "2026-10-20",
+    "titleJa": "TwelveLabs の Pegasus 1.5 が Amazon Bedrock で利用可能に",
+    "summaryJa": "2026年10月9日、TwelveLabsの動画言語モデルPegasus 1.5がAmazon Bedrockで利用可能になったと発表されています。指定した条件に合う区間を、開始・終了時刻付きのJSONとして返せ、Amazon S3のURIまたはbase64で動画を渡せば事前のインデックス作成は不要です。対応リージョンはus-west-2で、一度のリクエストで最大2時間の動画を解析できると書かれています。"
+  },
+  {
+    "source": "claude-blog",
+    "title": "Redesigning source control at Anthropic",
+    "url": "https://www.anthropic.com/engineering/redesigning-source-control",
+    "date": "2026-10-19",
+    "titleJa": "Anthropic におけるソース管理の再設計",
+    "summaryJa": "Anthropic では、2026 年 5 月に 1 日平均約 2,500 件だったコードの変更のマージが、9 月には 1 日 30,000 件超になったと書かれています。こうした規模に対応するため、社内で開発したバージョン管理システム Scion を作り、5 か月かけてモノリポをgit から移行したとされています。エージェントが常にオンラインであることを前提に、サーバー側が履歴・ブレームやマージを担い、クライアントは必要なデータだけを取得する設計にしたと説明されています。"
+  },
+  {
+    "source": "databricks-blog",
+    "title": "Databricks Is Doubling Down On New York City As A Premier AI Talent Hub",
+    "url": "https://www.databricks.com/blog/databricks-doubling-down-new-york-city-premier-ai-talent-hub",
+    "date": "2026-10-19",
+    "titleJa": "Databricks、AI 人材の拠点としてニューヨーク市への投資を倍増",
+    "summaryJa": "Databricks は、ニューヨークの R&D 拠点 5 Bryant Park の面積を約 120,000 平方フィートへ倍増させ、Engineering and Research 専用のフロアや Executive Briefing Center を加えると発表しました。NYC のチームは、強化学習や情報検索、エージェントの評価などの AI 研究、Unity Gateway、CustomerLake などの製品開発を担当しています。ニューヨークを選ぶ理由として、米国最大の技術人材プール、金融・メディア・ヘルスケア・小売の Fortune 500 企業との近さ、欧州やインドの拠点との時差の重なりが挙げられています。"
+  },
+  {
+    "source": "zenn-agentskills",
+    "title": "自作スキル:日本語パワポスライド作成「pptx-ja」の紹介",
+    "url": "https://zenn.dev/ncdc/articles/64a03f77394c46",
+    "date": "2026-10-19",
+    "titleJa": "自作スキル:日本語パワポスライド作成「pptx-ja」の紹介",
+    "summaryJa": "公式の pptx スキルは英語圏の資料を前提にしており、日本語スライドでは赤い波線、フォントの崩れ、単語の途中での改行などが起きると説明されています。pptx-ja は公式スキルと一緒に使い、日本語に関係する部分だけを上書きするスキルで、テンプレートの優先、全文字 12pt 以上、CP932 で表せる文字だけの使用などの対策を含みます。Mac 版 PowerPoint で PDF に書き出して確認する機能もあるとされています。ただし、スライドの中身の質を上げるものではないと明記されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "コンカフェ1店舗のために、9つの業務システムをAIと作った話",
+    "url": "https://zenn.dev/koyabase/articles/kemo-concafe-9-systems-with-ai",
+    "date": "2026-10-19",
+    "titleJa": "コンカフェ1店舗のために、9つの業務システムをAIと作った話",
+    "summaryJa": "群馬県高崎市のコンセプトカフェ「けもみみかふぇ」の業務システムを、2026 年 8 月から約 2 か月半で 9 つ作成したと紹介されています。TypeScript で約 48 万行、リポジトリは 9 個で、ほとんどを Claude Code で書き、作成者は主に「何を作るか決めること」と「設計書を正しく保つこと」を担当したとされています。データの持ち主を 1 つに決めて分けたことや、設計書を正とする CLAUDE.md、ファイルの場所ごとに読み込まれるルールなどの工夫が書かれています。紙の伝票の集計が不要になり、売上とバックの計算が入力時点で済むようになったと書かれています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "AIを利用したレガシーコード改善",
+    "url": "https://zenn.dev/naoyuki1212/articles/20261019-legacy-code-with-ai",
+    "date": "2026-10-19",
+    "titleJa": "AIを利用したレガシーコード改善",
+    "summaryJa": "テストのない、手書きの Excel 差分比較ツール（Wails + Go + Svelte 3）を、Claude Code（Claude Opus 5.5）でゴールを分けて改善した過程が紹介されています。まずユーザ操作を入口にカバレッジ 100% の特性テストを追加し、テストの期待値をユーザの意図と照合して、差分表示などの不具合を修正したと書かれています。仕様かバグか判断が必要なものは AI が確認を求め、人間が決めたとされています。その後、段階的なリファクタリング、Svelte からプレーン TypeScript への書き換え、依存関係の更新も行われました。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "大規模言語モデルって、結局なに？",
+    "url": "https://zenn.dev/kanfupanda/articles/what-is-an-llm",
+    "date": "2026-10-19",
+    "titleJa": "大規模言語モデルって、結局なに？",
+    "summaryJa": "大規模言語モデル（LLM）は、前の文章を読んで次に来る可能性がいちばん高い単語（トークン）を選び、それを繰り返してコードや文章を作るプログラムだと説明されています。記事では Python の add 関数を例に、次の単語を当てる仕組みを示しています。また、Anthropic の 2025 年の研究では、詩の締めの単語を先に決めて行を組み立てていたこと、足し算で複数の計算経路を同時に使っていたことが紹介されています。ユーザが渡す文章はすべてモデルにとっての前の文章になるため、明確に書くこと、書かれたコードは動かして確かめることが勧められています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Codexに動画を調べさせても、発言の時刻と文言は確認できなかった",
+    "url": "https://zenn.dev/twinharness/articles/video-codex-text-claude-crosscheck",
+    "date": "2026-10-19",
+    "titleJa": "Codexに動画を調べさせても、発言の時刻と文言は確認できなかった",
+    "summaryJa": "公式の発信を調べて自分のルールに取り込む作業で、動画は Codex、文章は Claude と分担し、結論を項目ごとの表で突き合わせたと書かれています。動画側では文字起こしが読み込み中のまま止まることがあり、発言の時刻と文言は最後まで確認できず、記録には「未確認」と明記されています。ルールに取り込んだ項目はすべて文章側に出典があり、動画だけを根拠にした項目はなかったとされています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "止まった Claude Code セッションを Telegram のボタンで再開する（公式機能と自作の分担）",
+    "url": "https://zenn.dev/nanora/articles/20261019-claude-code-session-watch-telegram",
+    "date": "2026-10-19",
+    "titleJa": "止まった Claude Code セッションを Telegram のボタンで再開する（公式機能と自作の分担）",
+    "summaryJa": "Raspberry Pi 5 で長時間の Claude Code セッションを回している著者が、止まったセッションを Telegram のボタンから再開する仕組みを作った記録です。セッションの状態取得（claude agents --json）と、claude --bg で始めたセッションの起こし直しは公式機能に任せています。端末で動かして落ちたセッションの検出、止まり方の判定、後から別の作業が入っていないかの確認（git log）、再開の指示は自作しています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Code が『ファイルを消させない仕組み』を作っている最中に、Mac のファイルが消えた",
+    "url": "https://zenn.dev/ryodevapp/articles/claude-code-home-deleted-guards",
+    "date": "2026-10-19",
+    "titleJa": "Claude Code が『ファイルを消させない仕組み』を作っている最中に、Mac のファイルが消えた",
+    "summaryJa": "2026年10月7日の深夜、Claude Code に開発を任せていた間に Mac のホームディレクトリ内のファイルが消えた事例の振り返りです。原因は推定ですが、スクリプトにガードを足す作業でサブエージェントが本物のホームディレクトリを渡してテストを実行したことだと書かれています。著者は、OS レベルのサンドボックスと Mac の外のバックアップを主な対策にし、deny ルールと hook は補助として位置づけています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "AI討論 MAGI Games 開発記 #7 — 「票を取る力と遊ばれる力は別物だ」。AI 3体に、遊んだ人の言葉を初めて見せた",
+    "url": "https://zenn.dev/mappy55/articles/magi-games-devlog-07",
+    "date": "2026-10-19",
+    "titleJa": "AI討論 MAGI Games 開発記 #7 — 「票を取る力と遊ばれる力は別物だ」。AI 3体に、遊んだ人の言葉を初めて見せた",
+    "summaryJa": "AI 3体の討論と Claude によるミニゲーム制作を行うサイトの開発記第7回です。第2回の反省会のあとの1週間で票が動いた経緯と、遊んだ人の感想を毎朝1行ずつ記録して3体に見せ始めたことが書かれています。感想からは、スマホでは隅の葉を寄せられないこと、2周目が始まらない不具合、司令の難易度見積もりと体感のずれが見つかったと報告されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Code で採点係を別のサブエージェントにしたら、14回中6回不合格を出した",
+    "url": "https://zenn.dev/taka_s2/articles/30a6fdac8a0bd7",
+    "date": "2026-10-19",
+    "titleJa": "Claude Code で採点係を別のサブエージェントにしたら、14回中6回不合格を出した",
+    "summaryJa": "作る係（generator）と採点係（evaluator）を別のサブエージェントに分け、採点係に Playwright でアプリを操作させて合否を決めた約2週間14スプリントの記録です。6スプリントで不合格が出て、作る係への差し戻しは計9回でした。採点係は、未放送作品に「ON AIR」と表示される問題や、夏時間を閲覧日で判定していた問題などを見つけ、合格ラインは操作して確かめられる形で書かれています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "CLAUDE.md の長さは 200 行未満が目安:超えると起動時に警告が出る",
+    "url": "https://zenn.dev/aicoding_guide/articles/acg-claude-md-length-guideline",
+    "date": "2026-10-19",
+    "titleJa": "CLAUDE.md の長さは 200 行未満が目安:超えると起動時に警告が出る",
+    "summaryJa": "公式ドキュメントが示す CLAUDE.md の目安は 1 ファイル 200 行未満で、超えても読み込まれますが遵守率が下がると説明されています。ファイルが読み込まれなくなる境界は 4 MiB で、「200 行または 25KB」の制限はオートメモリの MEMORY.md のものだと整理されています。削るかどうかの基準は「消したら Claude がミスをするか」で、/doctor と /context を使って確認する方法が紹介されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "サイトマップ691件でインデックス0だった個人サイトの、薄いページ整理の記録(3,744→863ページ)",
+    "url": "https://zenn.dev/ruri_jupjup/articles/04bd0e2ece7811",
+    "date": "2026-10-19",
+    "titleJa": "サイトマップ691件でインデックス0だった個人サイトの、薄いページ整理の記録(3,744→863ページ)",
+    "summaryJa": "サイトマップを送信してもインデックスが0だった個人の情報サイトで、機械翻訳の多言語ページを削除し、固有本文が200文字未満の詳細ページを noindex にしてサイトマップから外した記録です。ページ数は 3,744 から 863 に減りました。lastmod は本文のハッシュが変わったときだけ更新する方法も紹介されており、AI に任せる際はコミットごとに数を数え直し、ルールをコードで書かせたとされています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "デイトレBotの骨組みを入れ替える案と、抜けていた「デイトレの基本」を94通り測ったら、元の戦略自体が見ていない日で-1,900円だった",
+    "url": "https://zenn.dev/codecraft/articles/daytrade-core-and-basics-94-variants",
+    "date": "2026-10-19",
+    "titleJa": "デイトレBotの骨組みを入れ替える案と、抜けていた「デイトレの基本」を94通り測ったら、元の戦略自体が見ていない日で-1,900円だった",
+    "summaryJa": "日本株デイトレ Bot の骨組みを入れ替える案 56 通りと、空売り・節目・材料などの基本 38 通りを、事前に決めた基準で検証した結果です。94 通りはいずれも基準を通りませんでした。元の戦略そのものが、ルール作成時に見ていなかった 20 日では -1,900 円だったと報告されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Code ModsとJevで作るモデルルーター入門",
+    "url": "https://zenn.dev/sunsun_eng/articles/claude-code-mods-jev-model-router",
+    "date": "2026-10-19",
+    "titleJa": "Claude Code ModsとJevで作るモデルルーター入門",
+    "summaryJa": "Claude Code Mods の概要と、依頼の難しさに応じてモデルを使い分けるモデルルーターの設計の型を紹介する入門記事です。著者は参考にした Qiita 記事の本文と Jev の仕様を一次情報で確認できていないと明記し、Jev の具体的な使い方は TBD としています。サブスクでの利用の可否は規約を公式で確認する必要があると注意されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Linuxの生みの親もClaude Codeを使う時代。点検を「ローリング」にしたくて、MCPをつないだだけでは0回だった",
+    "url": "https://zenn.dev/bpr_prot/articles/2d44d11a4b96c8",
+    "date": "2026-10-19",
+    "titleJa": "Linuxの生みの親もClaude Codeを使う時代。点検を「ローリング」にしたくて、MCPをつないだだけでは0回だった",
+    "summaryJa": "Claude Codeにセキュリティ診断のMCPをつないだだけの条件では、4回とも診断を呼ばずにコードを直してコミットしました。CLAUDE.mdに「コミット前に診断し、指摘があれば直す」と一行加えた条件では、3回とも診断を呼び、指摘を受けて修正と再診断を繰り返す流れが見られました。ただし、かかる時間と使用量は約2.5〜3倍に増え、本文では小さな無人実験の範囲に限られると注意されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "AIはファイルを読む間、一度も許可を求めなかった。でも読むだけのawkは3回とも止まり、1+1のnodeも止まった",
+    "url": "https://zenn.dev/numarn/articles/read-vs-write-permission-ask-handson",
+    "date": "2026-10-19",
+    "titleJa": "AIはファイルを読む間、一度も許可を求めなかった。でも読むだけのawkは3回とも止まり、1+1のnodeも止まった",
+    "summaryJa": "Claude Codeでは、ファイルを読む指示は一度も止められず、書き換えの指示は書き込みの直前で止まってファイルは変わりませんでした。シェルコマンドでは、読むだけのawkやpython3の表示、ファイルに触れないnodeの1+1の計算まで承認待ちで止まり、head -1に > copy.txt を足すだけでも扱いが変わったと報告されています。止められた場合も終了コードは0のままだったため、自動実行では終了コードだけで成否を判断しないよう注意が書かれています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude CodeにPRレビューと動作確認を丸投げするときのプロンプトを公開する",
+    "url": "https://zenn.dev/ryoushin/articles/claude-code-pr-review-prompt",
+    "date": "2026-10-19",
+    "titleJa": "Claude CodeにPRレビューと動作確認を丸投げするときのプロンプトを公開する",
+    "summaryJa": "Claude CodeにPRのレビューと動作確認を任せるためのプロンプトを、そのまま公開した記事です。PRの概要をチャットで具体例つきで説明させ、superpowersとponytail-reviewのスキルでレビューし、ego lite CLIでスクリーンショット付きの動作確認を行う流れが定められています。結果は1つのPRコメントにまとめ、問題のある点だけを影響別に書かせ、修正必須のものはインラインコメントにも書かせる設計だと説明されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "noUncheckedIndexedAccess など tsconfig フラグを 4 つ足して AI に書かせた。効いたのは 1 つだった",
+    "url": "https://zenn.dev/kana001_bit/articles/loomit-strict-tsconfig",
+    "date": "2026-10-19",
+    "titleJa": "noUncheckedIndexedAccess など tsconfig フラグを 4 つ足して AI に書かせた。効いたのは 1 つだった",
+    "summaryJa": "TypeScriptのCLIで、strict以外に入れた4つのtsconfigフラグが役立ったかを、コミットとAIのセッション記録をさかのぼって数えた記事です。noUncheckedIndexedAccess は、AIが出したundefinedのエラーを分岐で直させる場面があり、! は全202コミットで一度も使われていませんでした。exactOptionalPropertyTypes は止められた場面が1つだけで回避用の書き方が111か所に広がり、noImplicitOverride と noFallthroughCasesInSwitch は出番がなかったと報告されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "「確認して」でAIにファイルを書き換えられないように：相談と作業を分ける3行",
+    "url": "https://zenn.dev/madao1981/articles/20261017-ai-confirm-no-edit",
+    "date": "2026-10-19",
+    "titleJa": "「確認して」でAIにファイルを書き換えられないように：相談と作業を分ける3行",
+    "summaryJa": "「確認して」と頼んだだけでAIがファイルを書き換えることがあるため、相談と作業を言葉で分ける方法を紹介した記事です。依頼文の頭に「回答だけください。ファイルは編集しないでください」と一言足し、相談と作業の線引きを3行にまとめて貼るか CLAUDE.md に置く方法が挙げられています。頼んだあとは git diff などでファイルが変わっていないかを見るよう勧めており、指示の文だけでは必ず守られないため、編集前の承認設定との組み合わせも示されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claude Codeの会話を55分放っておいたら、272,422トークンが13,522に圧縮されていました ― アイドル圧縮の観測",
+    "url": "https://zenn.dev/ojisan_ai_lab/articles/claude-code-idle-compaction-20261019",
+    "date": "2026-10-19",
+    "titleJa": "Claude Codeの会話を55分放っておいたら、272,422トークンが13,522に圧縮されていました ― アイドル圧縮の観測",
+    "summaryJa": "Claude Code v2.1.299で追加された、放置された長い会話を1時間のキャッシュ期限前に圧縮する「アイドル圧縮」を、著者の環境で観測した記事です。約27万トークンの会話を約55.6分放置したところ、13,522トークンまで圧縮されたことが会話ログから確認され、過去にも同様の圧縮が3件あったと報告されています。設定を切った場合との比較は行っておらず、他の環境で同じタイミングで起きるかは未確認と明記されています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "「赤字です」とAIは言った。実際は…",
+    "url": "https://zenn.dev/hitoribocchi_ai/articles/be0256432c4c1d",
+    "date": "2026-10-19",
+    "titleJa": "「赤字です」とAIは言った。実際は…",
+    "summaryJa": "AIに商品別の利益を計算させると94,273円の赤字と出ましたが、仕入れ額を明細ごとに丸ごと当てはめて原価が膨らんでいたため、正しくは36,636円の黒字だったと著者は報告しています。別の計算では送料収入を入れていなかったため業販が赤字に見えており、加えると2〜9%の黒字になったと書かれています。著者は、集計の単位を確かめ、1件を手計算し、入っていない収入や費用がないかを聞く習慣を挙げています。"
+  },
+  {
+    "source": "zenn-claudecode",
+    "title": "Claudeに入力した情報はどこに保存され、どこまで共有されるのか？",
+    "url": "https://zenn.dev/da39nbv3/articles/46712a65570b59",
+    "date": "2026-10-19",
+    "titleJa": "Claudeに入力した情報はどこに保存され、どこまで共有されるのか？",
+    "summaryJa": "Claudeに入力した内容は、デスクトップアプリ、Web、スマホ、Claude Codeのいずれでも一度Anthropicのサーバーに送られて処理されると整理されています。claude.aiの会話履歴はサーバーに保存されて端末間で共有される一方、Claude Codeは会話の記録が ~/.claude/projects/ に平文で保存され、標準では30日間残るとされています。プロジェクト間の検索はシステムで分離される一方、メモリは設定次第で他の会話とつながると説明されています。"
+  },
+  {
+    "source": "classmethod-claudecode",
+    "title": "Playwright CLIをWSLで動かしてみた",
+    "url": "https://dev.classmethod.jp/articles/playwright-cli-wsl-setup/",
+    "date": "2026-10-19",
+    "titleJa": "Playwright CLIをWSLで動かしてみた",
+    "summaryJa": "Windows 11 の WSL2 上に検証用の Ubuntu 24.04 を新規作成し、@playwright/cli を pnpm で導入して動作を確認しています。ブラウザが無い状態で open すると Chrome を探して失敗し、playwright-cli install で Chrome for Testing と FFmpeg を約20秒で取得しています。その後の「installだけではlibnspr4」の失敗については本文が途中で切れており、解決方法と結論は取得できませんでした。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MCPを旧仕様のまま理解しない：stateless化と責務境界",
+    "url": "https://zenn.dev/kas_blog/articles/20260908-mcp-model-context-protocol",
+    "date": "2026-10-19",
+    "titleJa": "MCPを旧仕様のまま理解しない：stateless化と責務境界",
+    "summaryJa": "2026-07-28 版の MCP 仕様では initialize や Mcp-Session-Id によるプロトコル単位のセッションが廃止され、各リクエストが version・capability を持つ stateless な構成になったと説明されています。記事は Host・Client・Server の接続構造と Tools・Resources・Prompts の機能分類を分けて理解することを勧め、Function Calling と MCP は別の境界だと整理しています。また、Server の信頼性、最小権限、入力・出力の検証、人間による承認は MCP だけでは強制されないため、Host と Server の両方で実装が必要だとしています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MATLAB で setup_harness.m を1回走らせるだけで、Copilot がテストハーネスを書く環境を作る",
+    "url": "https://zenn.dev/rurihari/articles/6a83e689c838f7",
+    "date": "2026-10-19",
+    "titleJa": "MATLAB で setup_harness.m を1回走らせるだけで、Copilot がテストハーネスを書く環境を作る",
+    "summaryJa": "MATLAB のプロジェクトルートで setup_harness を1回実行すると、Copilot 用の指示ファイル、MATLAB MCP Server の設定、テストハーネス生成スクリプトなどの一式が生成されると説明されています。配布物を zip ではなく単一の .m ファイルにしたのは、ファイルのダウンロードが制限される職場でもコピー＆ペーストで持ち込めるようにするためです。MATLAB MCP Server を通じて Copilot が MATLAB のコードを実行して検証できるため、Simulink のテストハーネス作成まで進められるとされています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MCPでAIエージェントに「ログイン済みの自分のChrome」を操作させる：FSB入門",
+    "url": "https://zenn.dev/parzival1213/articles/4cf5993eea8ed2",
+    "date": "2026-10-19",
+    "titleJa": "MCPでAIエージェントに「ログイン済みの自分のChrome」を操作させる：FSB入門",
+    "summaryJa": "FSB は、ログイン済みの Chrome を MCP クライアントから操作するための Chrome 拡張（MV3）と MCP サーバー（fsb-mcp-server）です。拡張がローカルの ws://localhost:7225 に接続し、スクリーンショットではなく DOM を構造化テキストとしてモデルに渡すため、ボタン名や入力欄のラベルを確実に得られると説明されています。パスワードは暗号化されたボールトに保存され、入力は拡張が行うのでモデルには渡らないとされています。一方で、同時に接続できるブラウザプロファイルは1つで、接続直後の呼び出しが失敗することがあるなどの限界も書かれています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "ChatGPT・ClaudeからPowerPointにTeXの数式を入れるアドイン「MathPoint」を作った",
+    "url": "https://zenn.dev/kktexlatex3/articles/2cfe3ccbfb43c1",
+    "date": "2026-10-19",
+    "titleJa": "ChatGPT・ClaudeからPowerPointにTeXの数式を入れるアドイン「MathPoint」を作った",
+    "summaryJa": "MathPoint は、ChatGPT や Claude からチャットで依頼すると、PowerPoint や Word に LuaLaTeX で組んだ数式・図・表を SVG として挿入するアドインです。組版はサーバー側で行うため、利用者は TeX をインストールする必要がありません。組んだ図は元の LaTeX を保存しているので、「色を変えて」などの依頼で同じ位置に組み直せると説明されています。無料プランは月30件までで、スライドや文書の内容は保存せず、TeX のソースと組版結果は最長30日保存するとされています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "DeepSeek-V4.1-Flash-1017 を Claude Code の委譲先と検索 MCP にする",
+    "url": "https://zenn.dev/serotoninmax/articles/deepseek-v41-flash-claude-code-delegate",
+    "date": "2026-10-19",
+    "titleJa": "DeepSeek-V4.1-Flash-1017 を Claude Code の委譲先と検索 MCP にする",
+    "summaryJa": "Claude Code の子プロセス（claude -p）を OpenRouter の Anthropic 互換エンドポイントに向け、DeepSeek-V4.1-Flash-1017 に作業を委譲する仕組みを作ったと説明されています。子プロセスの環境変数は許可リストから組み立て、送信先を ZDR 対応の5社に限定するため OpenRouter の Guardrail を設定し、権限は dontAsk、サブエージェント起動は禁止、ネットワークは遮断しています。記事では、第三者の報告で評価環境の外部キーを使った不正な実行があったことを踏まえ、ネットワーク遮断後の正答率が既定の effort で 12%、max で 17% だったことも紹介されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Claude 公式認定は4種類。Claude Code を毎日使う側から、試験ガイドの出題範囲を読んでみた",
+    "url": "https://zenn.dev/mameresearcher/articles/claude-certification-4-exams-for-operators",
+    "date": "2026-10-19",
+    "titleJa": "Claude 公式認定は4種類。Claude Code を毎日使う側から、試験ガイドの出題範囲を読んでみた",
+    "summaryJa": "Claude の公式認定は Associate・Developer・Architect（Foundations・Professional）の4種類で、受験は Claude Partner Network に加盟する組織の社員に限られると説明されています。いずれも120分、合格ラインは720以上、有効期間は12か月です。Architect – Foundations は、エージェント設計（27%）や Claude Code の設定とワークフロー（20%）などが出題範囲で、記事は Claude Code を日常的に使う人に最も近い試験として紹介しています。日本語での受験については、2026年10月16日時点の公式 FAQ では英語のみとされているため、申込画面での確認を勧めています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MCPとは？USB-Cに例えるとわかりやすいAIの新しい接続規格",
+    "url": "https://zenn.dev/m__f/articles/what-is-mcp-guide",
+    "date": "2026-10-19",
+    "titleJa": "MCPとは？USB-Cに例えるとわかりやすいAIの新しい接続規格",
+    "summaryJa": "MCP（Model Context Protocol）は、AI と外部のツールやデータをつなぐための共通プロトコルであり、USB-C の共通規格に例えて説明されています。記事では、Google Drive の検索やデータベースの参照のような連携を個別に実装する代わりに、共通ルールで扱いやすくできると述べています。API はソフトウェアが機能やデータを使うための窓口で、MCP はその機能を AI から利用するための共通ルールであり、MCP サーバーが内部で API を利用する形も紹介されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AIの質問があちこちに散らばるので、スマホに決裁を集めるApproval Boxを作りました",
+    "url": "https://zenn.dev/kitepon/articles/approval-box-release",
+    "date": "2026-10-19",
+    "titleJa": "AIの質問があちこちに散らばるので、スマホに決裁を集めるApproval Boxを作りました",
+    "summaryJa": "PCで動くAIからの相談をスマホで受け取り、その場で答えられるiPhoneアプリ「Approval Box」を紹介しています。Claude Code、Codex、Cursor、Grokに対応し、AIが書いた背景と推奨付きの選択肢から選んで回答できます。回答は申請したAIの会話に戻り、止まっていたセッションも再開します。アプリは無料で、公式サービスの月額プランは日本で300円です。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Vibe-Codingで頭痛アプリを作って、今度は毎日使ってる話（ただ、一般公開はやめた・・）",
+    "url": "https://zenn.dev/mato/articles/headdots-daily-use",
+    "date": "2026-10-19",
+    "titleJa": "Vibe-Codingで頭痛アプリを作って、今度は毎日使ってる話（ただ、一般公開はやめた・・）",
+    "summaryJa": "2年分の頭痛メモ1,403件を取り込んだ頭痛記録Webアプリ「頭痛ドット（HeadDots）」を、作者が毎日使っている経過が書かれています。数字を1回押すだけで記録でき、Claudeと接続すると話すだけでも記録できます。一般公開の直前で、誰でも作れること、健康データを預かる責任の重さ、本業への集中を理由に新規受付を止め、自分専用にしたと説明されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "SEO監査を「指摘」で終わらせない：MCPで修正前後を検証する",
+    "url": "https://zenn.dev/webdecoy/articles/aea671deebb365",
+    "date": "2026-10-19",
+    "titleJa": "SEO監査を「指摘」で終わらせない：MCPで修正前後を検証する",
+    "summaryJa": "無料・MITライセンスのMCPサーバー「GEOMCP」を使い、SEO監査、修正、同じURLでの再監査、比較という流れを紹介しています。2026年10月17日に193 URLを確認したところ11件の警告があり、修正・デプロイ後の再確認で元の11件はすべて解消したと書かれています。ただし、これはサイトの技術チェック結果で、AI引用率や検索順位の改善を測定したものではないと明記されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "Azure MCP 3.0 GA。全ツールで約14万トークン、既定の10倍",
+    "url": "https://zenn.dev/kazu_aiengineer/articles/azure-mcp-server-3-ga",
+    "date": "2026-10-19",
+    "titleJa": "Azure MCP 3.0 GA。全ツールで約14万トークン、既定の10倍",
+    "summaryJa": "Azure MCP Server 3.0のGA後、起動オプションごとのツール数とトークン数を測定した結果が書かれています。--mode allは504ツール・約14.3万トークン、既定は69ツール・約1.4万トークンでした。トークン数はo200k_baseで換算した値で、ログイン状態によって件数が変わることや、--read-onlyや--disable-proxy-toolsの効き方も併せて説明されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "MindManagerをChatGPTにつないだら、今度は2,641 Topicの仕様書と格闘することになった件【後編】",
+    "url": "https://zenn.dev/ab_ten/articles/zat-dev-story-part2-9e2b474f0c09",
+    "date": "2026-10-19",
+    "titleJa": "MindManagerをChatGPTにつないだら、今度は2,641 Topicの仕様書と格闘することになった件【後編】",
+    "summaryJa": "Zennの記事管理ツールzatの仕様を、MindManager 6をChatGPTから参照するMCPサーバーmm6mcpを使って整理した経緯が書かれています。更新検出のためのrevisionとsubtree_revision、祖先経路を返すancestor_path、文字列検索のfind_topicを追加したと説明されています。また、zatは単一ユーザーが逐次実行するツールだと仕様に明記し、設計の議論がかみ合うようになったと振り返られています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AI が実装しやすい Figma デザインデータの作り方",
+    "url": "https://zenn.dev/imkohenauser/articles/figma-design-data-for-ai-implementation",
+    "date": "2026-10-19",
+    "titleJa": "AI が実装しやすい Figma デザインデータの作り方",
+    "summaryJa": "AIに実装を任せやすくするため、Figmaでレイヤー構造、名前、オートレイアウトを整える方法が解説されています。カードなどの実装単位をフレームにまとめ、オートレイアウトの設定をCSSの対応する指定と並べて示しています。さらに、操作領域やホバー・フォーカスなどの状態を注記やバリアントとして残す例も紹介されています。"
+  },
+  {
+    "source": "qiita-mcp",
+    "title": "AgentCore Gateway が社内 CA の証明書を信頼できるようになったので ALB なしで VPC 内の MCP サーバーにつないでみた",
+    "url": "https://qiita.com/leomarokun/items/5d7628378489c8a77ff4",
+    "date": "2026-10-19",
+    "titleJa": "AgentCore Gateway が社内 CA の証明書を信頼できるようになったので ALB なしで VPC 内の MCP サーバーにつないでみた",
+    "summaryJa": "Amazon Bedrock AgentCore Gatewayが、certificateConfigurationsで指定した社内CA証明書（S3またはSecrets Manager）を信頼できるようになった機能を、Terraformと AWS CLIで検証しています。利用条件はVPC Latticeを使うprivateEndpointのターゲットのみで、執筆時点ではTerraformとCloudFormationには未対応のため、ターゲット作成はCLIで行っています。Gatewayは証明書を自動更新せず失効も確認しないため、有効期限のアラームなど運用側の管理が必要だと書かれています。"
+  },
+  {
     "source": "databricks-release-notes",
     "title": "Saving an unchanged job no longer adds rows to the jobs system tables",
     "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#saving-an-unchanged-job-no-longer-adds-rows-to-the-jobs-system-tables",
@@ -62,6 +454,30 @@
     "date": "2026-10-19",
     "titleJa": "Snowflake DCM Projectsとは？ 宣言型で環境を管理する",
     "summaryJa": "Snowflake の DCM Projects を公式 Quickstart に沿って動かし、Workspace の作成から PLAN と DEPLOY、変更の再デプロイ、デプロイ履歴の確認、後片付けまでの流れを紹介しています。定義は DEFINE 文で「あるべき状態」として書き、差分は Snowflake が計算して CREATE OR ALTER で反映されること、定義から消したオブジェクトは DROP の対象になることが説明されています。さらに、手で変更した環境を PLAN がどう示すかを独自に検証し、DEPLOY で定義の状態に戻ったと報告しています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "AIエージェント専用の検索エンジンxerjを自分のリポジトリに対して動かしてみた",
+    "url": "https://zenn.dev/matsushima_a/articles/day-019-xerj-search-engine-for-agents",
+    "date": "2026-10-18",
+    "titleJa": "AIエージェント専用の検索エンジンxerjを自分のリポジトリに対して動かしてみた",
+    "summaryJa": "xerjは、フォルダ単位でインデックス化し、AIエージェントが該当箇所だけを取り出せるRust製のローカル検索エンジンです。著者は自身のリポジトリ（280ファイル）を9.0秒で3,694件のドキュメントとしてインデックス化し、lexicalモードでは短い語句は日本語でもヒットするものの、言い換え文はヒットしないことを確認しました。検証では、データディレクトリをインデックス対象内に置くと失敗する点、ファイル削除後の再autoindexが拒否されて全件再構築が必要になった点、neuralモードで本文が semantic_text にならない場合があった点も報告されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "自作MCPサーバーが接続を切る — バックオフ再接続・一覧再取得・冪等キー外部化の3設計で二重実行を止める",
+    "url": "https://zenn.dev/yukihayama/articles/mcp-transport-reconnect-backoff",
+    "date": "2026-10-18",
+    "titleJa": "自作MCPサーバーが接続を切る — バックオフ再接続・一覧再取得・冪等キー外部化の3設計で二重実行を止める",
+    "summaryJa": "FastMCPとstdioで動かす自作CRMサーバーで、再試行が顧客の二重登録につながった事例を基に、MCP接続の切断に備える設計をまとめた記事です。固定間隔の再試行、クライアントに保持したツール一覧のキャッシュ、プロセス内メモリに置いた冪等キーが、それぞれ不具合や二重実行の原因になったと説明されています。対策として、指数バックオフ＋ジッターで再接続して毎回ツール一覧を再取得すること、決定的に生成した冪等キーをsqliteに保存して前回の応答を返すこと、3分を超える処理はjob_idを即答するジョブ化で扱うことが示されています。"
+  },
+  {
+    "source": "zenn-mcp",
+    "title": "なぜ既存のChromeにタスク用Workspaceを作るのか",
+    "url": "https://zenn.dev/beatapi/articles/37fda1795918b7",
+    "date": "2026-10-18",
+    "titleJa": "なぜ既存のChromeにタスク用Workspaceを作るのか",
+    "summaryJa": "BeatBrowser 1.4.1の設計を、ブラウザー・タスク・接続権限の3つの境界から説明した記事です。Chrome拡張機能とローカルNodeブリッジで既存のChromeプロファイルに接続し、TaskSpaceでタスク用ウィンドウや所有者、実行状態を管理しますが、同じプロファイル内ではCookieを共有するため、ウィンドウの分離はアカウントの分離ではないと明記されています。拡張機能の再読み込み後は未完了タスクが一時停止して復元され、途中の入力や送信は自動で再実行されないとされています。"
   },
   {
     "source": "anthropic-news",
@@ -912,6 +1328,14 @@
     "summaryJa": "本文を取得できなかったため、見出しから、Snowflake で機密データのエクスポートをデータ移動ポリシーとカスタムガードレール層によって統制する内容だと分かります。"
   },
   {
+    "source": "databricks-blog",
+    "title": "The best AI database solutions for 2026",
+    "url": "https://www.databricks.com/blog/ai-database-solutions",
+    "date": "2026-10-16",
+    "titleJa": "2026年のベストなAIデータベースソリューション",
+    "summaryJa": "AIエージェント向けデータベースを選ぶための5つの基準（ブランチ分離、サーバーレス拡張、ハイブリッド検索、ACID保証、統合アクセス）を解説し、10のソリューションを検索機能、サーバーレス、Postgres互換性、同時実行性、低遅延などの観点で比較しています。ベクトルデータベース（Pinecone、Milvus、Weaviate、Qdrantなど）と、pgvectorやLakebase Postgresのようなリレーショナルデータベースに分けて整理されています。既存のPostgreSQLを使うチームにはpgvector、Databricksを使いトランザクション処理も必要なチームにはLakebaseが適すると推奨されています。"
+  },
+  {
     "source": "aws-ml-blog",
     "title": "Trust in Depth: Giving agents more autonomy without losing control",
     "url": "https://aws.amazon.com/blogs/machine-learning/trust-in-depth-giving-agents-more-autonomy-without-losing-control/",
@@ -1422,6 +1846,14 @@
     "date": "2026-10-16",
     "titleJa": "Databricks DEAで、みんなが間違えた問題5つ（129人の回答から）",
     "summaryJa": "Databricks Certified Data Engineer Associate の練習問題を解いた 129 人の回答から、正答率の低かった 5 問を取り上げた記事です。全体の正答率は 68% ですが、この 5 問は 12〜29% にとどまったとしています。For each タスクのネスト、Cluster Policy の範囲、Unity Catalog での DENY、MERGE INTO の失敗理由、SHALLOW CLONE と VACUUM の注意点を、公式ドキュメントに沿って解説しています。"
+  },
+  {
+    "source": "databricks-release-notes",
+    "title": "Dashboard enhancements and bug fixes",
+    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#dashboard-enhancements-and-bug-fixes",
+    "date": "2026-10-15",
+    "titleJa": "ダッシュボードの機能強化とバグ修正",
+    "summaryJa": "AI/BIおよびGenie Oneの2026年リリースノートのうち、ダッシュボードに関する更新をまとめたページです。2026年10月15日には、Lakehouse Real-Time SQLウェアハウスへの対応（ベータ）、Dashboard Insights（ベータ）、Power BIの.tmdlファイルのインポート、ピボットテーブルの階層ドリルダウンなどが公開されたと記載されています。リリースは段階的に提供されるため、アカウントに反映されるまで1週間以上かかる場合があるとされています。"
   },
   {
     "source": "databricks-release-notes",
@@ -4366,437 +4798,5 @@
     "date": "2026-10-10",
     "titleJa": "ICYMI: 2026年9月にAIビルダー向けに登場したもの",
     "summaryJa": "AWS は、2026 年 9 月の Amazon Bedrock、Amazon Bedrock AgentCore、Strands の更新をまとめています。OpenAI モデルを使う Amazon Bedrock Managed Agents（パブリックプレビュー）、Astra・Sol・Luna の OpenAI モデルの一般提供、Claude Fable 5.1・Opus 5.5・Sonnet 5.5、Kimi K3 などが Bedrock で利用可能になったと紹介されています。また、Strands harness は同等の精度で 28% 少ないトークンを使い、Strands Decider 2B はツール選択やルーティングなど、事前定義された選択肢から決定するための小型オープンソースモデルとして紹介されています。"
-  },
-  {
-    "source": "aws-ml-blog",
-    "title": "How Postman runs Agent Mode for 40 million developers on Amazon Bedrock",
-    "url": "https://aws.amazon.com/blogs/machine-learning/how-postman-runs-agent-mode-for-40-million-developers-on-amazon-bedrock/",
-    "date": "2026-10-10",
-    "titleJa": "Postman が Amazon Bedrock 上で 4,000 万人の開発者向け Agent Mode を運用する方法",
-    "summaryJa": "Postman は Agent Mode の運用に Amazon Bedrock を使い、既存製品にエージェントを組み込む際の課題と、その対策を解説しています。ツールが約 40 個を超えると選択ミスが増えたため、ベクトルデータベースで 170 以上のツールから約 15 個に絞り、コンテキストを分離したサブエージェントに渡す設計にしたと説明されています。また、アプリの状態を変更する操作には利用者の承認を必須とし、Amazon Bedrock Guardrails で個人情報を除去する運用も紹介されています。"
-  },
-  {
-    "source": "snowflake-builders-blog",
-    "title": "Modernizing External Volume Access with Workload Identity Federation",
-    "url": "https://medium.com/snowflake/modernizing-external-volume-access-with-workload-identity-federation-e5adadde26d0?source=rss----34b6daafc07---4",
-    "date": "2026-10-10",
-    "titleJa": "Workload Identity Federation による外部ボリュームアクセスの近代化",
-    "summaryJa": "見出しから、外部ボリュームへのアクセスを Workload Identity Federation を用いて見直す内容と分かります。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Unity Gateway supports Amazon Bedrock Mantle",
-    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#unity-gateway-supports-amazon-bedrock-mantle",
-    "date": "2026-10-09",
-    "titleJa": "Unity Gateway が Amazon Bedrock Mantle に対応",
-    "summaryJa": "2026 年 10 月 9 日のリリースノートで、Amazon Bedrock Mantle のモデルを Unity Gateway のモデルプロバイダーサービス経由で利用できるようになったと案内されています。Unity Catalog の権限、レート制限、予算、推論テーブルを使えます。リリースは段階的に行われるため、アカウントへの反映が 1 週間以上遅れる場合があると注記されています。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "JDBC Unity Catalog connections will soon be available by default for workspaces with the compliance security profile enabled",
-    "url": "https://docs.databricks.com/aws/en/release-notes/whats-coming#jdbc-unity-catalog-connections-will-soon-be-available-by-default-for-workspaces-with-the-compliance-security-profile-enabled",
-    "date": "2026-10-09",
-    "titleJa": "JDBC Unity Catalog 接続が、コンプライアンスセキュリティプロファイル有効のワークスペースでまもなく標準で利用可能に",
-    "summaryJa": "2026 年 11 月中旬から、SSL 証明書のサポートを含む JDBC Unity Catalog 接続が、コンプライアンスセキュリティプロファイルを有効にしたワークスペースで標準で利用できるようになると案内されています。カスタム JDBC ドライバーで外部データベースに接続でき、アクセスは Unity Catalog で管理されます。このページでは、ほかにも予定されている変更が一覧されています。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Unity Gateway supports Amazon Bedrock Mantle",
-    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#unity-gateway-supports-amazon-bedrock-mantle",
-    "date": "2026-10-09",
-    "titleJa": "Unity Gateway が Amazon Bedrock Mantle に対応",
-    "summaryJa": "2026 年 10 月のリリースノートに、10 月 9 日付で Amazon Bedrock Mantle のモデルを Unity Gateway のモデルプロバイダーサービス経由で利用できるようになったと記載されています。Unity Catalog の権限、レート制限、予算、推論テーブルを使えるとされています。同じページには、Unity Gateway のスキル API のベータ提供など、10 月中の他の機能も掲載されています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "「Reverse Engineer Anything」を名乗るMCPサーバーREAを自作Electronアプリで試した",
-    "url": "https://zenn.dev/matsushima_a/articles/day-010-rea-reverse-engineering-mcp-limits",
-    "date": "2026-10-09",
-    "titleJa": "「Reverse Engineer Anything」を名乗るMCPサーバーREAを自作Electronアプリで試した",
-    "summaryJa": "MCPサーバーREA（rea-agents 5.0.0）を、割引ロジックと隠しデバッグ機能を仕込んだ自作の小さなElectronアプリで検証しています。アプリの構造（BrowserWindow数、IPCハンドラー数、公開APIなど）は正解と完全に一致しましたが、隠し機能の意味までは自動では説明されず、返ってきた事実を読んで自分で繋ぐ必要がありました。また、識別子を指定した追跡は一致せず、読みやすいソースの復元は外部ツール Wakaru が必要で自動インストールされないことも確認したと書かれています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "MCP Eventsで、体重をはかるとChatGPTが動き出す仕組みを作った",
-    "url": "https://zenn.dev/hodagi/articles/a7db00426b6756",
-    "date": "2026-10-09",
-    "titleJa": "MCP Eventsで、体重をはかるとChatGPTが動き出す仕組みを作った",
-    "summaryJa": "Eufy Smart Scale C1 が送信するBLEアドバタイズのManufacturer Dataに体重が含まれていたため、ミニPCのPythonコレクターで受信し、SQLiteに保存しています。ミニPC上のMCPサーバーを Secure MCP Tunnel 経由でDotsから呼び出せるようにし、MCP Eventsの events/subscribe で購読を登録すると、体重を測るたびにミニPCから署名付きWebhookが届きます。Webhookの本文は参照できなかったため、通知でDotsを起動し、Dotsが履歴をMCPサーバーから取得して前回比を計算する二段構成にしたと書かれています。"
-  },
-  {
-    "source": "databricks-blog",
-    "title": "Solving defense supply chain visibility through governed data sharing",
-    "url": "https://www.databricks.com/blog/solving-defense-supply-chain-visibility-through-governed-data-sharing",
-    "date": "2026-10-09",
-    "titleJa": "ガバナンス付きデータ共有で防衛サプライチェーンの可視化を実現する",
-    "summaryJa": "記事では、Department of War（DoW）が20万社以上のサプライヤーのコストとサプライチェーンを把握するため、ガバナンス付きのフェデレーテッドなデータ交換を提案しています。各事業者は自社のデータを元の場所で管理し、検証済みの版管理されたエビデンスだけを指定の受領者に公開する仕組みです。Databricks の ガバナンス機能と OpenSharing プロトコルを使い、CSDR報告などの既存の報告義務を活用できると説明されています。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Use request tags in Unity Gateway service policies (Beta)",
-    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#use-request-tags-in-unity-gateway-service-policies-beta",
-    "date": "2026-10-09",
-    "titleJa": "Unity Gateway のサービスポリシーでリクエストタグを使用する（Beta）",
-    "summaryJa": "2026年10月9日に、Unity Gateway のカスタムサービスポリシーで、呼び出し側が指定するリクエストタグを確認できるようになったと発表されています。たとえば、モデルリクエストや MCP ツール呼び出しの前にタグを必須にする、といった制御が可能です。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Use OpenJev as the evaluator for LLM-as-a-judge service policies (Beta)",
-    "url": "https://docs.databricks.com/aws/en/release-notes/product/2026/october#use-openjev-as-the-evaluator-for-llm-as-a-judge-service-policies-beta",
-    "date": "2026-10-09",
-    "titleJa": "LLM-as-a-judge サービスポリシーの評価モデルとして OpenJev を使用する（Beta）",
-    "summaryJa": "2026年10月9日に、カスタムの LLM-as-a-judge サービスポリシーの評価モデルとして OpenJev（Qwen3.5 4B）を選択できるようになったと発表されています。OpenJev は出力トークンを生成せずにコンテンツを分類するため、チャット型の評価モデルより一般的に応答が速いと説明されています。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Code execution in Genie One (Public Preview)",
-    "url": "https://docs.databricks.com/aws/en/ai-bi/release-notes/2026#code-execution-in-genie-one-public-preview",
-    "date": "2026-10-09",
-    "titleJa": "Genie One でのコード実行（パブリックプレビュー）",
-    "summaryJa": "2026年10月9日、Genie One が安全で隔離されたサンドボックス内でコードを実行できるようになったと発表されました。SQL を超える、より高度な分析などの作業を扱えるようになります。コードはユーザーの既存の権限で実行され、Unity Catalog のガバナンスとデータアクセス制御がそのまま適用されます。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Use OpenJev as the evaluator for LLM-as-a-judge service policies (Beta)",
-    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#use-openjev-as-the-evaluator-for-llm-as-a-judge-service-policies-beta",
-    "date": "2026-10-09",
-    "titleJa": "LLM-as-a-judge サービスポリシーの評価モデルとして OpenJev を使用（ベータ）",
-    "summaryJa": "2026年10月9日、カスタム LLM-as-a-judge サービスポリシーの評価モデルサービスとして OpenJev（Qwen3.5 4B）を選択できるようになりました。OpenJev は出力トークンを生成せずにコンテンツを分類するため、一般的にチャット型の評価モデルより速く応答します。詳細は Use OpenJev as the evaluator のページに記載されています。"
-  },
-  {
-    "source": "databricks-release-notes",
-    "title": "Use request tags in Unity Gateway service policies (Beta)",
-    "url": "https://docs.databricks.com/aws/en/release-notes/unity-gateway#use-request-tags-in-unity-gateway-service-policies-beta",
-    "date": "2026-10-09",
-    "titleJa": "Unity Gateway のサービスポリシーでリクエストタグを使用（ベータ）",
-    "summaryJa": "2026年10月9日、Unity Gateway のカスタムサービスポリシーで、呼び出し側が付与したリクエストタグを確認できるようになりました。例として、モデルリクエストや MCP ツール呼び出しを進める前にタグを必須にする設定が挙げられています。詳細は Request tags のページに記載されています。"
-  },
-  {
-    "source": "qiita-agentskills",
-    "title": "サーバーなしで動く OSS の自律型 AI エージェント「aeon」— GitHub Actions だけで 85 スキルを cron 実行する",
-    "url": "https://qiita.com/0xNurstar/items/0127182328d74f53073a",
-    "date": "2026-10-09",
-    "titleJa": "サーバーなしで動く OSS の自律型 AI エージェント「aeon」— GitHub Actions だけで 85 スキルを cron 実行する",
-    "summaryJa": "aeon は @aaronjmars による OSS の自律型 AI エージェントフレームワークで、利用者自身の GitHub リポジトリ内で GitHub Actions 上で動作し、cron でスケジュール実行されます。同梱のスキルは 6 つのパックにまたがる 85 個で、各スキルは SKILL.md 1 枚として定義されます。対応するハーネスは 9 つで、通知は Telegram などに送られ、有料 API の支払いはエージェント自身の x402 ウォレットから行われます。本記事は公式ブログの翻訳で、訳者は aeon の Growth コントリビューターであると明記されています。"
-  },
-  {
-    "source": "qiita-agentskills",
-    "title": "CIのWARN 7件を1件ずつ開いたら、壊れていたのは0件だった【kurashi-skill Day 29】",
-    "url": "https://qiita.com/Ichiropen/items/f5a706d43313a91d290c",
-    "date": "2026-10-09",
-    "titleJa": "CIのWARN 7件を1件ずつ開いたら、壊れていたのは0件だった【kurashi-skill Day 29】",
-    "summaryJa": "v1.0.0 の前に 27 スキルを点検したところ、CI は全件緑でしたが、URL 検査では OK 112、WARN 7、SKIP 8、FAIL 0 という内訳でした。WARN 7 件を個別に確認すると、台風がないときの 404、ひな形 URL を未置換のまま叩いたことによる 404、必須パラメータ欠落による 400 など、想定どおりの応答が中心でした。そらまめくんの API は検査の 20 秒で時間切れになっていましたが、待ち時間を 100 秒にすると 34.6 秒で 5.29MB の JSON が返り、壊れてはいなかったと結論づけています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "Claude Codeの引用・コードブロックにコピーボタンを付けるmod",
-    "url": "https://zenn.dev/z_maruhira/articles/claude-code-mod-copy-blocks",
-    "date": "2026-10-09",
-    "titleJa": "Claude Codeの引用・コードブロックにコピーボタンを付けるmod",
-    "summaryJa": "copy-blocks は、Claude Code の回答に含まれる引用ブロックとコードブロックのそれぞれの上に、コピー用の行を表示する mod です。ボタンを押すと、ブロックの中身だけが、行頭の ▎ や > を除き、ターミナルの折り返しによる改行も入らない形でコピーされます。回答の表示を読むだけで、コマンドの実行やネットワークへの送信は行わず、Claude Code 2.1.287 以降が必要です。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "残業が月100時間あるので、Claude Code をスマホから動かせるようにした",
-    "url": "https://zenn.dev/ciel_lab/articles/0198f02def2c47",
-    "date": "2026-10-09",
-    "titleJa": "残業が月100時間あるので、Claude Code をスマホから動かせるようにした",
-    "summaryJa": "著者は、Mac で動く Claude Code や Codex をブラウザの画面から使えるツール「Ciel」を作りました。ターミナルの窓は 9 月 12 日の依頼から 9 月 25 日に 6 面まで並べられるようになり、9 月 17 日には Tailscale を使って iPhone から Mac につなげるようになりました。10 月 7 日からは、利用者が ciel remote on と入力したときだけスマホからの接続口が開く仕様に変わりました。Ciel は Mac（Apple チップ）と Windows 11 で動作し、当面は無料で配布されています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "16ビットRISC CPU「E16」の自作からポケコンと携帯ゲーム機まで — Claude Codeで作った仮想機械の設計",
-    "url": "https://zenn.dev/kurouna/articles/elec16-virtual-cpu-with-claude-code",
-    "date": "2026-10-09",
-    "titleJa": "16ビットRISC CPU「E16」の自作からポケコンと携帯ゲーム機まで — Claude Codeで作った仮想機械の設計",
-    "summaryJa": "著者は elecdex の一ペインとして、16 ビットの仮想機械 ELEC-16 を作りました。命令セット E16（104 命令、レジスタ 16 本）、エミュレータ、アセンブラ、逆アセンブラ、TypeScript の部分集合を E16 の機械語に変換するコンパイラ e16c、e16c で書いた BASIC ROM などを自前で実装しています。さらに同じ CPU に描画回路と音源を足した携帯ゲーム機 ELEC-16 PLAY（PLAY-320）も作られ、同梱ゲームは 4 本です。開発は 2026 年 10 月 3 日から 9 日までの 7 日間で、仕様決定と動作確認は著者、設計書・実装・テスト・説明書は Claude Code が担当したと記載されています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "`git status`はクリーンだと言った。`git checkout -B`は、2件とも「破壊的操作」として拒否された",
-    "url": "https://zenn.dev/hideki_tamae/articles/checkout-b-ff-only-denial",
-    "date": "2026-10-09",
-    "titleJa": "`git status`はクリーンだと言った。`git checkout -B`は、2件とも「破壊的操作」として拒否された",
-    "summaryJa": "定期タスクで2つのリポジトリのローカル main を origin に合わせるため `git checkout -B main origin/main` を実行したところ、作業ツリーがクリーンだったにもかかわらず、2件とも「Irreversible Local Destruction」として拒否されました。代わりに `git checkout main && git merge --ff-only origin/main` を実行すると、同じ結果（fast-forward）に拒否なしで到達できました。著者は、`git status` は未コミット変更の有無を確認するもので、ref を無条件に書き換える `-B` の安全性は保証しないと整理し、`--ff-only` のように安全性を先に検証して失敗させる書き方を選ぶべきだとまとめています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "秘伝のタレに新しいタレをぶちこむ：dotfiles整理記",
-    "url": "https://zenn.dev/tett23/articles/8739dd37717025",
-    "date": "2026-10-09",
-    "titleJa": "秘伝のタレに新しいタレをぶちこむ：dotfiles整理記",
-    "summaryJa": "10年以上育ててきた dotfiles を整理するため、AI にベストプラクティスの監査を行わせ、docs/audit の指摘をリスクに応じて順に潰しています。依存管理は Nix と mise に統一し、dependencies.md を正本として自然言語から設定ファイルを AI に生成させています。変更の経緯は CLAUDE.md で定めた ADR（コミット後は変更不可）に記録し、macOS の仮想マシンでブートストラップを検証して、curl | sh で環境構築を完了させることを目指しています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "Claude Code・Blender・Remotion で、寸法の JSON 1 つから木の継手の 3D Web と縦動画を毎日出す",
-    "url": "https://zenn.dev/jinc_tdil/articles/tsugite-automation-01-pipeline",
-    "date": "2026-10-09",
-    "titleJa": "Claude Code・Blender・Remotion で、寸法の JSON 1 つから木の継手の 3D Web と縦動画を毎日出す",
-    "summaryJa": "木の継手ごとに寸法を書いた JSON を 1 つ用意し、Blender の Python がそこから形を作って 5 つの自動検査（重なり、取りこぼし、抜ける向き、閉じた立体、測った寸法）を通します。検査が 1 つでも赤なら何も書き出さず、同じ JSON から three.js と manifold-3d で Web を、Remotion で縦動画を作ります。2026-10-09 時点で動画は 27 本（英日で計 54 本）書き出されており、著者は寸法と形の正しさ、動画の見せ方を決め、コードは Claude Code に書かせています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "ファイル名は識別子ではない — 同名スキップで写真が黙って消えていた",
-    "url": "https://zenn.dev/shinsei99/articles/filename-is-not-identity",
-    "date": "2026-10-09",
-    "titleJa": "ファイル名は識別子ではない — 同名スキップで写真が黙って消えていた",
-    "summaryJa": "巡回写真を物件ごとのフォルダへ振り分ける道具で、記録84枚に対してフォルダに入っていたのは9枚だけだったと報告されています。原因は、保存先の同一性をファイル名で判断し、同名なら飛ばしていたことと、同じ写真の再投稿が別の名前で二重に保存されていたことでした。著者は同一性の判断を SHA-256 のハッシュに移し、名前は衝突時に連番を付ける表示用のラベルとして扱うよう直しています。また、外部から来た ID を文字列と整数で比較して重複排除が効いていなかった問題や、人が外した写真を記録して次回の実行で戻らないようにした対応も書かれています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "食べた物を「屁理屈」で0kcalにする日記を、Geminiの無料枠とClaude Codeで作った",
-    "url": "https://zenn.dev/unifapps/articles/94dd11e513dbe7",
-    "date": "2026-10-09",
-    "titleJa": "食べた物を「屁理屈」で0kcalにする日記を、Geminiの無料枠とClaude Codeで作った",
-    "summaryJa": "食べた物のカロリー見積もりと、AI が生成する「もっともらしい屁理屈」による 0kcal 理論を表示するジョークの Web アプリ「ゼロカロ日記」を、Claude Code と Gemini の無料枠で作ったことが書かれています。Gemini には responseSchema で JSON 形式の回答を求め、「熱で蒸発」ばかり出る問題や時間帯の話に偏る問題はプロンプトの指示を足して改善しています。一覧から選んだ料理のカロリーはサーバー側で一覧の値に置き換え、iPhone で音が出ない問題は「音を出す」ボタンを最初のタップにすることで解決しており、運用費用は毎月0円とされています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "dbt Wizard vs Claude Code: 同じdbtタスクを頼んで挙動の違いを見てみた",
-    "url": "https://zenn.dev/intage_tech/articles/art026-dbt-wizard-try",
-    "date": "2026-10-09",
-    "titleJa": "dbt Wizard vs Claude Code: 同じdbtタスクを頼んで挙動の違いを見てみた",
-    "summaryJa": "dbt Labs の dbt 特化エージェント「dbt Wizard」（CLI 版ベータ）と Claude Code に、同じプロンプトと同じモデル（claude-sonnet-5）で 5 つの dbt タスクを頼み、挙動を比べています。仕様が明確なタスクでは修正内容はほぼ同じでしたが、前提が曖昧なタスクでは dbt Wizard が選択式の確認を挟み、所要時間と API 利用料（1 タスク目は 0.56 ドル）が大きくなりました。著者は、設定なしで丁寧な振る舞いが得られる点で dbt 初学者や運用ルールのないチームに向くとまとめ、各タスクは 1 回ずつの試行であり厳密なベンチマークではないと断っています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "デザインは資産、骨子が先、作業は対話へ ― HTMLスライドをリポジトリで作る3つのポイント",
-    "url": "https://zenn.dev/solcube/articles/63636ee1905178",
-    "date": "2026-10-09",
-    "titleJa": "デザインは資産、骨子が先、作業は対話へ ― HTMLスライドをリポジトリで作る3つのポイント",
-    "summaryJa": "スライドを HTML で作り、共通の CSS とスクリプトをリポジトリに置いて、デザインを資産として再利用しています。初回の出力は Markdown の骨子を詰めてから生成し、保存済みの 15 本の計測では、初回の文が最終版に残った割合が 22% から 100% まで用途ごとに大きく異なりました。また、はみ出しは描画して測るスクリプトで検出し、PDF は page.pdf()、PowerPoint は 1 枚ずつの画像で出力しています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "MacBook の蓋を閉じると Claude Code が止まる問題を、pmset で防ぐ",
-    "url": "https://zenn.dev/daydreamer/articles/claude-code-keep-running-lid-closed",
-    "date": "2026-10-09",
-    "titleJa": "MacBook の蓋を閉じると Claude Code が止まる問題を、pmset で防ぐ",
-    "summaryJa": "夜間に走らせた Claude Code の subagent が、MacBook の蓋を閉じたことによるスリープ（Clamshell Sleep）で途切れていたことが報告されています。--bg、Remote Control、caffeinate、Desktop アプリのスリープ防止は、蓋を閉じたときのスリープには効かないと確認されています。著者は、離席中だけ `sudo pmset -a disablesleep 1` でスリープを無効にし、戻ったら `0` に戻す方法を勧めています。ただし disablesleep は man pmset に載っていないオプションで、電池駆動でも眠らなくなるため、電源接続と戻し忘れに注意するよう書かれています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "社外に出せない資料から、ノウハウだけを取り出すClaude Code Skillを作った",
-    "url": "https://zenn.dev/sonchu/articles/2026-10-09-knowhow-manager-anonymized-knowhow",
-    "date": "2026-10-09",
-    "titleJa": "社外に出せない資料から、ノウハウだけを取り出すClaude Code Skillを作った",
-    "summaryJa": "固有名詞を消しただけの文章でも、項目名や言い回しなどの手がかりから元の資料を検索で見つけられたことが紹介されています。そこで、出来事を原理まで抽象化して書き直す抽象化レベルの設定や、資料を抽出・検索・ポリシー確認する3つのClaude Code Skillからなる「knowhow-manager」の仕組みと、コミット前の機械チェックや人による全文確認の工程が説明されています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "AIに資本金1万円を渡して共同創業者にした。1日目で商品を出すまで",
-    "url": "https://zenn.dev/midas_ai/articles/midas-day1-ai-cofounder",
-    "date": "2026-10-09",
-    "titleJa": "AIに資本金1万円を渡して共同創業者にした。1日目で商品を出すまで",
-    "summaryJa": "AIが判断し人間が実行する事業実験「Midas」の1日目の記録で、需要の証拠がある場所にしか作らないという原則のもと、受託開発は応募数の多さから見送り、BOOTHでクトゥルフ神話TRPG向けのホラー演出素材を出品したことが書かれています。別のAI（Codex）が作った素材の霧や目の不具合を人が確認して直したこと、人間に頼んだ作業が合計約1時間だったことも紹介されています。1日目の売上は0円、残高は10,000円です。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "4時間おきに無人で動く Claude Code が、前の回の打ち切りを次の回で片付ける手順",
-    "url": "https://zenn.dev/tasukina/articles/c43ac2b4700f3b",
-    "date": "2026-10-09",
-    "titleJa": "4時間おきに無人で動く Claude Code が、前の回の打ち切りを次の回で片付ける手順",
-    "summaryJa": "Claude Codeを4時間おきに起動する仕組みで、途中で打ち切られた回が残した未commitの変更を、次の回が持ち主ごとに分けて片付ける手順が紹介されています。起動の仕組みが書いたファイルはそのままcommitし、人間が直したファイルには触らず、前の回のClaudeが書いたファイルは完成していればcommit、壊れていればファイル名を指定してgit restoreで戻すとされています。何をどう片付けたかは日報に書き残す運用です。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "【第18回】使ったスキルを古いままにするな。Hermes Agentは自分でSKILL.mdを書き直す。",
-    "url": "https://zenn.dev/sora_biz/articles/hermes-vps-18-skill-rewrite",
-    "date": "2026-10-09",
-    "titleJa": "【第18回】使ったスキルを古いままにするな。Hermes Agentは自分でSKILL.mdを書き直す。",
-    "summaryJa": "VPSで動かしているHermes Agentに、毎朝のニュース配信で使うスキル（morning-news）を今の使い方に合わせて書き直すよう頼み、台帳と diff で変更を確認した過程が書かれています。書き直したスキルで配信を1回手動で実行し、取得状況が新しい手順どおりに出たことが確かめられています。台帳のrollbackコマンドで1件だけ戻す操作は、テスト用のスキルで試されています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "Claude Code を4時間おきに無人で回す会社の作り方（テンプレート付き）",
-    "url": "https://zenn.dev/tasukina/books/2983440e0370cb",
-    "date": "2026-10-09",
-    "titleJa": "Claude Code を4時間おきに無人で回す会社の作り方（テンプレート付き）",
-    "summaryJa": "Claude Codeをタスクスケジューラから4時間おきに起動し、人が見ていない間に仕事を選ばせ、部署に任せて結果を検収させる仕組みを、テンプレートとして解説した有料の本です。憲章、部署の決まり、書き込み範囲の宣言、指示書、検収の記録、人間との受け渡し、日報の書式などの章立てが示されています。第1章は無料で読めるとされています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "Claude Codeに頼ってZennの記事をdev.toへ転載する仕組みを作った",
-    "url": "https://zenn.dev/sho7650/articles/c673de64966797",
-    "date": "2026-10-09",
-    "titleJa": "Claude Codeに頼ってZennの記事をdev.toへ転載する仕組みを作った",
-    "summaryJa": "Zennの記事を英訳してdev.toに転載するGitHub Actionsの仕組みを、Claude Codeの支援で設計した過程が書かれています。dev.toの記事IDを保存せずcanonical_urlで照合する方式や、元記事のハッシュで英訳の古さを検出する方式など、参考元と異なる判断が説明されています。英訳は手元のClaude Codeで行い、人が読んでからコミットする運用で、Zenn記法の変換は正規表現のスクリプトにしてテストで挙動を固定したとされています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "QAエンジニアがAI生成E2Eテストの「Spec Drift」を多層で潰した話 〜事前検査・実行時検出・仕様追従〜",
-    "url": "https://zenn.dev/qubena/articles/717569b88da010",
-    "date": "2026-10-09",
-    "titleJa": "QAエンジニアがAI生成E2Eテストの「Spec Drift」を多層で潰した話 〜事前検査・実行時検出・仕様追従〜",
-    "summaryJa": "AIが生成したE2Eテストで、テスト項目書と実装コードのズレ（Spec Drift）を、テスト生成前の事前検査と、テスト失敗時の原因分類による実行時検出の二段で扱った設計が紹介されています。事前検査は期待値と実装を照合して4段階で判定し、実行時は失敗をCode・Limit・Defectに分類して、自動修正の範囲を3階層に分けています。定量データはまだ集計中で、判定精度は100%ではないと書かれています。"
-  },
-  {
-    "source": "zenn-claudecode",
-    "title": "AIで作ったWebアプリを公開する前に、自分で確かめる5つの手順",
-    "url": "https://zenn.dev/qzailabs/articles/e196c0dcac1bd8",
-    "date": "2026-10-09",
-    "titleJa": "AIで作ったWebアプリを公開する前に、自分で確かめる5つの手順",
-    "summaryJa": "Claude CodeやCodexなどで作ったWebアプリを公開前に確かめる5つの観点が、コマンド例つきで紹介されています。具体的には、画面に配られる環境変数に入った秘密の鍵、Supabaseの表ごとのRLS設定、本番で使う部品の公表された弱点、Gitに入った.env、本番で公開されたソースマップです。自動の点検、AIによる確認、人の診断をそれぞれ何が得意かで使い分けるとされています。"
-  },
-  {
-    "source": "qiita-claudecode",
-    "title": "Claude Codeの引用・コードブロックにコピーボタンを付けるmod",
-    "url": "https://qiita.com/y-hirakaw/items/219becbf896009aba2ef",
-    "date": "2026-10-09",
-    "titleJa": "Claude Codeの引用・コードブロックにコピーボタンを付けるmod",
-    "summaryJa": "Claude Codeの回答に含まれる引用ブロックとコードブロックの上に、コピー用の罫線の行を表示するmod「copy-blocks」が紹介されています。ボタンを押すと、ブロックの中身だけがコピーされ、行頭の ▎ や >、ターミナルの折り返しによる改行は含まれません。表示場所は回答の中・プロンプトの上の帯・両方から /config で切り替えられます。"
-  },
-  {
-    "source": "qiita-claudecode",
-    "title": "Claude Opus 5.5 の effort 比較：low〜max を実測",
-    "url": "https://qiita.com/yunany90/items/c8586f6366a52ce5e544",
-    "date": "2026-10-09",
-    "titleJa": "Claude Opus 5.5 の effort 比較：low〜max を実測",
-    "summaryJa": "同じゲーム制作の依頼を、Claude Opus 5.5 の effort 5段階（low〜max）で1回ずつ実行して比べた記事です。時間は low の32秒から max の22分22秒、費用は $0.48 から $5.25 でした。著者は、普段は既定の medium、完成度が必要なときは費用が34%増えるだけの high が向いていると述べています。"
-  },
-  {
-    "source": "classmethod-claudecode",
-    "title": "Claude Code v2.1.294〜v2.1.295 の主要アップデート - hooks の onFailure: \"block\" 追加と OSC 7501 対応",
-    "url": "https://dev.classmethod.jp/articles/20261009-cc-updates-v2-1-295/",
-    "date": "2026-10-09",
-    "titleJa": "Claude Code v2.1.294〜v2.1.295 の主要アップデート - hooks の onFailure: \"block\" 追加と OSC 7501 対応",
-    "summaryJa": "2026年10月8日に公開された Claude Code v2.1.294〜v2.1.295 の変更（合計145件）を紹介した記事です。command フックと HTTP フックに onFailure: \"block\" が追加され、フックが起動できない・タイムアウトする・想定外の終了コードで終わった場合に操作を止められます。Program Status Protocol（OSC 7501）にも対応し、対応ターミナルで作業中・応答待ち・完了を表示できます。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "Claude Code の MCP ツールで「人の操作を待つ」と、120 秒でバックグラウンドに移される（再現と 2 つの作り方）",
-    "url": "https://zenn.dev/tanashun/articles/claude-code-mcp-tool-background",
-    "date": "2026-10-09",
-    "titleJa": "Claude Code の MCP ツールで「人の操作を待つ」と、120 秒でバックグラウンドに移される（再現と 2 つの作り方）",
-    "summaryJa": "長く続く MCP ツールの呼び出しは、既定で120秒を超えるとバックグラウンドに移されることを、小さな MCP サーバーで再現しています。移された後の結果は新しい発言の形で Claude に届き、移される時の文には「作業を続けてよい」と書かれているため、人の操作が済む前に次の作業を始めることがあると説明しています。対策として、ツールを待たずに即返す方法と、移されたらターンを終えるよう説明に書く方法の2つを紹介しています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "AIに手元の資料を読ませたくて、ローカル知識ベースを作ってみた",
-    "url": "https://zenn.dev/softbank/articles/e6d00ee5086772",
-    "date": "2026-10-09",
-    "titleJa": "AIに手元の資料を読ませたくて、ローカル知識ベースを作ってみた",
-    "summaryJa": "ソフトバンクの記事で、SQLite の全文検索とベクトル検索を組み合わせたローカル知識ベース「kb4dev」の構成と実測結果が紹介されています。CLI から操作でき、MCP 経由でエージェントも検索・元文書の参照ができます。開発チームの Wiki（108文書）の初回取り込みには約14分かかり、2回目以降の検索は中央値23ms でした。社内資料を外部サービスに預けない構成にするため、すべてローカルで動かしています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "Flutter DesktopアプリにMCP連携をつけてみた",
-    "url": "https://zenn.dev/bestat/articles/flutter-desktop-mcp",
-    "date": "2026-10-09",
-    "titleJa": "Flutter DesktopアプリにMCP連携をつけてみた",
-    "summaryJa": "社内で開発中の Flutter 製3Dデスクトップアプリに、実験的に MCP 連携を追加した事例です。MCP サーバーは別プロセスの Python で動き、操作の一覧が50を超えたためツールは get_state・execute_script・capture の3つにまとめられています。execute_script は Python スクリプトを実行し、操作後の画面を画像としてAIに返します。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "Windows だけ PDF が1つも読めなかった原因は末尾の「\\」1文字だった（と Excel CSV の文字コードの罠）",
-    "url": "https://zenn.dev/bcd_app/articles/d5213f507de34e",
-    "date": "2026-10-09",
-    "titleJa": "Windows だけ PDF が1つも読めなかった原因は末尾の「\\」1文字だった（と Excel CSV の文字コードの罠）",
-    "summaryJa": "MCP サーバー「BCD」で、Windows でだけファイル読み込みが失敗していた3つの原因がまとめられています。pdf.js の標準フォントのフォルダの URL は末尾が / でなければならず、Windows の path.sep（\\）で失敗していました。また、Windows PowerShell 5.1 の出力（UTF-16LE）や、日本語・韓国語などの Excel CSV（CP932・CP949 など）の読み込み方も修正しています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "SDK なし・PHP だけでレンタルサーバーに MCP サーバーを立てた（Claude から呼べるまで）",
-    "url": "https://zenn.dev/kitbench/articles/77779f396f59b7",
-    "date": "2026-10-09",
-    "titleJa": "SDK なし・PHP だけでレンタルサーバーに MCP サーバーを立てた（Claude から呼べるまで）",
-    "summaryJa": "Web ツール集「キットベンチ」の計算ツールを、SDK を使わず PHP のファイル4つでレンタルサーバー（Xserver）上に MCP サーバーとして作った事例です。消費税・日付計算・和暦変換など7つのツールを提供し、Claude のカスタムコネクタから呼べます。元のサイトの JavaScript と答えが一致するかを、16万通り以上の入力で突き合わせ、不一致が0だったと書かれています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "自作MCPサーバーのツール呼び出しがタイムアウトする — 100行実装に「制限時間と再試行上限」を足す設計",
-    "url": "https://zenn.dev/yukihayama/articles/mcp-tool-timeout-retry-design",
-    "date": "2026-10-09",
-    "titleJa": "自作MCPサーバーのツール呼び出しがタイムアウトする — 100行実装に「制限時間と再試行上限」を足す設計",
-    "summaryJa": "タイムアウトはツール実行、サーバー全体、クライアントの3層に存在するとして、内側の層のタイムアウトを外側より短くする原則を示しています。例外を握りつぶさず、分類したエラーを返す実装と、再試行をタイムアウトのみ・上限2回（3秒、6秒のバックオフ）に絞る実装を、コピペで動くコードとともに紹介しています。構文エラーまで再試行して DB 負荷を上げた実際の事故も、再試行対象を絞る理由として挙げられています。"
-  },
-  {
-    "source": "zenn-mcp",
-    "title": "AI エージェントに描画を任せても、お金を使い込まれない仕組み",
-    "url": "https://zenn.dev/renderjanction/articles/0d7fcc51ac7d54",
-    "date": "2026-10-09",
-    "titleJa": "AI エージェントに描画を任せても、お金を使い込まれない仕組み",
-    "summaryJa": "JANCTION Render は、AI エージェントが MCP サーバーまたは HTTP API から呼び出せる Blender のクラウド GPU レンダーファームで、新しい鍵ごとに 500 円分が無料、その後は 0.1 円/GPU 秒です。記事では、描画前の見積もり（render_estimate）、残高不足時の HTTP 402、鍵ごとの支出上限（既定は 1 仕事 3,000 円・1 日 10,000 円）、Idempotency-Key による安全な再送などの仕組みを紹介しています。オートチャージや月額プランは人が決める形で、エージェントは申し込みや解約を行えないと説明されています。"
-  },
-  {
-    "source": "qiita-mcp",
-    "title": "AWS MCP Server 経由のエージェントを IAM で絞る",
-    "url": "https://qiita.com/asahide/items/050edb6e7a9496c6b207",
-    "date": "2026-10-09",
-    "titleJa": "AWS MCP Server 経由のエージェントを IAM で絞る",
-    "summaryJa": "AWS MCP Server 経由の呼び出しを aws:ViaAWSMCPService 条件で見分け、既存の IAM ポリシーに MCP 経由のみに適用される Deny 文を追加して、許可リストにない操作を拒否する方法を検証しています。読み取りは広く許可し、S3 への書き込みは reports/agent/ に限り、管理者シークレットの取得を拒否した構成で、サポート調査と売上分析をエージェントに任せた結果が書かれています。IAM では SQL の内容を条件にできないため Aurora の読み取り専用は DB ロールで実現したこと、シェルからの AWS CLI 操作はこの条件では見分けられないことも注記されています。"
-  },
-  {
-    "source": "qiita-mcp",
-    "title": "IBM Bob x ContextForgeでシークレットをLLMに読ませずにMCPを使ってみる",
-    "url": "https://qiita.com/mt2024/items/d632f9a4a90ad3837d6d",
-    "date": "2026-10-09",
-    "titleJa": "IBM Bob x ContextForgeでシークレットをLLMに読ませずにMCPを使ってみる",
-    "summaryJa": "IBM のオープンソース MCP ゲートウェイ ContextForge を使い、エージェントがシークレットを持たずに、ゲートウェイが HashiCorp Vault から取得したトークンを Authorization ヘッダに注入して MCP サーバーへ認証付きリクエストを送る構成を、Docker Compose のローカル環境で検証しています。検証ではトークンの長さと先頭数文字だけを返すモック MCP サーバーを使い、結果のみがエージェントに返ることを確認しています。記事では OAUTH_TOKEN_BACKEND=vault の機能はドキュメントで確認できなかったこと、Vault Dev Server は検証専用であることも注記されています。"
-  },
-  {
-    "source": "qiita-mcp",
-    "title": "AIエージェントにAPIを売るには？ Skill・MCPサーバー・有料ケイパビリティの違い",
-    "url": "https://qiita.com/xnjiang/items/c4bb160d60d8365416c0",
-    "date": "2026-10-09",
-    "titleJa": "AIエージェントにAPIを売るには？ Skill・MCPサーバー・有料ケイパビリティの違い",
-    "summaryJa": "AI エージェントに API を提供する方法として、Skill、MCP サーバー、有料ケイパビリティを比較し、ホスティング・発見・課金の違いを整理しています。記事で紹介されている Qumge では、既存の HTTPS API やリモート MCP サーバーにツールごとの価格を付けて登録でき、ユーザーは残高から呼び出しごとに支払い、開発者は売上の 80% を受け取ると説明されています。あわせて、エンジニアでない人向けのデスクトップエージェント Marlo も紹介されています。"
-  },
-  {
-    "source": "qiita-databricks",
-    "title": "Snowflake Postgres を PostgREST で REST API 化して Databricks から OAuth M2M 認証で実行する（Azure Container Apps + Easy Auth + Nginx）",
-    "url": "https://qiita.com/satoshi_enomoto/items/9f5bdb6cf7961fd51d4a",
-    "date": "2026-10-09",
-    "titleJa": "Snowflake Postgres を PostgREST で REST API 化して Databricks から OAuth M2M 認証で実行する（Azure Container Apps + Easy Auth + Nginx）",
-    "summaryJa": "Snowflake Postgres のテーブルを PostgREST で REST API として公開し、Azure Container Apps 上の Nginx と Easy Auth の背後に置いて、Microsoft Entra ID のアクセストークンで保護する構成を手順付きで解説しています。Databricks から OAuth 2.0 の M2M 認証で呼び出し、Snowflake Postgres 側はネットワークポリシーで Container Apps の送信元 IP からの接続を許可しています。今回の構成では認証済みリクエストが共通の DB ロールで処理されるため、クライアントごとの細かな認可は別途実装が必要だと明記されています。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "dotsへの委任を「タスク」「実行場所」「成果」の三つに分けて引き継ぐ",
-    "url": "https://zenn.dev/tsukaima_kobo/articles/4ce81e6a03a535",
-    "date": "2026-10-09",
-    "titleJa": "dotsへの委任を「タスク」「実行場所」「成果」の三つに分けて引き継ぐ",
-    "summaryJa": "著者は、dots への委任を引き継ぐ際に、依頼 ID、実行中のタスク ID と実行環境、受け取る成果の観測を別々に記録することを提案しています。通信が切れた場合は unknown 状態として既存の仕事と照合し、prepared に自動で戻さない設計が示されています。ローカルでは状態分岐の 9 ケースを確認したと書かれていますが、これは独自の状態管理例の検証であり、dots 自体の動作を実証したものではないと明記されています。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "OpenAIの売上、実は500億ドル。AI株が下落",
-    "url": "https://zenn.dev/sugawara_ai/articles/ai-news-20261009",
-    "date": "2026-10-09",
-    "titleJa": "OpenAIの売上、実は500億ドル。AI株が下落",
-    "summaryJa": "CNBCが確認した話として、OpenAIの9月末時点の年換算売上は約500億ドルで、先月末に広く報じられた680億ドルとは数え方が違うと書かれています。680億ドルには提携先を通した分の総額も含まれていたと関係者が話したとされ、木曜にはNvidiaやOracle、CoreWeaveの株価が下がりました。このほか、OpenAIによる数学論文3本の取り下げ、Geminiのエージェント化、韓国の銀行を狙った攻撃の報告、オフラインで動く会議メモアプリなど、5本のニュースが紹介されています。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "日本語の音声合成を4つ聞き比べた記録（VOICEVOX・OpenAI・Azure・AivisSpeech）",
-    "url": "https://zenn.dev/toprunner/articles/890b9cdc21d15f",
-    "date": "2026-10-09",
-    "titleJa": "日本語の音声合成を4つ聞き比べた記録（VOICEVOX・OpenAI・Azure・AivisSpeech）",
-    "summaryJa": "会話用途で、VOICEVOX・OpenAI・Azure・AivisSpeechを聞き比べた記録です。話し始めるまでの待ち時間と会話のテンポが、音質以上に印象を左右したとされています。無料でローカル動作し反応が速く調整しやすいVOICEVOXを採用し、速さ・高さ・抑揚は一度に1つずつ変えて調整したと書かれています。また、話す文章を1〜2文に短く区切ることが最も効いたこと、無音を「視聴してくださって本当にありがとうございます。」と認識する音声認識の問題も紹介されています。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "ゼロからはじめるWebアプリ入門 〜自己紹介カードからAIチャットまで、4つのアプリを作りながら学ぶ〜",
-    "url": "https://zenn.dev/funayamateppei/books/b494c29818551a",
-    "date": "2026-10-09",
-    "titleJa": "ゼロからはじめるWebアプリ入門 〜自己紹介カードからAIチャットまで、4つのアプリを作りながら学ぶ〜",
-    "summaryJa": "HTML・CSS・JavaScriptの基本から、Web API、OpenAI APIを使ったAIチャットまでを、4つの小さなアプリを作りながら学ぶ入門書です。第1〜3章のアプリは追加費用や外部サービスへの登録なしで作れ、第4章のみOpenAI APIの利用料がかかると説明されています。中学生・高校生でも読めるよう専門用語をかみ砕いて解説しており、価格は1,000円です。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "OpenAIの判断モデルgpt-6-lunaも日本語の問い合わせで試してみた — Jev・d1との3モデル比較",
-    "url": "https://zenn.dev/saishunkansys/articles/178cf5768c51e3",
-    "date": "2026-10-09",
-    "titleJa": "OpenAIの判断モデルgpt-6-lunaも日本語の問い合わせで試してみた — Jev・d1との3モデル比較",
-    "summaryJa": "OpenAIのDecisions API（gpt-6-luna）を、前回比較したJevやLiquid d1と同じ日本語の問い合わせデータで試した記録です。対応部署の選択、解約・返金の判定、日付の比較は満点でしたが、感情分析は24件中18件（75.0%）で3モデルの中で最も低かったと書かれています。APIはJevと互換性がないため変換コードを自前で書く必要があり、今回の64回分の料金は約$0.003だったと報告されています。"
-  },
-  {
-    "source": "zenn-openai",
-    "title": "Decisions APIの画像認識能力を検証",
-    "url": "https://zenn.dev/tkada/articles/c7854943de4292",
-    "date": "2026-10-09",
-    "titleJa": "Decisions APIの画像認識能力を検証",
-    "summaryJa": "公開写真100枚に写っている人数を、Decisions API（gpt-6-luna）、Responses API（gpt-6-luna）、Claude Haiku 5.5の3方式で数えた検証記録です。完全一致率はResponses APIが81%、Haiku 5.5が79%、Decisions APIが78%で、差が3枚のため明確な優劣は付かなかったとされています。中央値の応答時間はDecisions APIが351ms、Haiku 5.5が835ms、Responses APIが1,466msで、1,000枚あたりの費用はDecisions APIが$0.100、Responses APIが$0.058、Haiku 5.5が$0.121と報告されています。"
   }
 ]
