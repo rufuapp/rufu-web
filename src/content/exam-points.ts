@@ -31,7 +31,7 @@ const CLAUDE_DOCS = 'https://platform.claude.com/docs/en';
 export const EXAM_POINT_SETS: ExamPointSet[] = [
   {
     certId: 'claude-certified-developer-foundations',
-    checkedOn: '2026年10月8日〜11日',
+    checkedOn: '2026年10月8日〜11月17日',
     points: [
       {
         id: 'tool-description',
@@ -434,16 +434,19 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'deny: 人の判断なしに必ず止める（絶対に実行させない操作に使う）',
           'ask: 人の承認を挟む（審査すれば実行してよい操作に使う）',
           'defer: フックは判断せず、ふだんの許可の流れ（設定の権限など）に任せる',
+          '「止める（執行）」はフック、「記録して異常に気づく（検知）」は監視やログ。役割を混ぜない',
         ],
         explanation: [
           '自動で動くエージェントが、審査の必要な決済のツールを呼んでしまうなら、そのツールに対して ask を返す PreToolUse のフックを足します。そのツールだけを承認待ちにでき、ほかの自動化はそのまま残せます。',
           '本番のデータを元に戻せない形で消すコマンドのように、どんな場合でも進めてはいけない操作には deny を返します。ask では、人が承認すると実行できてしまいます。',
+          '監査の記録や異常の検知が求められるときは、フックとは別に監視やログを用意します。ログや監視は起きたことを残して知らせる仕組みで、実行を止める力はありません。止める役はフック、残して気づく役は監視、と分けて考えます。',
         ],
         misconceptions: [
           '「システムプロンプトに大きな字で警告を書く」: 助言にすぎず、モデルが従う保証はありません。',
           '「すべてのツールで自動モードをやめる」: 正しい自動化まで失われ、最初に取る最小の対策ではありません。',
           '「PostToolUse で後から取り消す」: 実行の後に動くので、決済はもう行われています。取り消せるとも限りません。',
           '「絶対に止めたい操作に ask や defer を使う」: ask は人が承認すれば、defer はふだんの許可の流れ次第で、実行されることがあります。',
+          '「アクセスログや監視に承認を強制させる」: ログや監視は検知の仕組みで、実行の前に止めることはできません。',
         ],
         basicsIds: ['claude-code-for-teams'],
         resources: [{ title: 'フック（Hooks）', url: 'https://code.claude.com/docs/en/hooks', kind: '公式ドキュメント' }],
@@ -516,6 +519,56 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           { title: 'コンテキストウィンドウ（Context windows）', url: `${CLAUDE_DOCS}/build-with-claude/context-windows`, kind: '公式ドキュメント' },
           { title: '要約（Compaction）', url: `${CLAUDE_DOCS}/build-with-claude/compaction`, kind: '公式ドキュメント' },
           { title: 'コンテキストの編集（Context editing）', url: `${CLAUDE_DOCS}/build-with-claude/context-editing`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'adaptive-thinking-only',
+        title: '新しいモデルの思考は adaptive だけ。budget_tokens を指定すると 400 エラー',
+        area: 'Claude API',
+        keyPoints: [
+          'Claude 4.7 以降のモデルは、思考を thinking: {type: "adaptive"} でしか受け付けない',
+          'thinking: {type: "enabled", budget_tokens: N}（従来の extended thinking）を送ると 400 エラーになる。黙って無視されるわけではない',
+          '思考の深さは effort（output_config.effort）で調整する。トークン数を直接決める設定はない',
+          'Claude 4.6 では enabled と budget_tokens はまだ動くが非推奨。4.5 以前は extended thinking だけ',
+        ],
+        explanation: [
+          '公式ドキュメントでは、extended thinking は Claude 4.6 で非推奨となり、Claude 4.7 以降のモデルは対応せず 400 エラーを返すと説明されています。エラーの文には、adaptive と output_config.effort を使うよう書かれています。',
+          'adaptive では、モデルが依頼ごとに考えるかどうかと、どれだけ考えるかを決めます。費用の上限は max_tokens（思考と答えの合計の上限）で決まり、effort はその中でどれだけ思考に使うかの目安です。',
+          'どのモデルがどの思考の設定を受け付けるかは世代ごとに違うので、モデルを切り替えるときは公式の対応表で確かめます。',
+        ],
+        misconceptions: [
+          '「budget_tokens は無視されて、思考はそのまま動く」: 黙って無視されるのではなく、400 エラーになります。',
+          '「budget_tokens を max_tokens より小さくすれば通る」: それは古いモデルの extended thinking での決まりで、新しいモデルでは条件を満たしてもエラーです。',
+          '「effort でトークン数を正確に決められる」: effort は目安で、トークン数を保証しません。',
+        ],
+        basicsIds: ['claude-models-and-pricing'],
+        resources: [
+          { title: '思考のトラブルシューティング（モデルごとの対応表）', url: `${CLAUDE_DOCS}/build-with-claude/thinking-troubleshooting`, kind: '公式ドキュメント' },
+          { title: '思考の調整と費用', url: `${CLAUDE_DOCS}/build-with-claude/thinking-steering-and-cost`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'tool-failure-isolation',
+        title: 'ツール呼び出しが正しく、実行で失敗したなら、問題は統合の側（ハンドラー）',
+        area: 'ツール利用',
+        keyPoints: [
+          '障害は「モデル（どのツールを選び、どう考えたか）」と「統合（ツールを実行するアプリ側のコード）」に分けて切り分ける',
+          'モデルが妥当なツール呼び出しを返し、ハンドラーの中で例外が起きたなら、直すのは統合の側',
+          'ツールの実行に失敗したら、空の結果を返さず、エラーの内容を tool_result に is_error: true を付けて返す',
+        ],
+        explanation: [
+          'ツールの結果が空でモデルの答えがおかしくなったとき、まずトレースで「モデルが正しいツールと引数を選んだか」を見ます。選択が正しく、実行で例外が出ているなら、モデルやプロンプトを直しても解決しません。',
+          '公式ドキュメントでは、ツールの実行でエラーが起きたときは、tool_result に is_error: true とエラーの内容を入れて返すよう説明されています。モデルは失敗を知ったうえで、やり直したり、別の手段を選んだりできます。空の結果を返すと、失敗したこと自体がモデルに伝わりません。',
+        ],
+        misconceptions: [
+          '「答えがおかしいので、モデルがツールの選択を誤った」: トレースで呼び出しが妥当なら、選択の問題ではありません。',
+          '「モデルがツールの結果を読み違えた」: 結果が空なら、読み違える以前に情報が渡っていません。',
+          '「失敗したときは、空の結果を返しておけばよい」: 失敗が伝わらず、モデルがもっともらしい答えを作るおそれがあります。',
+        ],
+        basicsIds: ['claude-tool-design'],
+        resources: [
+          { title: 'ツールの呼び出しを処理する（is_error）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/handle-tool-calls`, kind: '公式ドキュメント' },
+          { title: 'ツールの使い方（Tool use）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/overview`, kind: '公式ドキュメント' },
         ],
       },
     ],
