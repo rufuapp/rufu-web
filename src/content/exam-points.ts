@@ -31,7 +31,7 @@ const CLAUDE_DOCS = 'https://platform.claude.com/docs/en';
 export const EXAM_POINT_SETS: ExamPointSet[] = [
   {
     certId: 'claude-certified-developer-foundations',
-    checkedOn: '2026年10月8日〜11月17日',
+    checkedOn: '2026年10月8日〜11月21日',
     points: [
       {
         id: 'tool-description',
@@ -107,6 +107,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'stdio: AI アプリが MCP サーバーを子プロセスとして起動し、標準入出力でやりとりする',
           '同じパソコンの上で、1つのクライアントが使う形に向く（ネットワークの設定が要らない）',
           '離れた場所・複数の利用者・利用者ごとの認証・台数を増やす構成は Streamable HTTP',
+          '多数のリモートの利用者に提供する本番のサーバーは、Streamable HTTP。認証をかけられ、ロードバランサーの後ろで横に増やせる',
         ],
         explanation: [
           'MCP の通信の方式（トランスポート）には、stdio と Streamable HTTP があります。stdio はクライアントが起動した子プロセスとの通信なので、クライアントとサーバーが同じ機械の上にあることが前提です。',
@@ -265,11 +266,13 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'すべてのプロジェクトに効かせたい個人の好みは ~/.claude/CLAUDE.md',
           '設定（settings）も同じで、共有は .claude/settings.json、個人は .claude/settings.local.json（コミットしない）',
           'チームで使うプラグインや権限・フックも、コミットする .claude/settings.json に書く。API キーなどの秘密はどのファイルにもコミットしない',
+          'チームで使うスラッシュコマンドも、プロジェクトの .claude/commands/（今は .claude/skills/ にまとめられた）に置いてコミットする。~/.claude/commands/ は個人用',
         ],
         explanation: [
           '同じリポジトリなのに人によって Claude の動きが違うときは、共有の決まりがリポジトリに入っていないことがよくあります。チームの決まりはプロジェクトの CLAUDE.md に書いてコミットし、個人の上書きは自分の手元だけにあるファイルに置きます。',
           'Claude Code は、自分で作った .claude/settings.local.json を git の対象から外します。手で作ったときは、自分で .gitignore に足します。',
           '公式ドキュメントでは、.claude/settings.json は「チームの権限・フック・プラグイン」を置く場所とされています。チーム全員に同じプラグインを使わせたいなら、ここに書いてコミットします。',
+          '公式ドキュメントでは、カスタムのコマンドは Skill にまとめられ、既存の .claude/commands/ のファイルもそのまま使えると説明されています。どちらでも、リポジトリの中に置いてコミットすれば、クローンした全員に届きます。',
         ],
         misconceptions: [
           '「個人の settings.local.json をコミットする」: 個人の上書きが全員に公開され、非公開にしたいという目的に反します。',
@@ -291,6 +294,8 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           '本番では、特定のスナップショットを指すモデル ID を指定し、新しいモデルが出ても動きが変わらないようにする',
           '公式ドキュメントでは、すべてのモデル ID は固定のスナップショットとされ、4.6 世代以降は日付のない ID も固定',
           '新しいモデルへの切り替えは、評価で確かめてから、意図したときに ID を書き換える',
+          '新しいモデルでは、古い設定が受け付けられないことがある。Opus 4.6 以降はプリフィル（assistant の発話を先に書く）が 400 エラー、Opus 5.5 では temperature などのサンプリング設定を送らない',
+          '昇格の前に、こうした設定を含む呼び出しを評価で確かめてから ID を切り替える',
         ],
         explanation: [
           '「最新のモデル」を指す呼び名に頼ると、新しいモデルが出たときに、本番の動きが予告なく変わるおそれがあります。動きを安定させたいなら、どのモデルを使うかを ID で固定します。',
@@ -343,6 +348,8 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'API にない機能やモデルの能力を、SDK が足すことはない',
           'どのプラットフォーム（Amazon Bedrock など）でどの機能が使えるかは、プラットフォーム側で決まる',
           '結果のぶれ（非決定性）も、SDK にしたからといってなくならない',
+          'Claude API は HTTPS の REST API。POST /v1/messages に JSON を送り、JSON を受け取る。ストリーミングは SSE（Server-Sent Events）',
+          'そのため、SDK を入れなくても curl などの HTTP クライアントで呼べる。GraphQL や WebSocket、独自のバイナリ形式ではない',
         ],
         explanation: [
           'REST の API を直接呼ぶのと SDK を使うのとで、送っている中身は同じです。SDK に移すと書きやすく、間違えにくくなりますが、できることそのものは変わりません。',
@@ -365,6 +372,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'モデルは、ツールを使う（tool_use）か、最終的な答えを返すかを決める',
           'ツールを使うなら実行し、その結果（tool_result）をコンテキストに足して、次の判断に戻す',
           'ツールを使わない最終的な答え（stop_reason が end_turn）が返ったら、ループを終える',
+          '手書きのループで stop_reason が tool_use なら、ツールを実行し、assistant の応答と、tool_use_id を合わせた tool_result を messages に足して、もう一度呼ぶ。同じリクエストを送り直しても進まない',
         ],
         explanation: [
           'Claude Agent SDK や Claude Code のエージェントは、このループを繰り返して仕事を進めます。公式ドキュメントでも、ツールの結果は毎回 Claude に戻され、次の判断の材料になると説明されています。',
@@ -389,6 +397,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           '構造化出力（スキーマ）が保証するのは、型・必須の項目・決められた値の形など「形」まで',
           '「閉じた口座が有効になっている」のような業務のルールに合っているかは、スキーマでは分からない',
           '生成の後に、コードで業務のルールを確かめ、合わなければ違反の内容を添えてもう一度頼む',
+          '必須の項目が欠けるなどの形の崩れは、生成の直後にスキーマで確かめ、具体的なエラーを添えてもう一度生成させる。パイプラインの最後で構文だけを見るのでは遅く、浅い',
         ],
         explanation: [
           '公式ドキュメントでは、構造化出力はスキーマに合った応答を保証する仕組みと説明されています。保証されるのは形であって、中身が業務として正しいかどうかではありません。',
@@ -410,6 +419,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           '出力の形（書式）は、言葉で説明するより、例を見せるほうが正確に伝わる',
           '1つの標準的な例で形が完全に決まるなら、例は1つで足りる',
           'いくつもの型や、まれで境界的な場合があるときに、複数の例（マルチショット）が役に立つ',
+          'トーンと論理の順序のように、言葉では近似しかできない複合的なパターンは、違いの分かる複数の例で見せる',
         ],
         explanation: [
           '公式ドキュメントでは、例は出力の形・口調・構造を導く、最も確実な方法の一つと説明されています。一方で、新しい情報を持たない例を増やしても、トークンが増えるだけで、例に引きずられやすくもなります。',
@@ -505,6 +515,7 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
           'Claude 4.5 以降では、入力と max_tokens の合計が超えていても受け付け、上限に達したら stop_reason が model_context_window_exceeded で止まる',
           'それより前のモデルでは、入力と max_tokens の合計が超えると検証エラーになる',
           '長い会話には、サーバー側の要約（compaction。4.6 以降のベータで、自分で有効にする）や、古いツールの結果を消す context editing を使う',
+          'Claude Code は、上限が近づくと会話を自動で要約（compact）して続ける。/compact で手動でも実行できる。早い段階の細かい指示は要約で落ちることがあるので、守らせたい決まりは CLAUDE.md に書く',
         ],
         explanation: [
           'エラーになるのか、途中で止まるのかは、何が上限を超えたかとモデルの世代で決まります。入力そのものが入り切らないなら、どのモデルでも受け付けられません。',
@@ -569,6 +580,239 @@ export const EXAM_POINT_SETS: ExamPointSet[] = [
         resources: [
           { title: 'ツールの呼び出しを処理する（is_error）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/handle-tool-calls`, kind: '公式ドキュメント' },
           { title: 'ツールの使い方（Tool use）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/overview`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'system-prompt-placement',
+        title: 'ずっと変わらない役割やルールはシステムプロンプトに、ターンごとに変わる質問はユーザーのターンに',
+        area: 'Claude API',
+        keyPoints: [
+          '会話全体に効かせたい役割・口調・ルールは、システムプロンプトに書く',
+          '顧客の質問のように毎回変わる入力は、ユーザーのターン（messages）に入れる',
+          '変わらない部分を先頭にまとめると、プロンプトキャッシュも効きやすい',
+        ],
+        explanation: [
+          '固定の部分と変わる部分を分けると、ルールがぶれず、同じ内容を毎回送り直す無駄もなくなります。',
+          'プロンプトキャッシュは tools → system → messages の順に並んだ先頭の部分で一致を見るので、変わらないシステムプロンプトはキャッシュの対象にしやすい部分です。',
+        ],
+        misconceptions: [
+          '「ルールを毎ターン、ユーザーの発話に書き足す」: 冗長で、キャッシュにも不利です。',
+          '「質問が変わるたびにシステムプロンプトを書き換える」: 役割の分け方が崩れ、キャッシュも効かなくなります。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'プロンプトキャッシュ（Prompt caching）', url: `${CLAUDE_DOCS}/build-with-claude/prompt-caching`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'prompt-cache-prefix',
+        title: 'プロンプトキャッシュは先頭からの完全一致。変わる部分はキャッシュする範囲の後ろへ',
+        area: 'Claude API',
+        keyPoints: [
+          'キャッシュが当たるのは、cache_control を付けたブロックまでの内容が 100% 同じときだけ',
+          '並びは tools → system → messages。ある段が変わると、その段と後ろの段のキャッシュが無効になる',
+          'タイムスタンプや利用者の入力など毎回変わるものは、キャッシュする範囲より後ろに置く',
+          'ブレークポイントは 1 回のリクエストで最大 4 つ。TTL は保持する時間で、一致の判定とは関係ない',
+        ],
+        explanation: [
+          '大きな文書をキャッシュしているのにほとんど当たらないときは、先頭のほうに毎回変わる内容が入っていないかを疑います。1 行でも違えば、別の内容として扱われます。',
+          '公式ドキュメントでは、キャッシュの読み取りは入力の基本料金よりずっと安く、書き込みは少し高いと説明されています（料金の倍率はモデルや保持時間で違います）。当たらないキャッシュは、書き込みの分だけ高くつきます。',
+        ],
+        misconceptions: [
+          '「ブレークポイントを増やせば当たるようになる」: 変わる内容が範囲の中にある限り、当たりません。',
+          '「キャッシュは似ていれば当たる」: あいまいな一致はなく、完全に同じときだけです。',
+          '「TTL を延ばせば当たる」: TTL は保持する時間で、一致するかどうかには影響しません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'プロンプトキャッシュ（Prompt caching）', url: `${CLAUDE_DOCS}/build-with-claude/prompt-caching`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'context-relevance',
+        title: 'コンテキストは多さより関連性。必要なものだけを入れ、要らないものは削る',
+        area: 'エージェント開発',
+        keyPoints: [
+          '関係のない文書やツールの生の出力を詰め込むと、費用と待ち時間が増え、注意が散って精度が下がることもある',
+          'モデルは価値の低いトークンを自動で無視しない。入れたものはすべて処理され、課金される',
+          '「完全さのため」に全部残すのではなく、必要な部分だけを残し、ツールの出力は要約したり消したりする',
+        ],
+        explanation: [
+          'コンテキストは限りのある資源として扱い、目的に役立つ情報だけを選びます。長い会話では、古いツールの結果を消す context editing や、要約する compaction も使えます。',
+          'サブエージェントに調べものを任せて、結果の要約だけを受け取るのも、メインのコンテキストをきれいに保つ方法です。',
+        ],
+        misconceptions: [
+          '「文書を全部入れれば、答えが良くなる」: 関係のない情報は、精度を下げることがあります。',
+          '「コンテキストに入れたトークンは無料」: 入力トークンとして課金されます。',
+          '「長くなるのは待ち時間だけの問題で、精度は変わらない」: 注意が散って、精度にも影響することがあります。',
+        ],
+        basicsIds: ['claude-context-management'],
+        resources: [
+          { title: 'コンテキストウィンドウ（Context windows）', url: `${CLAUDE_DOCS}/build-with-claude/context-windows`, kind: '公式ドキュメント' },
+          { title: 'コンテキストの編集（Context editing）', url: `${CLAUDE_DOCS}/build-with-claude/context-editing`, kind: '公式ドキュメント' },
+        ],
+      },
+      {
+        id: 'managed-agents-self-hosted',
+        title: 'ループは Anthropic に任せ、ツールは自社の環境で動かすなら Managed Agents とセルフホストのサンドボックス',
+        area: 'エージェント開発',
+        keyPoints: [
+          'Claude Managed Agents は、エージェントのループ・ツールの実行・実行環境を Anthropic が用意する仕組み（ベータ版）',
+          '実行環境は、Anthropic が管理するクラウドのサンドボックスか、自社のインフラで動かすセルフホストのサンドボックスを選べる',
+          '規制でデータを社内に置く必要があるなら、セルフホストのサンドボックスで、ツールを自社のネットワークの中で動かす',
+          'リリースをまたいで動きをそろえたいなら、モデル ID は固定する',
+        ],
+        explanation: [
+          '要件が複数あるときは、1 つずつ分けて照らし合わせます。「ツールはどこで動くか」「ループは誰が回すか」「動きをどう安定させるか」を別々に考えると、どの構成がすべてを満たすかが見えます。',
+          '公式ドキュメントでは、セルフホストのサンドボックスは、コンプライアンスやデータの所在の要件のための選択肢と説明されています。',
+        ],
+        misconceptions: [
+          '「Anthropic のサンドボックスでツールを動かす」: 社内のネットワークで動かすという要件に反します。',
+          '「自前のハーネスを作る」: ループを Anthropic に任せたいという要件に反します。',
+          '「最新を指す呼び名でモデルを指定する」: リリースをまたいで動きがそろいません。',
+        ],
+        basicsIds: ['claude-agent-design'],
+        resources: [{ title: 'Claude Managed Agents の概要', url: `${CLAUDE_DOCS}/managed-agents/overview`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'client-vs-server-tools',
+        title: 'クライアントツールは自分で実行して結果を返す。サーバーツールは Anthropic が実行する',
+        area: 'ツール利用',
+        keyPoints: [
+          'クライアントツール: 自分で定義したツールと、Anthropic がスキーマを公開するツール（bash・text_editor など）。実行するのは自分のアプリ',
+          'クライアントツールでは、モデルが stop_reason: tool_use で止まるので、実行して tool_result を返す',
+          'サーバーツール（web_search・web_fetch・code_execution など）は Anthropic の側で実行され、結果は同じ応答で返る',
+          'Messages API でライブの Web 検索をしたいなら、web_search のサーバーツールを tools に足す',
+        ],
+        explanation: [
+          '公式ドキュメントでは、ツールの違いは主に「コードがどこで動くか」だと説明されています。bash や text_editor は、スキーマこそ Anthropic のものですが、実行も結果を返すのも開発者の責任です。',
+          'web_search は Anthropic の基盤で検索し、出典付きの結果を同じ応答で返します。自分でループを書く必要はありません。',
+        ],
+        misconceptions: [
+          '「bash や text_editor は Anthropic が実行してくれる」: スキーマが Anthropic のものでも、実行するのは自分のアプリです。',
+          '「API でも claude.ai の Web 検索の設定が引き継がれる」: API では、使うツールをリクエストで指定します。',
+          '「text_editor で URL のページを取れる」: ファイルを編集するツールです。ページの取得は web_fetch です。',
+        ],
+        basicsIds: ['claude-tool-design'],
+        resources: [{ title: 'ツールの使い方（Tool use）', url: `${CLAUDE_DOCS}/agents-and-tools/tool-use/overview`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'model-routing',
+        title: '簡単な依頼と難しい依頼が混ざるなら、小さいモデルで受けて難しいものだけ大きいモデルへ',
+        area: 'Claude API',
+        keyPoints: [
+          '大半の簡単な依頼は、安くて速いモデル（Haiku など）で処理する',
+          '難しい依頼や、自信の低い答えだけを、性能の高いモデル（Opus など）に回す（カスケード・ルーティング）',
+          '費用を下げつつ、難しい依頼の品質も保てる',
+        ],
+        explanation: [
+          '全部を高性能なモデルにすれば品質は保てますが、費用は下がりません。全部を小さいモデルにすれば安くなりますが、難しい依頼の品質が落ちます。難しさで振り分けると、両方を満たせます。',
+          '振り分けの基準（難しさの判定、自信の低さなど）が妥当かは、評価のデータで確かめます。',
+        ],
+        misconceptions: [
+          '「難しさに関係なく、交互に振り分ける」: 難しい依頼が小さいモデルに回って品質が落ち、簡単な依頼に高い費用がかかります。',
+        ],
+        basicsIds: ['claude-models-and-pricing'],
+        resources: [{ title: 'モデルの選び方（Choosing a model）', url: `${CLAUDE_DOCS}/about-claude/models/choosing-a-model`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'secrets-and-pii',
+        title: 'キーは環境ごとに分けて権限を絞る。個人情報は送る前に減らす',
+        area: 'Claude API',
+        keyPoints: [
+          '最小権限: 開発と本番で別の API キーを使い、それぞれの用途に必要な範囲だけにする。Console ではワークスペースごとにキーを分けられる',
+          'キーはコミットするファイルや CLAUDE.md に書かず、環境変数やシークレットの管理の仕組みで渡す',
+          '個人情報（社会保障番号など）は、モデルに送る前に、必要な項目だけに絞ったり、伏せたりする',
+          '応答を後からフィルタしたり暗号化したりしても、送ってしまった入力は守れない',
+        ],
+        explanation: [
+          'キーを分けておけば、漏れたときの被害がその環境だけで済み、1 本だけを止めたり入れ替えたりできます。',
+          '個人情報は、入り口で出さなければ、送信・保存・ログといった経路のどこでも漏れません。後から守るより、最初から入れないほうが確実です。',
+        ],
+        misconceptions: [
+          '「権限の広いキーを 1 本、みんなで使う」: 漏れたときの被害が最大になります。',
+          '「顧客の記録を全部送り、応答のほうをフィルタする」: 個人情報はもうモデルに送られ、ログにも残ります。',
+        ],
+        basicsIds: ['fde-production-checklist'],
+        resources: [{ title: 'API キーとワークスペース（Claude Console）', url: `${CLAUDE_DOCS}/build-with-claude/workspaces`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'robust-output-parsing',
+        title: 'モデルの出力は表記がゆれる。完全一致で分岐せず、受け側で正規化するか構造化出力で決める',
+        area: 'Claude API',
+        keyPoints: [
+          '「APPROVED」との完全一致で分岐すると、「Approved.」のような大文字・小文字や句読点のゆれで失敗する',
+          '受け側で正規化（大文字・小文字、空白、句読点をそろえる）してから判定する',
+          '決まった値が必要なら、構造化出力の enum やツールの入力で、値そのものを決めさせる',
+          '再試行、モデル ID の固定、温度を下げることは、表記のゆれをなくす根本の対策ではない',
+        ],
+        explanation: [
+          '自然な文章の出力は、意味が同じでも表記が少しずつ変わります。根本の原因は、ゆれる出力を厳密に読もうとしている受け側にあります。',
+          '公式ドキュメントでは、Opus 5.5 では temperature などのサンプリング設定を送らないよう求められ、temperature を 0 にしても、以前のモデルでも同じ出力は保証されなかったと説明されています。',
+        ],
+        misconceptions: [
+          '「失敗したら再試行する」: 費用と待ち時間が増えるだけで、確実ではありません。',
+          '「temperature を 0 にすれば毎回同じになる」: 同じ出力は保証されず、新しいモデルではそもそも送れません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: '構造化出力（Structured outputs）', url: `${CLAUDE_DOCS}/build-with-claude/structured-outputs`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'nonfunctional-requirements',
+        title: 'モデルやサービスの選び方を決めるのは、応答時間などの非機能の要件',
+        area: 'Claude API',
+        keyPoints: [
+          '要件を「機能（どう振る舞うか）」と「非機能（応答時間・処理量・費用・可用性など）」に分ける',
+          '「1 秒以内に応答」のような応答時間の要件は、モデルの大きさ、ストリーミング、キャッシュなどの選び方に直接効く',
+          '名前で挨拶する、平易に要約する、怒っている人を引き継ぐ、などはプロンプトや業務の流れで実現する機能の要件',
+        ],
+        explanation: [
+          'FDE が顧客の要件を聞くときは、どれが設計（プロンプトや流れ）で解けて、どれが基盤の選び方を縛るかを分けると、提案が早く固まります。',
+        ],
+        misconceptions: [
+          '「振る舞いの要件がモデルの選択を決める」: 多くはプロンプトや設計で実現でき、基盤の選び方を直接は縛りません。',
+        ],
+        basicsIds: ['fde-production-checklist'],
+        resources: [{ title: 'レイテンシーを下げる（Reducing latency）', url: `${CLAUDE_DOCS}/test-and-evaluate/strengthen-guardrails/reduce-latency`, kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'mcp-primitives',
+        title: 'MCP のサーバーが公開するのは、ツール・リソース・プロンプトの 3 つ。操作する主体がそれぞれ違う',
+        area: 'ツール利用',
+        keyPoints: [
+          'ツール（Tools）: モデルが操作する。必要に応じて呼ぶ関数（検索、API の呼び出し、書き込みなど）',
+          'リソース（Resources）: アプリが操作する。文脈として渡す読み取り専用のデータ（ファイルの中身、DB のスキーマなど）',
+          'プロンプト（Prompts）: 利用者が操作する。明示的に選んで使うひな形（スラッシュコマンドとして現れることが多い）',
+        ],
+        explanation: [
+          'MCP の公式ドキュメントでは、3 つの要素と、それぞれを誰が操作するか（モデル・アプリ・利用者）が表で示されています。',
+          'どの要素で公開するかは、「誰がいつ使うかを決めるか」で選びます。モデルに判断させたい操作はツール、アプリが選んで渡したいデータはリソース、利用者が呼び出す定型の作業はプロンプトです。',
+        ],
+        misconceptions: [
+          '「3 つとも接続したらモデルがすべて管理する」: 操作する主体は要素ごとに違います。',
+          '「エンドポイント・スキーマ・ハンドラーが 3 つの要素」: これらは MCP の要素の定義ではありません。',
+        ],
+        basicsIds: [],
+        resources: [{ title: 'MCP サーバーの概念（Model Context Protocol）', url: 'https://modelcontextprotocol.io/docs/learn/server-concepts', kind: '公式ドキュメント' }],
+      },
+      {
+        id: 'usage-cost',
+        title: 'リクエストごとの費用は、応答の usage のトークン数から計算する',
+        area: 'Claude API',
+        keyPoints: [
+          '応答の usage に、課金の対象になったトークン数が入っている',
+          'input_tokens・output_tokens に加え、キャッシュの書き込み（cache_creation_input_tokens）と読み取り（cache_read_input_tokens）が別に記録される',
+          '種類ごとに単価が違うので、種類別に集計してモデルの単価を掛ける',
+          '思考のトークンも出力として課金される。内訳は output_tokens_details.thinking_tokens で分かる',
+        ],
+        explanation: [
+          '公式ドキュメントでは、入力の合計は cache_read_input_tokens + cache_creation_input_tokens + input_tokens と説明されています。キャッシュの読み取りは安く、書き込みは基本料金より高いので、合計のトークン数だけでは費用が正しく出ません。',
+          'stop_reason や応答時間は、終わり方や性能の指標で、課金の根拠にはなりません。',
+        ],
+        misconceptions: [
+          '「システムプロンプトの長さとツールの数から見積もる」: 目安にはなりますが、実際に課金された量ではありません。',
+          '「応答時間から費用を出す」: 課金はトークンの量で決まります。',
+        ],
+        basicsIds: ['claude-models-and-pricing'],
+        resources: [
+          { title: '料金（Pricing）', url: `${CLAUDE_DOCS}/about-claude/pricing`, kind: '公式ドキュメント' },
+          { title: 'プロンプトキャッシュ（Prompt caching）', url: `${CLAUDE_DOCS}/build-with-claude/prompt-caching`, kind: '公式ドキュメント' },
         ],
       },
     ],
