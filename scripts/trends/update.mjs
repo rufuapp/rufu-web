@@ -31,7 +31,7 @@ const NO_GIT = args.has('--no-git');
 /** 初回や久しぶりの実行で古い記事を大量に訳さないよう、この日数より前の記事は対象にしない */
 const LOOKBACK_DAYS = 14;
 /** 1 回の実行で訳す上限（多すぎる日は翌日に回す） */
-const MAX_NEW_PER_RUN = 100;
+const MAX_NEW_PER_RUN = 200;
 /** Claude Code 1 回の呼び出しで訳す記事の数 */
 const BATCH_SIZE = 8;
 /** 保存しておく件数の上限 */
